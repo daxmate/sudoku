@@ -1,24 +1,45 @@
 <!DOCTYPE html>
+<!-- ============================================================
+     数独游戏 - HTML 骨架
+     ============================================================
+     本文件只负责 DOM 结构，样式在 sudoku.css，逻辑在 sudoku.js。
+     如果你想调整页面布局（比如加按钮、改顺序），改这里即可。
+     ============================================================ -->
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
+    <!-- 视口设置：让页面在手机上正确缩放 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>数独游戏</title>
+    <!-- 引用外部样式表 -->
     <link rel="stylesheet" href="sudoku.css" />
 </head>
 <body>
 
+    <!-- ==========================================================
+         主容器 — 包裹整个游戏面板
+         背景模糊毛玻璃效果在 CSS 中实现
+         ========================================================== -->
     <div class="container">
+
+        <!-- 标题区域 -->
         <h1>数 独</h1>
         <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
 
-        <!-- 计时 & 错误 -->
+        <!-- -------------------------------------------------------
+             顶部信息栏：计时器 + 错误计数
+             timerDisplay 和 mistakesCount 的文本由 JS 动态更新
+             ------------------------------------------------------- -->
         <div class="game-header">
             <div class="timer">⏱️ <span id="timerDisplay">00:00</span></div>
             <div class="mistakes">❌ 错误 <span id="mistakesCount">0</span> / 3</div>
         </div>
 
-        <!-- 难度选择 -->
+        <!-- -------------------------------------------------------
+             难度选择按钮组
+             data-diff 属性告诉 JS 对应哪个难度等级
+             默认 "easy" 高亮（class="active"）
+             ------------------------------------------------------- -->
         <div class="difficulty-wrap">
             <button data-diff="easy" class="active">简单</button>
             <button data-diff="medium">中等</button>
@@ -26,12 +47,20 @@
             <button data-diff="expert">专家</button>
         </div>
 
-        <!-- 棋盘 -->
+        <!-- -------------------------------------------------------
+             数独棋盘容器
+             #board 是 9×9 网格，由 JS 动态生成每个格子
+             board-wrapper 只负责居中布局
+             ------------------------------------------------------- -->
         <div class="board-wrapper">
             <div class="sudoku-board" id="board"></div>
         </div>
 
-        <!-- 数字面板 -->
+        <!-- -------------------------------------------------------
+             数字输入面板
+             data-num="1~9" 对应填入 1-9，data-num="0" 是擦除
+             #notesToggle 切换笔记模式，CSS 中 .active 高亮
+             ------------------------------------------------------- -->
         <div class="num-pad">
             <button data-num="1">1</button>
             <button data-num="2">2</button>
@@ -46,14 +75,19 @@
             <button class="notes-toggle" id="notesToggle">笔记</button>
         </div>
 
-        <!-- 控制按钮 -->
+        <!-- -------------------------------------------------------
+             底部控制按钮
+             primary / warning / success 只是颜色差异，功能由 JS 绑定
+             ------------------------------------------------------- -->
         <div class="controls">
             <button class="primary" id="newGameBtn">✦ 新游戏</button>
             <button class="warning" id="hintBtn">💡 提示</button>
             <button class="success" id="solveBtn">⚡ 解答</button>
         </div>
+
     </div>
 
+    <!-- 引用外部 JavaScript 文件 -->
     <script src="sudoku.js"></script>
 </body>
 </html>
