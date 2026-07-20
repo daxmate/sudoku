@@ -1,0 +1,380 @@
+/* --- 全局与布局 --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    background: linear-gradient(145deg, #f0f4ff 0%, #d9e2f0 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-radius: 32px;
+    padding: 30px 35px 35px 35px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+h1 {
+    color: #1a2639;
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.subtitle {
+    color: #4a5b73;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+/* --- 顶部信息栏 --- */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 0 4px;
+}
+
+.timer,
+.mistakes {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 6px 16px;
+    border-radius: 30px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.mistakes span {
+    color: #e74c3c;
+    font-weight: 700;
+}
+
+/* --- 难度选择 --- */
+.difficulty-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.difficulty-wrap button {
+    background: transparent;
+    border: 2px solid #cbd5e1;
+    padding: 6px 18px;
+    border-radius: 40px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.5px;
+}
+
+.difficulty-wrap button:hover {
+    border-color: #64748b;
+    color: #1e293b;
+}
+
+.difficulty-wrap button.active {
+    background: #1a2639;
+    border-color: #1a2639;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(26, 38, 57, 0.25);
+}
+
+/* --- 数独棋盘 --- */
+.board-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.sudoku-board {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 1px;
+    background-color: #b0bec5;
+    border: 3px solid #1a2639;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 450px;
+    aspect-ratio: 1 / 1;
+}
+
+.cell {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: #0b1a2a;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+    aspect-ratio: 1 / 1;
+    user-select: none;
+    position: relative;
+}
+
+/* 3x3 宫格边框 */
+.cell:nth-child(3n) {
+    border-right: 2.5px solid #1a2639;
+}
+
+.cell:nth-child(9n) {
+    border-right: none;
+}
+
+.cell:nth-child(n+19):nth-child(-n+27) {
+    border-bottom: 2.5px solid #1a2639;
+}
+
+.cell:nth-child(n+46):nth-child(-n+54) {
+    border-bottom: 2.5px solid #1a2639;
+}
+
+.cell.fixed {
+    background-color: #eef2f7;
+    color: #1a2639;
+    font-weight: 700;
+}
+
+.cell.user-input {
+    color: #2c6b9e;
+    font-weight: 600;
+}
+
+.cell.selected {
+    background-color: #bbdefb !important;
+    outline: 2px solid #1976d2;
+    outline-offset: -2px;
+    z-index: 2;
+}
+
+.cell.highlighted {
+    background-color: #e8edf5;
+}
+
+.cell.same-number {
+    background-color: #c5d9f0;
+}
+
+.cell.error {
+    background-color: #ffcdd2 !important;
+    color: #c62828 !important;
+}
+
+.cell.hint-glow {
+    background-color: #fff9c4 !important;
+    color: #1a2639 !important;
+    animation: hintPulse 0.6s ease 2;
+}
+
+@keyframes hintPulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+/* 笔记模式（小数字） */
+.cell .notes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+    height: 100%;
+    padding: 1px;
+}
+
+.cell .notes-container span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.55rem;
+    font-weight: 500;
+    color: #4a5b73;
+    line-height: 1;
+}
+
+/* --- 数字输入面板 --- */
+.num-pad {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.num-pad button {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: none;
+    background: #f1f5f9;
+    color: #1e293b;
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.num-pad button:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.num-pad button:active {
+    transform: translateY(0px);
+}
+
+.num-pad button.erase-btn {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 0.85rem;
+    width: 52px;
+}
+
+.num-pad button.erase-btn:hover {
+    background: #fecaca;
+}
+
+.num-pad button.notes-toggle {
+    background: #dbeafe;
+    color: #1e40af;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 52px;
+}
+
+.num-pad button.notes-toggle.active {
+    background: #1e40af;
+    color: #fff;
+}
+
+/* --- 控制按钮 --- */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.controls button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 40px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #eef2f7;
+    color: #1e293b;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.controls button.primary {
+    background: #1a2639;
+    color: white;
+}
+
+.controls button.primary:hover {
+    background: #2c3e5a;
+}
+
+.controls button.success {
+    background: #2e7d32;
+    color: white;
+}
+
+.controls button.success:hover {
+    background: #1b5e20;
+}
+
+.controls button.warning {
+    background: #f59e0b;
+    color: white;
+}
+
+.controls button.warning:hover {
+    background: #d97706;
+}
+
+/* --- 响应式 --- */
+@media (max-width: 520px) {
+    .container {
+        padding: 18px 14px 22px 14px;
+    }
+    h1 {
+        font-size: 1.8rem;
+    }
+    .cell {
+        font-size: 1.2rem;
+    }
+    .num-pad button {
+        width: 34px;
+        height: 34px;
+        font-size: 1.0rem;
+    }
+    .num-pad button.erase-btn,
+    .num-pad button.notes-toggle {
+        width: 44px;
+        font-size: 0.7rem;
+    }
+    .controls button {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+    }
+    .difficulty-wrap button {
+        padding: 4px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .cell {
+        font-size: 0.95rem;
+    }
+    .num-pad button {
+        width: 28px;
+        height: 28px;
+        font-size: 0.85rem;
+    }
+    .num-pad button.erase-btn,
+    .num-pad button.notes-toggle {
+        width: 36px;
+        font-size: 0.6rem;
+    }
+}

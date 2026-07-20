@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数独游戏</title>
+    <link rel="stylesheet" href="sudoku.css" />
+</head>
+<body>
+
+    <div class="container">
+        <h1>数 独</h1>
+        <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
+
+        <!-- 计时 & 错误 -->
+        <div class="game-header">
+            <div class="timer">⏱️ <span id="timerDisplay">00:00</span></div>
+            <div class="mistakes">❌ 错误 <span id="mistakesCount">0</span> / 3</div>
+        </div>
+
+        <!-- 难度选择 -->
+        <div class="difficulty-wrap">
+            <button data-diff="easy" class="active">简单</button>
+            <button data-diff="medium">中等</button>
+            <button data-diff="hard">困难</button>
+            <button data-diff="expert">专家</button>
+        </div>
+
+        <!-- 棋盘 -->
+        <div class="board-wrapper">
+            <div class="sudoku-board" id="board"></div>
+        </div>
+
+        <!-- 数字面板 -->
+        <div class="num-pad">
+            <button data-num="1">1</button>
+            <button data-num="2">2</button>
+            <button data-num="3">3</button>
+            <button data-num="4">4</button>
+            <button data-num="5">5</button>
+            <button data-num="6">6</button>
+            <button data-num="7">7</button>
+            <button data-num="8">8</button>
+            <button data-num="9">9</button>
+            <button class="erase-btn" data-num="0">✕</button>
+            <button class="notes-toggle" id="notesToggle">笔记</button>
+        </div>
+
+        <!-- 控制按钮 -->
+        <div class="controls">
+            <button class="primary" id="newGameBtn">✦ 新游戏</button>
+            <button class="warning" id="hintBtn">💡 提示</button>
+            <button class="success" id="solveBtn">⚡ 解答</button>
+        </div>
+    </div>
+
+    <script src="sudoku.js"></script>
+</body>
+</html>
