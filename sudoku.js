@@ -275,6 +275,7 @@ const SudokuEngine = (() => {
     const timerDisplay = document.getElementById('timerDisplay'); // 计时器文字
     const mistakesDisplay = document.getElementById('mistakesCount'); // 错误计数
     const notesToggleBtn = document.getElementById('notesToggle'); // 一键标记按钮
+    const candidateEditBtn = document.getElementById('candidateEditBtn'); // 候选编辑按钮
     const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
     const hintBtn = document.getElementById('hintBtn');         // 提示按钮
     const solveBtn = document.getElementById('solveBtn');       // 解答按钮
@@ -291,6 +292,7 @@ const SudokuEngine = (() => {
     //   userGrid[][]   — 用户当前填写的内容，动态变化
     //   fixedCells[][] — true=初始给定的数字（不可修改）
     //   notes[][]      — 每个格子的笔记（Set 存的候选数字）
+    //   userRemovedNotes[][] — 用户手动移除的候选（Set），自动标记时不再加入
     //   selectedRow/Col — 当前选中的格子坐标，-1 表示未选中
     //   mistakes       — 已发生的错误次数
     //   maxMistakes    — 允许的最大错误次数（可以改成 5 或 10）
@@ -306,11 +308,13 @@ const SudokuEngine = (() => {
         userGrid: [],
         fixedCells: [],
         notes: [],
+        userRemovedNotes: [],
         selectedRow: -1,
         selectedCol: -1,
         mistakes: 0,
         maxMistakes: 3,           // ← 想改错误上限，改这里
         isGameOver: false,
+        isCandidateEditMode: false,
         timerSeconds: 0,
         timerInterval: null,
         difficulty: 'easy',
@@ -371,6 +375,8 @@ const SudokuEngine = (() => {
         state.mistakes = 0;
         mistakesDisplay.textContent = '0';
         state.isGameOver = false;
+        state.isCandidateEditMode = false;
+        candidateEditBtn.classList.remove('active');
         state.selectedRow = -1;
         state.selectedCol = -1;
 
@@ -381,6 +387,7 @@ const SudokuEngine = (() => {
         state.userGrid = SudokuEngine.deepCopy(puzzle);              // 用户盘面以谜题为起点
         state.fixedCells = puzzle.map(row => row.map(v => v !== 0)); // 非 0 的就是固定格
         state.notes = puzzle.map(row => row.map(() => new Set()));   // 每个格子一个 Set 存笔记
+        state.userRemovedNotes = puzzle.map(row => row.map(() => new Set()));  // 追踪用户手动移除的候选
 
         autoMarkNotes();  // 自动标记候选数
         renderBoard();    // 重新绘制棋盘
@@ -605,6 +612,28 @@ const SudokuEngine = (() => {
         if (state.fixedCells[r][c]) return;   // 固定格不能修改
 
         const grid = state.userGrid;
+
+        // ---- 候选编辑模式 ----
+        if (state.isCandidateEditMode) {
+            if (grid[r][c] !== 0) return;  // 有数字的格子不可编辑候选
+
+            const noteSet = state.notes[r][c];
+            const removedSet = state.userRemovedNotes[r][c];
+            if (num === 0) {
+                noteSet.clear();      // 擦除 → 清空笔记
+                removedSet.clear();    // 清除追踪记录
+            } else {
+                if (noteSet.has(num)) {
+                    noteSet.delete(num);       // 移除候选
+                    removedSet.add(num);       // 记住用户移除了它
+                } else {
+                    noteSet.add(num);          // 添加候选
+                    removedSet.delete(num);    // 用户手动加回来了，解除移除标记
+                }
+            }
+            renderBoard();
+            return;
+        }
 
         // ---- 擦除 ----
         if (num === 0) {
@@ -933,8 +962,9 @@ const SudokuEngine = (() => {
         for (let r = 0; r < 9; r++) {
             for (let c = 0; c < 9; c++) {
                 if (grid[r][c] !== 0) {
-                    // 已填数字的格子清空笔记
+                    // 已填数字的格子清空笔记及移除追踪
                     state.notes[r][c].clear();
+                    state.userRemovedNotes[r][c].clear();
                     continue;
                 }
 
@@ -963,6 +993,8 @@ const SudokuEngine = (() => {
                 for (let n = 1; n <= 9; n++) {
                     if (!present.has(n)) candidates.add(n);
                 }
+                // 再排除用户手动移除的候选（之前编辑过的标记不再出现）
+                state.userRemovedNotes[r][c].forEach(n => candidates.delete(n));
                 state.notes[r][c] = candidates;
             }
         }
@@ -990,6 +1022,12 @@ const SudokuEngine = (() => {
         notesToggleBtn.addEventListener('click', () => {
             autoMarkNotes();
             renderBoard();
+        });
+
+        // 候选编辑模式切换
+        candidateEditBtn.addEventListener('click', () => {
+            state.isCandidateEditMode = !state.isCandidateEditMode;
+            candidateEditBtn.classList.toggle('active', state.isCandidateEditMode);
         });
 
         // 新游戏

@@ -340,6 +340,22 @@ h1 {
     color: #fff;
 }
 
+/* 候选编辑按钮：绿色调 */
+.num-pad button.candidate-edit-btn {
+    background: #d1fae5;
+    color: #065f46;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 64px;
+}
+.num-pad button.candidate-edit-btn:hover {
+    background: #a7f3d0;
+}
+.num-pad button.candidate-edit-btn.active {
+    background: #065f46;
+    color: #fff;
+}
+
 
 /* ================================================================
    7. 底部控制按钮
@@ -418,7 +434,8 @@ h1 {
         font-size: 1.0rem;
     }
     .num-pad button.erase-btn,
-    .num-pad button.notes-toggle {
+    .num-pad button.notes-toggle,
+    .num-pad button.candidate-edit-btn {
         width: 44px;
         font-size: 0.7rem;
     }
@@ -443,7 +460,8 @@ h1 {
         font-size: 0.85rem;
     }
     .num-pad button.erase-btn,
-    .num-pad button.notes-toggle {
+    .num-pad button.notes-toggle,
+    .num-pad button.candidate-edit-btn {
         width: 36px;
         font-size: 0.6rem;
     }
