@@ -426,12 +426,13 @@ const SudokuEngine = (() => {
                     cell.classList.add('selected');
                 }
 
-                // 同行/同列高亮（但不包括选中格本身）
-                if ((r === selR || c === selC) && !(r === selR && c === selC)) {
+                // 同行/同列/同宫高亮
+                const sameBlock = Math.floor(r / 3) === Math.floor(selR / 3) && Math.floor(c / 3) === Math.floor(selC / 3);
+                if ((r === selR || c === selC || sameBlock) && !(r === selR && c === selC)) {
                     cell.classList.add('highlighted');
                 }
 
-                // 与选中数字相同的其他格高亮
+                // 与选中数字相同的其他格高亮（蓝色）
                 if (selectedNum !== null && val === selectedNum && !(r === selR && c === selC)) {
                     cell.classList.add('same-number');
                 }
@@ -484,33 +485,14 @@ const SudokuEngine = (() => {
         cells.forEach(el => el.classList.remove('error'));
 
         /**
-         * 检查 (r,c) 的数字是否违反数独规则
-         * 注意：固定格即使有冲突也不标记错误（它们不可能错，因为是题目给的）
+         * 检查 (r,c) 的数字是否正确
+         * 非固定格且数字与答案不符即为错误
          */
         const hasError = (r, c) => {
+            if (fixed[r][c]) return false;
             const val = grid[r][c];
             if (val === 0) return false;
-
-            // 检查行
-            for (let i = 0; i < 9; i++) {
-                if (i === c) continue;
-                if (grid[r][i] === val) return true;
-            }
-            // 检查列
-            for (let i = 0; i < 9; i++) {
-                if (i === r) continue;
-                if (grid[i][c] === val) return true;
-            }
-            // 检查宫
-            const sr = Math.floor(r / 3) * 3;
-            const sc = Math.floor(c / 3) * 3;
-            for (let rr = sr; rr < sr + 3; rr++) {
-                for (let cc = sc; cc < sc + 3; cc++) {
-                    if (rr === r && cc === c) continue;
-                    if (grid[rr][cc] === val) return true;
-                }
-            }
-            return false;
+            return val !== state.solution[r][c];
         };
 
         cells.forEach(el => {

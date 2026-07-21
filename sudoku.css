@@ -207,9 +207,8 @@ h1 {
 
 /* ---- 格子状态样式 ---- */
 
-/* 固定（初始谜题）格子：浅灰背景 + 粗体 */
+/* 固定（初始谜题）格子：粗体 */
 .cell.fixed {
-    background-color: #eef2f7;
     color: #1a2639;
     font-weight: 700;
 }
@@ -235,7 +234,7 @@ h1 {
 
 /* 与选中数字相同的格子 */
 .cell.same-number {
-    background-color: #c5d9f0;
+    background-color: #90caf9;
 }
 
 /* 错误格子：浅红背景 + 深红文字 */
