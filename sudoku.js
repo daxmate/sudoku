@@ -111,6 +111,42 @@ const SudokuEngine = (() => {
         return solver(board) ? board : null;
     };
 
+    /**
+     * 计数求解器 — 统计盘面有多少个解（上限为 limit）
+     * 用于唯一性检测：countSolutions(puzzle, 2) === 1 即为唯一解
+     *
+     * @param {number[][]} grid — 待解的盘面（0 表示空格）
+     * @param {number} [limit=2] — 最多数到几个解就停止
+     * @returns {number} — 找到的解的数量（不超过 limit）
+     */
+    const countSolutions = (grid, limit = 2) => {
+        const board = deepCopy(grid);
+        let count = 0;
+
+        const solver = (b) => {
+            for (let r = 0; r < 9; r++) {
+                for (let c = 0; c < 9; c++) {
+                    if (b[r][c] === 0) {
+                        for (let num = 1; num <= 9; num++) {
+                            if (isValidPlacement(b, r, c, num)) {
+                                b[r][c] = num;
+                                if (solver(b)) return true;
+                                b[r][c] = 0;
+                            }
+                        }
+                        return false;
+                    }
+                }
+            }
+            // 找到一个完整解
+            count++;
+            return count >= limit;  // 够了就停
+        };
+
+        solver(board);
+        return count;
+    };
+
 
     // ---------- 生成完整盘面 ----------
 
@@ -157,9 +193,10 @@ const SudokuEngine = (() => {
      *   1. 先生成一个完整解
      *   2. 将 81 个位置随机打乱
      *   3. 逐个位置尝试挖掉数字
-     *   4. 每挖一个就检测是否还有唯一解
-     *      - 如果挖掉后无解 → 恢复
-     *      - 如果挖掉后有多解 → 恢复（保证唯一解）
+     *   4. 每挖一个就用计数求解器判断唯一性：
+     *      - 0 个解 → 恢复
+     *      - 2+ 个解 → 恢复（保证唯一解）
+     *      - 恰好 1 个解 → 确认挖掉
      *   5. 挖到目标数量为止
      *
      * @param {string} difficulty — 难度：easy|medium|hard|expert
@@ -197,32 +234,10 @@ const SudokuEngine = (() => {
             const backup = puzzle[r][c];  // 暂存原数字
             puzzle[r][c] = 0;             // 挖掉
 
-            // 检查是否还有解
-            const sol1 = solve(puzzle);
-            if (!sol1) {
-                // 无解 → 恢复
-                puzzle[r][c] = backup;
-                continue;
-            }
-
-            // 检查是否唯一解：
-            // 尝试在同一个位置填入另一个合法数字，看看能不能也解出来
-            let unique = true;
-            for (let testNum = 1; testNum <= 9; testNum++) {
-                if (testNum === backup) continue;          // 跳过原数字
-                if (isValidPlacement(puzzle, r, c, testNum)) {
-                    puzzle[r][c] = testNum;
-                    const sol2 = solve(puzzle);
-                    puzzle[r][c] = 0;
-                    if (sol2) {
-                        unique = false;  // 另一种填法也有解 → 不唯一
-                        break;
-                    }
-                }
-            }
-
-            if (!unique) {
-                puzzle[r][c] = backup;  // 不唯一，恢复
+            // 用计数求解器判断：无解（0）或多解（2+）都恢复
+            const numSolutions = countSolutions(puzzle, 2);
+            if (numSolutions !== 1) {
+                puzzle[r][c] = backup;  // 不唯一或无解，恢复
             } else {
                 removed++;              // 唯一解，确认挖掉
             }
@@ -259,7 +274,7 @@ const SudokuEngine = (() => {
     const boardEl = document.getElementById('board');           // 棋盘容器
     const timerDisplay = document.getElementById('timerDisplay'); // 计时器文字
     const mistakesDisplay = document.getElementById('mistakesCount'); // 错误计数
-    const notesToggleBtn = document.getElementById('notesToggle'); // 笔记模式按钮
+    const notesToggleBtn = document.getElementById('notesToggle'); // 一键标记按钮
     const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
     const hintBtn = document.getElementById('hintBtn');         // 提示按钮
     const solveBtn = document.getElementById('solveBtn');       // 解答按钮
@@ -280,7 +295,6 @@ const SudokuEngine = (() => {
     //   mistakes       — 已发生的错误次数
     //   maxMistakes    — 允许的最大错误次数（可以改成 5 或 10）
     //   isGameOver     — 游戏是否已结束
-    //   isNotesMode    — 是否处于笔记模式
     //   timerSeconds   — 已用秒数
     //   timerInterval  — setInterval 的句柄，用于停止计时
     //   difficulty     — 当前难度
@@ -297,7 +311,6 @@ const SudokuEngine = (() => {
         mistakes: 0,
         maxMistakes: 3,           // ← 想改错误上限，改这里
         isGameOver: false,
-        isNotesMode: false,
         timerSeconds: 0,
         timerInterval: null,
         difficulty: 'easy',
@@ -360,8 +373,6 @@ const SudokuEngine = (() => {
         state.isGameOver = false;
         state.selectedRow = -1;
         state.selectedCol = -1;
-        state.isNotesMode = false;
-        notesToggleBtn.classList.remove('active');
 
         // 生成谜题
         const { puzzle, solution } = SudokuEngine.generatePuzzle(difficulty);
@@ -371,6 +382,7 @@ const SudokuEngine = (() => {
         state.fixedCells = puzzle.map(row => row.map(v => v !== 0)); // 非 0 的就是固定格
         state.notes = puzzle.map(row => row.map(() => new Set()));   // 每个格子一个 Set 存笔记
 
+        autoMarkNotes();  // 自动标记候选数
         renderBoard();    // 重新绘制棋盘
         startTimer();     // 开始计时
     };
@@ -384,7 +396,7 @@ const SudokuEngine = (() => {
      * 根据 state 中的 userGrid、notes、selectedRow/Col 等信息，
      * 重新生成整个棋盘 DOM。
      *
-     * 每次 state 变化（选中格、填入数字、切换笔记）都调用此函数。
+     * 每次 state 变化（选中格、填入数字、一键标记）都调用此函数。
      * 性能上没问题，因为 81 个格子很少。
      */
     const renderBoard = () => {
@@ -579,7 +591,6 @@ const SudokuEngine = (() => {
      * 将数字填入当前选中的格子
      *
      * 逻辑分支：
-     *   - 笔记模式下 → 添加/删除笔记
      *   - 数字=0     → 擦除当前格
      *   - 数字与答案不一致 → 计一次错误（但仍显示填的数字）
      *   - 数字正确   → 填入，检查胜利
@@ -595,28 +606,12 @@ const SudokuEngine = (() => {
 
         const grid = state.userGrid;
 
-        // ---- 笔记模式 ----
-        if (state.isNotesMode) {
-            const noteSet = state.notes[r][c];
-            if (num === 0) {
-                noteSet.clear();              // 擦除 → 清空笔记
-            } else {
-                if (noteSet.has(num)) {
-                    noteSet.delete(num);      // 已有则移除（切换）
-                } else {
-                    if (grid[r][c] !== 0) return;  // 格子有数字时不能记笔记
-                    noteSet.add(num);         // 添加笔记
-                }
-            }
-            renderBoard();
-            return;
-        }
-
         // ---- 擦除 ----
         if (num === 0) {
             if (grid[r][c] !== 0) {
                 grid[r][c] = 0;
                 state.notes[r][c].clear();
+                autoMarkNotes();
                 renderBoard();
             }
             return;
@@ -634,6 +629,7 @@ const SudokuEngine = (() => {
             // 仍然填入数字让玩家看到错在哪
             grid[r][c] = num;
             state.notes[r][c].clear();
+            autoMarkNotes();
             renderBoard();
 
             // 检查是否超限
@@ -646,6 +642,7 @@ const SudokuEngine = (() => {
         // ---- 正确填入 ----
         grid[r][c] = num;
         state.notes[r][c].clear();
+        autoMarkNotes();
         renderBoard();
 
         // 检查是否完成
@@ -660,8 +657,12 @@ const SudokuEngine = (() => {
     // ==============================================================
 
     /**
-     * 给玩家一个提示：随机选一个错误或空格，填上正确答案
-     * 填完后格子会闪烁黄色动画
+     * 提示：优先使用逻辑推理找出可填的数字
+     *
+     * 推理优先级：
+     *   1. 唯余法（Naked Single）— 某格只有一个候选数
+     *   2. 隐唯法（Hidden Single）— 某数在行/列/宫中只能填在某格
+     *   3. 兜底：直接揭晓一个正确答案
      */
     const giveHint = () => {
         if (state.isGameOver) return;
@@ -669,29 +670,151 @@ const SudokuEngine = (() => {
         const grid = state.userGrid;
         const solution = state.solution;
         const fixed = state.fixedCells;
+        const notes = state.notes;
 
-        // 收集所有还没对的非固定格
-        let candidates = [];
+        // 确保笔记是最新的
+        autoMarkNotes();
+
+        // ---- 1. 唯余法：找一个只有一个候选数的空格 ----
         for (let r = 0; r < 9; r++) {
             for (let c = 0; c < 9; c++) {
-                if (!fixed[r][c] && grid[r][c] !== solution[r][c]) {
-                    candidates.push([r, c]);
+                if (fixed[r][c] || grid[r][c] !== 0) continue;
+                if (notes[r][c].size === 1) {
+                    const num = [...notes[r][c]][0];
+                    grid[r][c] = num;
+                    state.notes[r][c].clear();
+                    autoMarkNotes();
+                    renderBoard();
+                    flashHintCell(r, c);
+                    alert(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`);
+                    if (checkWin()) gameOver(true);
+                    return;
                 }
             }
         }
 
-        if (candidates.length === 0) {
-            alert('所有格子都已正确！');
-            return;
+        // ---- 2. 隐唯法：在行/列/宫中找一个数只能填在某格 ----
+        // 检查行
+        for (let r = 0; r < 9; r++) {
+            for (let num = 1; num <= 9; num++) {
+                // 找该行中 num 是否已在固定格或已填格中
+                let foundInRow = false;
+                for (let c = 0; c < 9; c++) {
+                    if (grid[r][c] === num) { foundInRow = true; break; }
+                }
+                if (foundInRow) continue;
+
+                // 找该行中哪些空格可以填 num（num 在其笔记中）
+                const possible = [];
+                for (let c = 0; c < 9; c++) {
+                    if (!fixed[r][c] && grid[r][c] === 0 && notes[r][c].has(num)) {
+                        possible.push(c);
+                    }
+                }
+                if (possible.length === 1) {
+                    const c = possible[0];
+                    grid[r][c] = num;
+                    state.notes[r][c].clear();
+                    autoMarkNotes();
+                    renderBoard();
+                    flashHintCell(r, c);
+                    alert(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`);
+                    if (checkWin()) gameOver(true);
+                    return;
+                }
+            }
         }
 
-        // 随机选一个提示
-        const [r, c] = candidates[Math.floor(Math.random() * candidates.length)];
-        grid[r][c] = solution[r][c];
-        state.notes[r][c].clear();
-        renderBoard();
+        // 检查列
+        for (let c = 0; c < 9; c++) {
+            for (let num = 1; num <= 9; num++) {
+                let foundInCol = false;
+                for (let r = 0; r < 9; r++) {
+                    if (grid[r][c] === num) { foundInCol = true; break; }
+                }
+                if (foundInCol) continue;
 
-        // 闪烁动画
+                const possible = [];
+                for (let r = 0; r < 9; r++) {
+                    if (!fixed[r][c] && grid[r][c] === 0 && notes[r][c].has(num)) {
+                        possible.push(r);
+                    }
+                }
+                if (possible.length === 1) {
+                    const r = possible[0];
+                    grid[r][c] = num;
+                    state.notes[r][c].clear();
+                    autoMarkNotes();
+                    renderBoard();
+                    flashHintCell(r, c);
+                    alert(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`);
+                    if (checkWin()) gameOver(true);
+                    return;
+                }
+            }
+        }
+
+        // 检查宫
+        for (let br = 0; br < 3; br++) {
+            for (let bc = 0; bc < 3; bc++) {
+                const sr = br * 3, sc = bc * 3;
+                for (let num = 1; num <= 9; num++) {
+                    let foundInBox = false;
+                    for (let rr = sr; rr < sr + 3; rr++) {
+                        for (let cc = sc; cc < sc + 3; cc++) {
+                            if (grid[rr][cc] === num) { foundInBox = true; break; }
+                        }
+                        if (foundInBox) break;
+                    }
+                    if (foundInBox) continue;
+
+                    const possible = [];
+                    for (let rr = sr; rr < sr + 3; rr++) {
+                        for (let cc = sc; cc < sc + 3; cc++) {
+                            if (!fixed[rr][cc] && grid[rr][cc] === 0 && notes[rr][cc].has(num)) {
+                                possible.push([rr, cc]);
+                            }
+                        }
+                    }
+                    if (possible.length === 1) {
+                        const [r, c] = possible[0];
+                        grid[r][c] = num;
+                        state.notes[r][c].clear();
+                        autoMarkNotes();
+                        renderBoard();
+                        flashHintCell(r, c);
+                        alert(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`);
+                        if (checkWin()) gameOver(true);
+                        return;
+                    }
+                }
+            }
+        }
+
+        // ---- 3. 兜底：直接揭晓一个空格 ----
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (!fixed[r][c] && grid[r][c] === 0) {
+                    grid[r][c] = solution[r][c];
+                    state.notes[r][c].clear();
+                    autoMarkNotes();
+                    renderBoard();
+                    flashHintCell(r, c);
+                    alert(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`);
+                    if (checkWin()) gameOver(true);
+                    return;
+                }
+            }
+        }
+
+        // 所有非固定格都正确
+        alert('所有格子都已正确！');
+    };
+
+    /**
+     * 闪烁提示格子
+     */
+    const flashHintCell = (r, c) => {
         const cells = boardEl.querySelectorAll('.cell');
         cells.forEach(el => {
             if (parseInt(el.dataset.row) === r && parseInt(el.dataset.col) === c) {
@@ -699,10 +822,6 @@ const SudokuEngine = (() => {
                 setTimeout(() => el.classList.remove('hint-glow'), 1200);
             }
         });
-
-        if (checkWin()) {
-            gameOver(true);
-        }
     };
 
 
@@ -729,6 +848,7 @@ const SudokuEngine = (() => {
                     }
                 }
             }
+            autoMarkNotes();
             renderBoard();
 
             if (checkWin()) {
@@ -765,7 +885,6 @@ const SudokuEngine = (() => {
      * 快捷键对照表：
      *   1-9     → 填入数字
      *   Backspace/Delete → 擦除
-     *   N       → 切换笔记模式
      *   方向键   → 移动选中格
      */
     const handleKeydown = (e) => {
@@ -779,10 +898,6 @@ const SudokuEngine = (() => {
         } else if (key === 'Backspace' || key === 'Delete') {
             e.preventDefault();
             placeNumber(0);
-        } else if (key === 'n' || key === 'N') {
-            e.preventDefault();
-            state.isNotesMode = !state.isNotesMode;
-            notesToggleBtn.classList.toggle('active', state.isNotesMode);
         } else if (key.startsWith('Arrow')) {
             e.preventDefault();
             let { selectedRow: r, selectedCol: c } = state;
@@ -804,6 +919,58 @@ const SudokuEngine = (() => {
 
 
     // ==============================================================
+    // 事件处理 — 一键标记
+    // ==============================================================
+
+    /**
+     * 遍历所有空格，填入行列宫中缺失的数字作为候选笔记
+     */
+    const autoMarkNotes = () => {
+        if (state.isGameOver) return;
+
+        const grid = state.userGrid;
+
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (grid[r][c] !== 0) {
+                    // 已填数字的格子清空笔记
+                    state.notes[r][c].clear();
+                    continue;
+                }
+
+                // 收集行、列、宫中已出现的数字
+                const present = new Set();
+
+                // 行
+                for (let i = 0; i < 9; i++) {
+                    if (grid[r][i] !== 0) present.add(grid[r][i]);
+                }
+                // 列
+                for (let i = 0; i < 9; i++) {
+                    if (grid[i][c] !== 0) present.add(grid[i][c]);
+                }
+                // 宫
+                const sr = Math.floor(r / 3) * 3;
+                const sc = Math.floor(c / 3) * 3;
+                for (let rr = sr; rr < sr + 3; rr++) {
+                    for (let cc = sc; cc < sc + 3; cc++) {
+                        if (grid[rr][cc] !== 0) present.add(grid[rr][cc]);
+                    }
+                }
+
+                // 候选数 = 1-9 减去已出现的数字
+                const candidates = new Set();
+                for (let n = 1; n <= 9; n++) {
+                    if (!present.has(n)) candidates.add(n);
+                }
+                state.notes[r][c] = candidates;
+            }
+        }
+
+    };
+
+
+    // ==============================================================
     // 初始化
     // ==============================================================
 
@@ -819,10 +986,10 @@ const SudokuEngine = (() => {
             });
         });
 
-        // 笔记模式切换
+        // 一键标记
         notesToggleBtn.addEventListener('click', () => {
-            state.isNotesMode = !state.isNotesMode;
-            notesToggleBtn.classList.toggle('active', state.isNotesMode);
+            autoMarkNotes();
+            renderBoard();
         });
 
         // 新游戏
