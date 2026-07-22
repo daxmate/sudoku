@@ -1133,6 +1133,11 @@ const SudokuEngine = (() => {
             });
         });
 
+        // 擦除按钮（在 action-buttons 中，单独绑定）
+        document.querySelector('.erase-btn').addEventListener('click', () => {
+            placeNumber(0);
+        });
+
         // 全部标记 — 切换开关
         notesToggleBtn.addEventListener('click', () => {
             state.allNotesOn = !state.allNotesOn;
