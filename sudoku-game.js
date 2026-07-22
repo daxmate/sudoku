@@ -23,7 +23,6 @@
     const newGameBtn = document.getElementById('newGameBtn');
     const hintBtn = document.getElementById('hintBtn');
     const leaderboardBtn = document.getElementById('leaderboardBtn');
-    const themeBtn = document.getElementById('themeBtn');
     const lbOverlay = document.getElementById('lbOverlay');
     const lbList = document.getElementById('lbList');
     const lbClose = document.getElementById('lbClose');
@@ -1304,22 +1303,6 @@
 
         // 排行榜
         leaderboardBtn.addEventListener('click', showLeaderboard);
-
-        // 主题切换
-        const applyTheme = (dark) => {
-            document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
-            themeBtn.classList.toggle('dark', dark);
-            try { localStorage.setItem('sudoku-theme', dark ? 'dark' : 'light'); } catch (e) {}
-        };
-        try {
-            const saved = localStorage.getItem('sudoku-theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            applyTheme(saved ? saved === 'dark' : prefersDark);
-        } catch (e) {}
-        themeBtn.addEventListener('click', () => {
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            applyTheme(!isDark);
-        });
         lbClose.addEventListener('click', () => lbOverlay.classList.remove('show'));
         lbOverlay.addEventListener('click', (e) => {
             if (e.target === lbOverlay) lbOverlay.classList.remove('show');
