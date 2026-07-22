@@ -261,3 +261,56 @@
 }
 
 
+/* ---------- 设置面板 ---------- */
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+.setting-row label:first-child {
+    font-size: .82rem;
+    color: #475569;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+    cursor: pointer;
+}
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.toggle-track {
+    position: absolute;
+    inset: 0;
+    background: #cbd5e1;
+    border-radius: 999px;
+    transition: background .15s ease;
+}
+.toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform .15s ease;
+}
+.toggle input:checked + .toggle-track { background: #6366f1; }
+.toggle input:checked + .toggle-track::after { transform: translateX(14px); }
+
+[data-theme="dark"] .setting-row label:first-child { color: #cbd5e1; }
+[data-theme="dark"] .toggle-track { background: #475569; }
+[data-theme="dark"] .toggle-track::after { background: #94a3b8; }
+[data-theme="dark"] .toggle input:checked + .toggle-track { background: #6366f1; }
+[data-theme="dark"] .toggle input:checked + .toggle-track::after { background: #fff; }
+
+

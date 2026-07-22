@@ -30,6 +30,7 @@ S.playNote = (freq, time, dur, vol = 0.1, type = 'sine') => {
 };
 
 S.playCompletionSound = () => {
+    if (window.S.state.soundOn === false) return;
     const c = ctx();
     if (!c) return;
     try {
@@ -39,12 +40,14 @@ S.playCompletionSound = () => {
 };
 
 S.playCorrectSound = () => {
+    if (window.S.state.soundOn === false) return;
     const c = ctx();
     if (!c) return;
     S.playNote(880, c.currentTime, 0.08, 0.06, 'sine');
 };
 
 S.playErrorSound = () => {
+    if (window.S.state.soundOn === false) return;
     const c = ctx();
     if (!c) return;
     const t = c.currentTime;
@@ -53,6 +56,7 @@ S.playErrorSound = () => {
 };
 
 S.playVictorySound = () => {
+    if (window.S.state.soundOn === false) return;
     const c = ctx();
     if (!c) return;
     const t = c.currentTime;

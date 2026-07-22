@@ -182,6 +182,7 @@ S.showFloatingScore = (pts, r, c) => {
 // ==============================================================
 
 S.checkAndAnimateLineCompletion = (r, c) => {
+    if (window.S.state.animOn === false) return;
     const g = S.state.userGrid;
     let done = false;
 
@@ -225,6 +226,7 @@ S.checkAndAnimateLineCompletion = (r, c) => {
 
 /** 提示格子闪烁 */
 S.flashHintCell = (r, c) => {
+    if (window.S.state.animOn === false) return;
     S.el.board.querySelectorAll('.cell').forEach(el => {
         if (parseInt(el.dataset.row) === r && parseInt(el.dataset.col) === c) {
             el.classList.add('hint-glow');

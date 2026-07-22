@@ -24,6 +24,12 @@ el.hintBtn = document.getElementById('hintBtn');
 el.hintCount = document.getElementById('hintCount');
 el.leaderboardBtn = document.getElementById('leaderboardBtn');
 el.themeBtn = document.getElementById('themeBtn');
+el.settingsBtn = document.getElementById('settingsBtn');
+el.settingsOverlay = document.getElementById('settingsOverlay');
+el.settingsClose = document.getElementById('settingsClose');
+el.settingSound = document.getElementById('settingSound');
+el.settingAnim = document.getElementById('settingAnim');
+el.settingDark = document.getElementById('settingDark');
 el.lbOverlay = document.getElementById('lbOverlay');
 el.lbList = document.getElementById('lbList');
 el.lbClose = document.getElementById('lbClose');
@@ -49,6 +55,8 @@ Object.assign(st, {
     timerSeconds: 0, timerInterval: null,
     difficulty: 'easy',
     score: 0, streak: 0, hintsUsed: 0, maxHints: 3,
+    soundOn: true,
+    animOn: true,
 });
 
 // ==============================================================
@@ -182,8 +190,10 @@ const placeNumber = (num) => {
         g[r][c] = num; st.notes[r][c].clear(); notesPruneNumber(num, r, c);
         S.renderBoard();
         S.playErrorSound();
-        const cel = el.board.children[r * 9 + c];
-        if (cel) cel.classList.add('shake');
+        if (st.animOn) {
+            const cel = el.board.children[r * 9 + c];
+            if (cel) cel.classList.add('shake');
+        }
         st.streak = 0;
         S.addScore(-30, r, c);
         if (st.mistakes >= st.maxMistakes) gameOver(false);
@@ -194,8 +204,10 @@ const placeNumber = (num) => {
     g[r][c] = num; st.notes[r][c].clear(); notesPruneNumber(num, r, c);
     S.renderBoard();
     S.playCorrectSound();
-    const cel = el.board.children[r * 9 + c];
-    if (cel) cel.classList.add('pop');
+    if (st.animOn) {
+        const cel = el.board.children[r * 9 + c];
+        if (cel) cel.classList.add('pop');
+    }
     st.streak++;
     const sm = st.streak >= 5 ? 3 : st.streak >= 3 ? 2 : st.streak >= 2 ? 1.5 : 1;
     S.addScore(Math.round(10 * sm), r, c);
@@ -338,11 +350,44 @@ const init = () => {
     el.hintBtn.addEventListener('click', giveHint);
     el.leaderboardBtn.addEventListener('click', S.showLeaderboard);
 
+    // 设置面板
+    el.settingsBtn.addEventListener('click', () => el.settingsOverlay.classList.add('show'));
+    el.settingsClose.addEventListener('click', () => el.settingsOverlay.classList.remove('show'));
+    el.settingsOverlay.addEventListener('click', (e) => {
+        if (e.target === el.settingsOverlay) el.settingsOverlay.classList.remove('show');
+    });
+
+    const loadSettings = () => {
+        try {
+            const s = JSON.parse(localStorage.getItem('sudoku-settings') || '{}');
+            st.soundOn = s.sound !== false;
+            st.animOn = s.anim !== false;
+            el.settingSound.checked = st.soundOn;
+            el.settingAnim.checked = st.animOn;
+        } catch (e) {}
+    };
+    const saveSettings = () => {
+        try { localStorage.setItem('sudoku-settings', JSON.stringify({ sound: st.soundOn, anim: st.animOn })); } catch (e) {}
+    };
+    el.settingSound.addEventListener('change', () => {
+        st.soundOn = el.settingSound.checked;
+        saveSettings();
+    });
+    el.settingAnim.addEventListener('change', () => {
+        st.animOn = el.settingAnim.checked;
+        saveSettings();
+    });
+    el.settingDark.addEventListener('change', () => {
+        applyTheme(el.settingDark.checked);
+    });
+    loadSettings();
+
     // 主题切换
     {
         const applyTheme = (dark) => {
             document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
             el.themeBtn.classList.toggle('dark', dark);
+            el.settingDark.checked = dark;
             try { localStorage.setItem('sudoku-theme', dark ? 'dark' : 'light'); } catch (e) {}
         };
         try {
