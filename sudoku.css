@@ -641,17 +641,18 @@ h1 {
     font-family: var(--font-sans);
     transition: all .12s ease;
 }
+.overlay-confirm {
+    background: #f1f4f8;
+    color: #4f46e5;
+}
+.overlay-confirm:hover {
+    background: #e5e9f0;
+}
 .overlay-cancel {
     background: #f1f4f8;
     color: #6d7584;
 }
 .overlay-cancel:hover {
     background: #e5e9f0;
-}
-.overlay-confirm {
-    background: #065f46;
-    color: #fff;
-}
-.overlay-confirm:hover {
-    background: #047857;
+    color: #dc2626;
 }
