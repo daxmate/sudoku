@@ -124,7 +124,11 @@ h1 {
 }
 
 .timer,
-.mistakes {
+.mistakes,
+.score-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     font-size: 0.82rem;
     font-weight: 500;
     color: #6d7584;
@@ -137,16 +141,7 @@ h1 {
 .mistakes span { color: #b85c5c; font-weight: 500; }
 .timer span { color: #5a8a6f; font-weight: 500; }
 
-.score-display {
-    font-size: .75rem;
-    font-weight: 500;
-    color: #6d7584;
-    background: #f1f4f8;
-    padding: 5px 12px;
-    border-radius: var(--radius-full);
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-}
+.score-display { font-size: .75rem; white-space: nowrap; }
 .score-display span { color: #5a6090; font-weight: 600; }
 
 .zoom-control {
