@@ -1064,8 +1064,10 @@ h1 {
 [data-theme="dark"] .action-buttons button.warning:hover { background: #451a03; color: #fbbf24; }
 [data-theme="dark"] .action-buttons button.mark-cell-btn:hover { background: #2e1065; color: #c4b5fd; }
 
-[data-theme="dark"] .bottom-row button.auto-mark-btn { color: #94a3b8; }
-[data-theme="dark"] .bottom-row button.auto-mark-btn:hover { color: #6ee7b7; border-color: #6366f1; }
+[data-theme="dark"] .bottom-row button.auto-mark-btn { background: #1e293b; color: #94a3b8; box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+[data-theme="dark"] .bottom-row button.auto-mark-btn:hover { background: #334155; color: #6ee7b7; }
+[data-theme="dark"] .bottom-row .new-game-btn { box-shadow: 0 2px 6px rgba(0,0,0,.25); }
+[data-theme="dark"] .bottom-row .new-game-btn:hover { box-shadow: 0 6px 18px rgba(99,102,241,.35); }
 [data-theme="dark"] .bottom-row button.auto-mark-btn.active { background: #065f46; color: #fff; }
 
 [data-theme="dark"] .bottom-row .new-game-btn { background: #1e293b; border-color: #334155; color: #e2e8f0; }
@@ -1079,8 +1081,9 @@ h1 {
 
 [data-theme="dark"] .info-bar { background: #1e293b; color: #e2e8f0; box-shadow: 0 -1px 12px rgba(0,0,0,.3); }
 
+[data-theme="dark"] .zoom-control { background: #1e293b; }
 [data-theme="dark"] .zoom-control label { color: #64748b; }
-[data-theme="dark"] .zoom-value { background: #1e293b; color: #94a3b8; }
+[data-theme="dark"] .zoom-label { color: #94a3b8; }
 
 [data-theme="dark"] .overlay-box { background: #1e293b; }
 [data-theme="dark"] .overlay-box h3,
