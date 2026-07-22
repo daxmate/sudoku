@@ -1210,7 +1210,11 @@ const SudokuEngine = (() => {
             try { localStorage.setItem('sudoku-zoom', val); } catch (e) {}
         };
 
-        zoomSlider.addEventListener('input', () => applyZoom(parseInt(zoomSlider.value)));
+        // 拖动时只更新标签数值，松开后才实际缩放
+        zoomSlider.addEventListener('input', () => {
+            zoomLabel.textContent = zoomSlider.value + '%';
+        });
+        zoomSlider.addEventListener('change', () => applyZoom(parseInt(zoomSlider.value)));
         applyZoom(parseInt(zoomSlider.value));
 
         // 键盘快捷键（全局）
