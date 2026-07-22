@@ -57,21 +57,22 @@
             confirmCancel.style.display = 'none';
         }
         confirmOverlay.classList.add('show');
-        const cleanup = () => {
+        const cleanup = (result) => {
             hideOverlay();
             confirmOk.removeEventListener('click', fire);
-            if (!opts.single) {
-                confirmCancel.removeEventListener('click', cleanup);
-                confirmOverlay.removeEventListener('click', onBgClick);
-            }
+            confirmCancel.removeEventListener('click', cancel);
+            confirmOverlay.removeEventListener('click', onBgClick);
+            if (result === 'ok' && opts.onOk) opts.onOk();
+            if (result === 'cancel' && opts.onCancel) opts.onCancel();
         };
-        const fire = () => { cleanup(); if (opts.onOk) opts.onOk(); };
+        const fire = () => cleanup('ok');
+        const cancel = () => cleanup('cancel');
         const onBgClick = (e) => {
-            if (e.target === confirmOverlay) cleanup();
+            if (e.target === confirmOverlay) cancel();
         };
         confirmOk.addEventListener('click', fire);
+        confirmCancel.addEventListener('click', cancel);
         if (!opts.single) {
-            confirmCancel.addEventListener('click', cleanup);
             confirmOverlay.addEventListener('click', onBgClick);
         }
     };
@@ -137,6 +138,11 @@
         return `${m}:${s}`;
     };
 
+    /** 清除已保存的游戏存档 */
+    const clearSavedGame = () => {
+        try { localStorage.removeItem('sudoku-saved-game'); } catch (e) {}
+    };
+
     /** 停止计时器 */
     const stopTimer = () => {
         if (state.timerInterval) {
@@ -188,6 +194,7 @@
         hintCount.textContent = state.maxHints;
         hintBtn.disabled = false;
         updateScoreDisplay();
+        clearSavedGame();
         scoreDetail.style.display = 'none';
 
         // 生成谜题
@@ -442,8 +449,79 @@
             localStorage.setItem('sudoku-history', JSON.stringify(h));
         } catch (e) {}
 
+        clearSavedGame();
         const msg = won ? '恭喜你完成数独！' : '游戏结束！错误已达上限。';
         showOverlay(msg, { single: true });
+    };
+
+    // ==============================================================
+    // 状态持久化
+    // ==============================================================
+
+    const serializeSets = (grid) => grid.map(row => row.map(set => [...set]));
+    const deserializeSets = (data) => data.map(row => row.map(arr => new Set(arr)));
+
+    const hasSavedGame = () => {
+        try {
+            const raw = localStorage.getItem('sudoku-saved-game');
+            if (!raw) return false;
+            const data = JSON.parse(raw);
+            return data && !data.isGameOver;
+        } catch (e) { return false; }
+    };
+
+    const saveGame = () => {
+        if (state.isGameOver) return;
+        const data = {
+            puzzle: state.puzzle,
+            solution: state.solution,
+            userGrid: state.userGrid,
+            notes: serializeSets(state.notes),
+            userRemovedNotes: serializeSets(state.userRemovedNotes),
+            mistakes: state.mistakes,
+            timerSeconds: state.timerSeconds,
+            difficulty: state.difficulty,
+            score: state.score,
+            streak: state.streak,
+            hintsUsed: state.hintsUsed,
+            isCandidateEditMode: state.isCandidateEditMode,
+        };
+        try { localStorage.setItem('sudoku-saved-game', JSON.stringify(data)); } catch (e) {}
+    };
+
+    const restoreGame = (saved) => {
+        stopTimer();
+        state.puzzle = saved.puzzle;
+        state.solution = saved.solution;
+        state.userGrid = saved.userGrid;
+        state.fixedCells = saved.puzzle.map(row => row.map(v => v !== 0));
+        state.notes = deserializeSets(saved.notes);
+        state.userRemovedNotes = deserializeSets(saved.userRemovedNotes);
+        state.mistakes = saved.mistakes;
+        state.timerSeconds = saved.timerSeconds;
+        state.difficulty = saved.difficulty;
+        state.score = saved.score;
+        state.streak = saved.streak || 0;
+        state.hintsUsed = saved.hintsUsed || 0;
+        state.isCandidateEditMode = saved.isCandidateEditMode || false;
+        state.isGameOver = false;
+        state.selectedRow = -1;
+        state.selectedCol = -1;
+        state.allNotesOn = false;
+        autoMarkBtn.classList.remove('active');
+        notesToggleBtn.classList.toggle('active', state.isCandidateEditMode);
+
+        timerDisplay.textContent = formatTime(state.timerSeconds);
+        mistakesDisplay.textContent = state.mistakes;
+        updateScoreDisplay();
+        hintCount.textContent = state.maxHints - state.hintsUsed;
+        hintBtn.disabled = state.hintsUsed >= state.maxHints;
+
+        diffButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.diff === state.difficulty));
+
+        renderBoard();
+        clearSavedGame();
+        startTimer();
     };
 
     // ==============================================================
@@ -1270,8 +1348,24 @@
         // 键盘快捷键（全局）
         document.addEventListener('keydown', handleKeydown);
 
-        // 以"简单"难度启动游戏
-        resetGame('easy');
+        // 页面关闭前自动保存
+        window.addEventListener('beforeunload', saveGame);
+
+        // 检查是否有未完成的游戏
+        if (hasSavedGame()) {
+            showOverlay('检测到未完成的数独，是否继续？', {
+                onOk: () => {
+                    try {
+                        const raw = localStorage.getItem('sudoku-saved-game');
+                        if (raw) restoreGame(JSON.parse(raw));
+                        else resetGame('easy');
+                    } catch (e) { resetGame('easy'); }
+                },
+                onCancel: () => resetGame('easy'),
+            });
+        } else {
+            resetGame('easy');
+        }
     };
 
     // 等待 DOM 加载完成后初始化
