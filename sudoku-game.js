@@ -20,8 +20,13 @@
     const notesToggleBtn = document.getElementById('notesToggle'); // 候选编辑按钮
     const autoMarkBtn = document.getElementById('autoMarkBtn'); // 全部标记按钮
     const markCellBtn = document.getElementById('markCellBtn'); // 单格备注按钮
-    const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
+    const newGameBtn = document.getElementById('newGameBtn');
     const hintBtn = document.getElementById('hintBtn');
+    const leaderboardBtn = document.getElementById('leaderboardBtn');
+    const lbOverlay = document.getElementById('lbOverlay');
+    const lbList = document.getElementById('lbList');
+    const lbClose = document.getElementById('lbClose');
+    const lbFilters = document.getElementById('lbFilters');
     const hintCount = document.getElementById('hintCount');
 
     // 自定义弹窗
@@ -441,6 +446,66 @@
         showOverlay(msg, { single: true });
     };
 
+    // ==============================================================
+    // 排行榜
+    // ==============================================================
+
+    const diffLabel = { easy: '简单', medium: '中等', hard: '困难', expert: '专家' };
+
+    const renderLeaderboard = (filter = 'all') => {
+        try {
+            const history = JSON.parse(localStorage.getItem('sudoku-history') || '[]');
+            const filtered = filter === 'all' ? history : history.filter(e => e.difficulty === filter);
+
+            // 更新筛选按钮状态
+            lbFilters.querySelectorAll('.lb-filter').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+
+            if (filtered.length === 0) {
+                lbList.innerHTML = '<p class="lb-empty">暂无游戏记录</p>';
+                return;
+            }
+
+            // 按积分降序排列
+            const sorted = [...filtered].sort((a, b) => b.score - a.score);
+
+            const fmtTime = (s) => {
+                const m = String(Math.floor(s / 60)).padStart(2, '0');
+                const sec = String(s % 60).padStart(2, '0');
+                return `${m}:${sec}`;
+            };
+
+            const fmtDate = (iso) => {
+                const d = new Date(iso);
+                return `${d.getMonth() + 1}/${d.getDate()}`;
+            };
+
+            let html = '';
+            sorted.forEach((entry, i) => {
+                const rank = i + 1;
+                const rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+                html += `<div class="lb-entry">
+                    <span class="lb-rank ${rankClass}">${rank}</span>
+                    <div class="lb-info">
+                        <span class="lb-score ${rankClass}">${entry.score}</span>
+                        <span class="lb-meta"><span class="lb-diff">${diffLabel[entry.difficulty] || entry.difficulty}</span>${fmtDate(entry.date)} · ${fmtTime(entry.time)}</span>
+                    </div>
+                    <span class="lb-time">${entry.won ? '✅' : '❌'}</span>
+                </div>`;
+            });
+
+            lbList.innerHTML = html;
+        } catch (e) {
+            lbList.innerHTML = '<p class="lb-empty">加载失败</p>';
+        }
+    };
+
+    /** 打开排行榜 */
+    const showLeaderboard = () => {
+        renderLeaderboard('all');
+        lbOverlay.classList.add('show');
+    };
 
     // ==============================================================
     // 事件处理 — 点击格子
@@ -1139,6 +1204,17 @@
 
         // 提示
         hintBtn.addEventListener('click', giveHint);
+
+        // 排行榜
+        leaderboardBtn.addEventListener('click', showLeaderboard);
+        lbClose.addEventListener('click', () => lbOverlay.classList.remove('show'));
+        lbOverlay.addEventListener('click', (e) => {
+            if (e.target === lbOverlay) lbOverlay.classList.remove('show');
+        });
+        lbFilters.addEventListener('click', (e) => {
+            const btn = e.target.closest('.lb-filter');
+            if (btn) renderLeaderboard(btn.dataset.filter);
+        });
 
         // 难度切换
         diffButtons.forEach(btn => {

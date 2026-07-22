@@ -103,12 +103,35 @@
                     </button>
                     <button class="new-game-btn" id="newGameBtn">✦ 新游戏</button>
                 </div>
+                <div class="leaderboard-row">
+                    <button class="lb-btn" id="leaderboardBtn">🏆 排行榜</button>
+                </div>
             </div>
         </div>
 
         <!-- 信息栏 -->
         <div class="info-bar" id="infoBar"></div>
 
+    </div>
+
+    <!-- 排行榜弹窗 -->
+    <div class="overlay lb-overlay" id="lbOverlay">
+        <div class="overlay-box lb-box">
+            <div class="lb-header">
+                <h2>🏆 排行榜</h2>
+                <span class="lb-close" id="lbClose">✕</span>
+            </div>
+            <div class="lb-filters" id="lbFilters">
+                <button class="lb-filter active" data-filter="all">全部</button>
+                <button class="lb-filter" data-filter="easy">简单</button>
+                <button class="lb-filter" data-filter="medium">中等</button>
+                <button class="lb-filter" data-filter="hard">困难</button>
+                <button class="lb-filter" data-filter="expert">专家</button>
+            </div>
+            <div class="lb-list" id="lbList">
+                <p class="lb-empty">暂无游戏记录</p>
+            </div>
+        </div>
     </div>
 
     <!-- 自定义确认弹窗 -->
