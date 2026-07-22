@@ -124,8 +124,8 @@ h1 {
 .mistakes {
     font-size: 0.82rem;
     font-weight: 600;
-    color: var(--color-text-muted);
-    background: var(--color-cell-highlight);
+    color: #6d7584;
+    background: #f1f4f8;
     padding: 5px 12px;
     border-radius: var(--radius-full);
     font-variant-numeric: tabular-nums;
@@ -164,10 +164,9 @@ h1 {
 }
 
 .difficulty-wrap button.active {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-    color: #fff;
-    box-shadow: 0 4px 12px rgba(99,102,241,.3);
+    background: #f1f4f8;
+    border-color: #cbd5e1;
+    color: #4f46e5;
 }
 
 
@@ -323,10 +322,10 @@ h1 {
     aspect-ratio: 1;
     border: none;
     border-radius: var(--radius-sm);
-    background: var(--color-cell-highlight);
-    color: var(--color-btn-text, #334155);
+    background: #f1f4f8;
+    color: #6d7584;
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all .12s ease;
     box-shadow: var(--shadow-btn);
@@ -334,7 +333,8 @@ h1 {
 }
 
 .num-grid button:hover {
-    background: #e2e8f0;
+    background: #e5e9f0;
+    color: #4f46e5;
     transform: translateY(-1px);
     box-shadow: var(--shadow-btn-hover);
 }
@@ -363,14 +363,22 @@ h1 {
 .action-buttons button {
     border: none;
     border-radius: var(--radius-sm);
-    padding: 8px 2px;
-    font-size: .68rem;
-    font-weight: 700;
+    height: 40px;
+    padding: 0;
     cursor: pointer;
     transition: all .12s ease;
     font-family: var(--font-sans);
     box-shadow: var(--shadow-btn);
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-buttons button svg {
+    width: 24px;
+    height: 24px;
+    display: block;
 }
 
 .action-buttons button:hover {
@@ -382,67 +390,48 @@ h1 {
 }
 
 /* 擦除 */
+.action-buttons button {
+    color: #6d7584;
+    background: #f1f4f8;
+}
+.action-buttons button:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+
 .action-buttons button.erase-btn {
-    background: linear-gradient(135deg, #fef2f2, #fee2e2);
     color: #b91c1c;
-    font-size: .85rem;
 }
 .action-buttons button.erase-btn:hover {
-    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    background: #fef2f2;
+    color: #dc2626;
 }
 
-/* 标记 */
-.action-buttons button.notes-toggle {
-    background: linear-gradient(135deg, #eef2ff, #e0e7ff);
-    color: #4338ca;
-}
-.action-buttons button.notes-toggle:hover {
-    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-}
 .action-buttons button.notes-toggle.active {
-    background: linear-gradient(135deg, #4338ca, #3730a3);
-    color: #fff;
+    background: #eef2ff;
+    color: #4f46e5;
 }
 
-/* 候选 */
-.action-buttons button.mark-cell-btn {
-    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
-    color: #6d28d9;
-}
-.action-buttons button.mark-cell-btn:hover {
-    background: linear-gradient(135deg, #ede9fe, #ddd6fe);
-}
-
-/* 编辑 */
-.action-buttons button.candidate-edit-btn {
-    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-    color: #065f46;
-}
-.action-buttons button.candidate-edit-btn:hover {
-    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-}
-.action-buttons button.candidate-edit-btn.active {
-    background: linear-gradient(135deg, #065f46, #047857);
-    color: #fff;
-}
-
-/* 提示（带计数徽标） */
 .action-buttons button.warning {
-    background: linear-gradient(135deg, #fef3c7, #fde68a);
     color: #92400e;
-    font-size: .75rem;
 }
 .action-buttons button.warning:hover {
-    background: linear-gradient(135deg, #fde68a, #fcd34d);
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.action-buttons button.mark-cell-btn:hover {
+    background: #f5f3ff;
+    color: #6d28d9;
 }
 
 .hint-count {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    background: #dc2626;
+    top: -3px;
+    right: -3px;
+    background: #94a3b8;
     color: #fff;
-    font-size: .55rem;
+    font-size: .5rem;
     font-weight: 700;
     min-width: 14px;
     height: 14px;
@@ -454,14 +443,7 @@ h1 {
     line-height: 1;
 }
 
-/* 解答 */
-.action-buttons button.success {
-    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
-    color: #065f46;
-    font-size: .75rem;
-}
-.action-buttons button.success:hover {
-    background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+
 }
 
 
@@ -491,23 +473,25 @@ h1 {
 }
 
 .secondary-actions button.candidate-edit-btn {
-    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-    color: #065f46;
+    background: #f1f4f8;
+    color: #6d7584;
 }
 .secondary-actions button.candidate-edit-btn:hover {
-    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    background: #e5e9f0;
+    color: #065f46;
 }
 .secondary-actions button.candidate-edit-btn.active {
-    background: linear-gradient(135deg, #065f46, #047857);
+    background: #065f46;
     color: #fff;
 }
 
 .secondary-actions button.success {
-    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-    color: #1e40af;
+    background: #f1f4f8;
+    color: #6d7584;
 }
 .secondary-actions button.success:hover {
-    background: linear-gradient(135deg, #bfdbfe, #93c5fd);
+    background: #e5e9f0;
+    color: #059669;
 }
 
 
@@ -519,19 +503,20 @@ h1 {
     border: none;
     border-radius: var(--radius-sm);
     font-size: .8rem;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     transition: all .15s ease;
     font-family: var(--font-sans);
-    background: linear-gradient(135deg, #1e293b, #334155);
-    color: white;
+    background: #f1f4f8;
+    color: #6d7584;
     box-shadow: var(--shadow-btn);
     margin-top: auto;
 }
 
 .new-game-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
     transform: translateY(-1px);
-    filter: brightness(1.15);
 }
 
 
@@ -586,11 +571,15 @@ h1 {
 
     .action-buttons {
         flex: 1;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(4, 1fr);
     }
     .action-buttons button {
-        padding: 10px 2px;
-        font-size: .68rem;
+        height: 36px;
+        padding: 0;
+    }
+    .action-buttons button svg {
+        width: 20px;
+        height: 20px;
     }
 
     .secondary-actions {
@@ -617,7 +606,8 @@ h1 {
     .sudoku-board { max-width: 280px; }
     .side-panel { max-width: 280px; }
     .num-grid button { font-size: .85rem; }
-    .action-buttons button { font-size: .6rem; padding: 7px 2px; }
+    .action-buttons button { height: 32px; }
+    .action-buttons button svg { width: 18px; height: 18px; }
     .secondary-actions button { font-size: .6rem; padding: 6px 2px; }
     .new-game-btn { font-size: .68rem; padding: 7px 0; }
 }
