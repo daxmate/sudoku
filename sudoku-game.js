@@ -36,6 +36,15 @@
         confirmCancel.style.display = '';
     };
 
+    /** 底部信息栏（非阻塞提示） */
+    let _infoTimer = null;
+    const showInfo = (msg) => {
+        if (_infoTimer) clearTimeout(_infoTimer);
+        infoBar.textContent = msg;
+        infoBar.classList.add('show');
+        _infoTimer = setTimeout(() => infoBar.classList.remove('show'), 3000);
+    };
+
     const showOverlay = (msg, opts = {}) => {
         confirmMsg.innerHTML = msg;
         if (opts.single) {
@@ -779,7 +788,7 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showOverlay(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`, { single: true });
+                    showInfo(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -808,7 +817,7 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showOverlay(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`, { single: true });
+                    showInfo(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -836,7 +845,7 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showOverlay(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`, { single: true });
+                    showInfo(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -871,7 +880,7 @@
                         renderBoard();
                         flashHintCell(r, c);
                         checkAndAnimateLineCompletion(r, c);
-                        showOverlay(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`, { single: true });
+                        showInfo(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`);
                         if (checkWin()) gameOver(true);
                         return;
                     }
@@ -887,14 +896,14 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showOverlay(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`, { single: true });
+                    showInfo(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
             }
         }
 
-        showOverlay('所有格子都已正确！', { single: true });
+        showInfo('✅ 所有格子都已正确！');
     };
 
     /**

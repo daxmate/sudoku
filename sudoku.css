@@ -713,6 +713,30 @@ h1 {
    9. 自定义确认弹窗
    ================================================================ */
 
+.info-bar {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(15,23,42,.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #e2e8f0;
+    font-size: .82rem;
+    font-weight: 450;
+    padding: 10px 22px;
+    border-radius: 999px;
+    white-space: nowrap;
+    z-index: 200;
+    transition: transform .25s ease, opacity .25s ease;
+    opacity: 0;
+    pointer-events: none;
+}
+.info-bar.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
 .overlay {
     display: none;
     position: fixed;
