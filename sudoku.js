@@ -575,7 +575,7 @@ const SudokuEngine = (() => {
                 if (v > 0) counts[v]++;
             }
         }
-        document.querySelectorAll('.num-pad button[data-num]').forEach(btn => {
+        document.querySelectorAll('.num-grid button[data-num]').forEach(btn => {
             const num = parseInt(btn.dataset.num);
             if (num === 0) return; // 擦除按钮不处理
             if (counts[num] >= 9) {
@@ -1126,7 +1126,7 @@ const SudokuEngine = (() => {
      */
     const init = () => {
         // 数字面板按钮点击
-        document.querySelectorAll('.num-pad button[data-num]').forEach(btn => {
+        document.querySelectorAll('.num-grid button[data-num]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const num = parseInt(btn.dataset.num);
                 placeNumber(num);

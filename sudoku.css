@@ -1,8 +1,7 @@
 /* ================================================================
-   数独游戏 - 全部样式（现代版）
+   数独游戏 - 全部样式（双栏版）
    ================================================================
-   现代极简风格，深色背景 + 毛玻璃浮起卡片。
-   如果你要改颜色，找 --color-* CSS 变量即可。
+   棋盘居左，操作面板居右，紧凑高效。
    ================================================================ */
 
 
@@ -11,68 +10,52 @@
    ================================================================ */
 
 :root {
-    /* 主色调 — 靛蓝系 */
-    --color-accent:      #6366f1;
-    --color-accent-dark: #4f46e5;
-    --color-accent-light: #a5b4fc;
+    --color-accent:        #6366f1;
+    --color-accent-dark:   #4f46e5;
+    --color-accent-light:  #a5b4fc;
 
-    /* 文字 */
-    --color-text:        #1e293b;
-    --color-text-muted:  #64748b;
-    --color-text-light:  #94a3b8;
+    --color-text:          #1e293b;
+    --color-text-muted:    #64748b;
+    --color-text-light:    #94a3b8;
 
-    /* 背景 */
-    --color-surface:     rgba(255, 255, 255, 0.92);
-    --color-bg:          #0f172a;
+    --color-surface:       rgba(255, 255, 255, 0.94);
+    --color-bg:            #0f172a;
 
-    /* 棋盘 */
-    --color-board-border:#334155;
-    --color-box-border:  #1e293b;
-    --color-cell-bg:     #ffffff;
-    --color-cell-fixed:  #0f172a;
-    --color-cell-user:   #4f46e5;
+    --color-board-border:  #334155;
+    --color-box-border:    #888;
+    --color-cell-bg:       #ffffff;
+    --color-cell-fixed:    #0f172a;
+    --color-cell-user:     #4f46e5;
     --color-cell-selected: #eef2ff;
-    --color-cell-highlight: #f1f5f9;
-    --color-cell-same:   #dbeafe;
-    --color-cell-error:  #fef2f2;
+    --color-cell-highlight:#f1f5f9;
+    --color-cell-same:     #dbeafe;
+    --color-cell-error:    #fef2f2;
     --color-cell-error-text: #dc2626;
-    --color-note-text:   #94a3b8;
+    --color-note-text:     #94a3b8;
 
-    /* 按钮 */
-    --color-btn-bg:      #f1f5f9;
-    --color-btn-text:    #334155;
-    --color-btn-hover:   #e2e8f0;
-
-    /* 圆角 */
-    --radius-sm:  8px;
-    --radius-md:  12px;
-    --radius-lg:  20px;
-    --radius-xl:  28px;
+    --radius-sm:   6px;
+    --radius-md:   10px;
+    --radius-lg:   20px;
+    --radius-xl:   28px;
     --radius-full: 9999px;
 
-    /* 阴影 */
-    --shadow-card:   0 25px 80px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.15);
-    --shadow-btn:    0 2px 6px rgba(0, 0, 0, 0.08);
-    --shadow-btn-hover: 0 8px 24px rgba(99, 102, 241, 0.25);
-    --shadow-board:  0 8px 32px rgba(0, 0, 0, 0.12);
+    --shadow-card:     0 25px 80px rgba(0,0,0,.35), 0 4px 16px rgba(0,0,0,.15);
+    --shadow-btn:      0 2px 6px rgba(0,0,0,.06);
+    --shadow-btn-hover: 0 6px 18px rgba(99,102,241,.2);
+    --shadow-board:    0 8px 32px rgba(0,0,0,.1);
 
-    /* 字体 */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: var(--font-sans);
     background: var(--color-bg);
     background-image:
-        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
-        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(139, 92, 246, 0.08), transparent),
-        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(59, 130, 246, 0.08), transparent);
+        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,.15), transparent),
+        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(139,92,246,.08), transparent),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(59,130,246,.08), transparent);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -82,7 +65,7 @@ body {
 
 
 /* ================================================================
-   2. 主容器 — 毛玻璃卡片
+   2. 主容器
    ================================================================ */
 
 .container {
@@ -90,13 +73,12 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: var(--radius-xl);
-    padding: 28px 32px 32px;
+    padding: 24px 28px 28px;
     box-shadow: var(--shadow-card);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255,255,255,.08);
     text-align: center;
-    max-width: 580px;
+    max-width: 650px;
     width: 100%;
-    transition: all 0.3s ease;
 }
 
 
@@ -106,10 +88,10 @@ body {
 
 h1 {
     color: var(--color-text);
-    font-size: 2rem;
+    font-size: 1.7rem;
     font-weight: 800;
-    letter-spacing: 6px;
-    margin-bottom: 2px;
+    letter-spacing: 5px;
+    margin-bottom: 1px;
     background: linear-gradient(135deg, #4f46e5, #7c3aed);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -118,41 +100,38 @@ h1 {
 
 .subtitle {
     color: var(--color-text-light);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 500;
-    letter-spacing: 3px;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 
 /* ================================================================
-   4. 顶部信息栏
+   4. 信息栏
    ================================================================ */
 
 .game-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     padding: 0 2px;
 }
 
 .timer,
 .mistakes {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 600;
     color: var(--color-text-muted);
-    background: var(--color-btn-bg);
-    padding: 6px 14px;
+    background: var(--color-cell-highlight);
+    padding: 5px 12px;
     border-radius: var(--radius-full);
     font-variant-numeric: tabular-nums;
 }
 
-.mistakes span {
-    color: var(--color-cell-error-text);
-    font-weight: 700;
-}
+.mistakes span { color: var(--color-cell-error-text); font-weight: 700; }
 
 
 /* ================================================================
@@ -163,19 +142,19 @@ h1 {
     display: flex;
     justify-content: center;
     gap: 6px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .difficulty-wrap button {
     background: transparent;
     border: 1.5px solid #e2e8f0;
-    padding: 5px 16px;
+    padding: 4px 14px;
     border-radius: var(--radius-full);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all .2s ease;
     font-family: var(--font-sans);
 }
 
@@ -188,18 +167,25 @@ h1 {
     background: var(--color-accent);
     border-color: var(--color-accent);
     color: #fff;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 12px rgba(99,102,241,.3);
 }
 
 
 /* ================================================================
-   6. 数独棋盘
+   6. 主行：棋盘 + 右侧面板
    ================================================================ */
 
-.board-wrapper {
+.board-row {
     display: flex;
     justify-content: center;
-    margin-bottom: 18px;
+    align-items: stretch;
+    gap: 14px;
+}
+
+/* ---- 棋盘 ---- */
+
+.board-wrapper {
+    flex-shrink: 0;
 }
 
 .sudoku-board {
@@ -210,38 +196,36 @@ h1 {
     border: 2px solid var(--color-board-border);
     border-radius: var(--radius-md);
     overflow: hidden;
-    width: 100%;
-    max-width: 440px;
-    aspect-ratio: 1 / 1;
+    width: 360px;
+    height: 360px;
     box-shadow: var(--shadow-board);
 }
 
-/* 格子基础样式 */
+/* 单元格 */
 .cell {
     background-color: var(--color-cell-bg);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 500;
     color: var(--color-text);
     cursor: pointer;
-    transition: background 0.1s ease, color 0.1s ease;
-    aspect-ratio: 1 / 1;
+    transition: background .1s ease, color .1s ease;
     user-select: none;
     position: relative;
 }
 
-/* ---- 3x3 宫格粗边框 ---- */
+/* 3×3 宫格分隔线 */
 .cell:nth-child(3n):not(:nth-child(9n)) {
-    border-right: 2px solid var(--color-box-border);
+    border-right: 1px solid var(--color-box-border);
 }
 .cell:nth-child(n+19):nth-child(-n+27),
 .cell:nth-child(n+46):nth-child(-n+54) {
-    border-bottom: 2px solid var(--color-box-border);
+    border-bottom: 1px solid var(--color-box-border);
 }
 
-/* 棋盘外围框线在圆角处更自然 */
+/* 外围圆角 */
 .sudoku-board .cell:first-child {
     border-top-left-radius: var(--radius-md);
 }
@@ -255,39 +239,30 @@ h1 {
     border-bottom-right-radius: var(--radius-md);
 }
 
-/* ---- 格子状态 ---- */
-
+/* 格子状态 */
 .cell.fixed {
     color: var(--color-cell-fixed);
     font-weight: 700;
 }
-
 .cell.user-input {
     color: var(--color-cell-user);
     font-weight: 600;
 }
-
-/* 选中格 — 使用 ring 而非 outline，视觉效果更现代 */
 .cell.selected {
     background-color: var(--color-cell-selected) !important;
     box-shadow: inset 0 0 0 2.5px var(--color-accent);
     z-index: 2;
 }
-
 .cell.highlighted {
     background-color: var(--color-cell-highlight);
 }
-
 .cell.same-number {
     background-color: var(--color-cell-same);
 }
-
 .cell.error {
     background-color: var(--color-cell-error) !important;
     color: var(--color-cell-error-text) !important;
 }
-
-/* 悬停微交互 */
 .cell:not(.fixed):hover {
     background-color: #f8fafc;
 }
@@ -295,16 +270,14 @@ h1 {
 /* 提示闪烁 */
 .cell.hint-glow {
     background-color: #fef9c3 !important;
-    color: var(--color-text) !important;
-    animation: hintPulse 0.5s ease 2;
+    animation: hintPulse .5s ease 2;
 }
 @keyframes hintPulse {
     0%, 100% { transform: scale(1); }
     50%  { transform: scale(1.1); }
 }
 
-/* ---- 候选数字 ---- */
-
+/* 候选数字 */
 .cell .notes-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -317,7 +290,7 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.5rem;
+    font-size: .45rem;
     font-weight: 500;
     color: var(--color-note-text);
     line-height: 1;
@@ -325,231 +298,326 @@ h1 {
 
 
 /* ================================================================
-   7. 数字面板
+   7. 右侧操作面板
    ================================================================ */
 
-.num-pad {
+.side-panel {
     display: flex;
-    justify-content: center;
-    gap: 5px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 140px;
+    max-width: 180px;
 }
 
-.num-pad button {
-    width: 38px;
-    height: 38px;
-    border-radius: var(--radius-sm);
+/* ---- 数字九宫格 ---- */
+
+.num-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+
+.num-grid button {
+    width: 100%;
+    aspect-ratio: 1;
     border: none;
-    background: var(--color-btn-bg);
-    color: var(--color-btn-text);
-    font-size: 1.15rem;
-    font-weight: 600;
+    border-radius: var(--radius-sm);
+    background: var(--color-cell-highlight);
+    color: var(--color-btn-text, #334155);
+    font-size: 1.2rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all .12s ease;
     box-shadow: var(--shadow-btn);
     font-family: var(--font-sans);
 }
 
-.num-pad button:hover {
-    background: var(--color-btn-hover);
-    transform: translateY(-2px);
+.num-grid button:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
     box-shadow: var(--shadow-btn-hover);
 }
-.num-pad button:active {
+.num-grid button:active {
     transform: translateY(0);
 }
 
-/* 数字耗尽状态 */
-.num-pad button.depleted {
-    opacity: 0.3;
+/* 数字耗尽 */
+.num-grid button.depleted {
+    opacity: .25;
     cursor: not-allowed;
     transform: none !important;
     box-shadow: none !important;
     pointer-events: none;
 }
 
-/* ---- 功能按钮 ---- */
 
-.num-pad button.erase-btn {
+/* ---- 功能按钮行（参考图风格：4个一行）---- */
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.action-buttons button {
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px 2px;
+    font-size: .68rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .12s ease;
+    font-family: var(--font-sans);
+    box-shadow: var(--shadow-btn);
+    position: relative;
+}
+
+.action-buttons button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-btn-hover);
+}
+.action-buttons button:active {
+    transform: translateY(0);
+}
+
+/* 擦除 */
+.action-buttons button.erase-btn {
     background: linear-gradient(135deg, #fef2f2, #fee2e2);
     color: #b91c1c;
-    font-size: 0.8rem;
-    width: 50px;
+    font-size: .85rem;
 }
-.num-pad button.erase-btn:hover {
+.action-buttons button.erase-btn:hover {
     background: linear-gradient(135deg, #fee2e2, #fecaca);
 }
 
-.num-pad button.notes-toggle {
+/* 标记 */
+.action-buttons button.notes-toggle {
     background: linear-gradient(135deg, #eef2ff, #e0e7ff);
     color: #4338ca;
-    font-size: 0.65rem;
-    font-weight: 700;
-    width: 50px;
 }
-.num-pad button.notes-toggle:hover {
+.action-buttons button.notes-toggle:hover {
     background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
 }
-.num-pad button.notes-toggle.active {
+.action-buttons button.notes-toggle.active {
     background: linear-gradient(135deg, #4338ca, #3730a3);
     color: #fff;
 }
 
-.num-pad button.mark-cell-btn {
+/* 候选 */
+.action-buttons button.mark-cell-btn {
     background: linear-gradient(135deg, #f5f3ff, #ede9fe);
     color: #6d28d9;
-    font-size: 0.65rem;
-    font-weight: 700;
-    width: 60px;
 }
-.num-pad button.mark-cell-btn:hover {
+.action-buttons button.mark-cell-btn:hover {
     background: linear-gradient(135deg, #ede9fe, #ddd6fe);
 }
 
-.num-pad button.candidate-edit-btn {
+/* 编辑 */
+.action-buttons button.candidate-edit-btn {
     background: linear-gradient(135deg, #ecfdf5, #d1fae5);
     color: #065f46;
-    font-size: 0.65rem;
-    font-weight: 700;
-    width: 60px;
 }
-.num-pad button.candidate-edit-btn:hover {
+.action-buttons button.candidate-edit-btn:hover {
     background: linear-gradient(135deg, #d1fae5, #a7f3d0);
 }
-.num-pad button.candidate-edit-btn.active {
+.action-buttons button.candidate-edit-btn.active {
     background: linear-gradient(135deg, #065f46, #047857);
     color: #fff;
 }
 
-
-/* ================================================================
-   8. 底部控制按钮
-   ================================================================ */
-
-.controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 2px;
+/* 提示（带计数徽标） */
+.action-buttons button.warning {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    color: #92400e;
+    font-size: .75rem;
+}
+.action-buttons button.warning:hover {
+    background: linear-gradient(135deg, #fde68a, #fcd34d);
 }
 
-.controls button {
-    padding: 9px 20px;
+.hint-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: #dc2626;
+    color: #fff;
+    font-size: .55rem;
+    font-weight: 700;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+}
+
+/* 解答 */
+.action-buttons button.success {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: #065f46;
+    font-size: .75rem;
+}
+.action-buttons button.success:hover {
+    background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+}
+
+
+/* ---- 次级操作（编辑 / 解答）---- */
+
+.secondary-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+}
+
+.secondary-actions button {
     border: none;
-    border-radius: var(--radius-full);
-    font-size: 0.82rem;
+    border-radius: var(--radius-sm);
+    padding: 9px 2px;
+    font-size: .68rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all .12s ease;
     font-family: var(--font-sans);
-    letter-spacing: 0.3px;
+    box-shadow: var(--shadow-btn);
 }
 
-.controls button:hover {
-    transform: translateY(-2px);
+.secondary-actions button:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
 }
 
-.controls button.primary {
+.secondary-actions button.candidate-edit-btn {
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+    color: #065f46;
+}
+.secondary-actions button.candidate-edit-btn:hover {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+}
+.secondary-actions button.candidate-edit-btn.active {
+    background: linear-gradient(135deg, #065f46, #047857);
+    color: #fff;
+}
+
+.secondary-actions button.success {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    color: #1e40af;
+}
+.secondary-actions button.success:hover {
+    background: linear-gradient(135deg, #bfdbfe, #93c5fd);
+}
+
+
+/* ---- 新游戏（独立全宽按钮，参考图风格）---- */
+
+.new-game-btn {
+    width: 100%;
+    padding: 11px 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: .8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s ease;
+    font-family: var(--font-sans);
     background: linear-gradient(135deg, #1e293b, #334155);
     color: white;
-    box-shadow: 0 4px 14px rgba(30, 41, 59, 0.3);
-}
-.controls button.primary:hover {
-    box-shadow: 0 8px 24px rgba(30, 41, 59, 0.4);
+    box-shadow: var(--shadow-btn);
+    margin-top: auto;
 }
 
-.controls button.success {
-    background: linear-gradient(135deg, #059669, #10b981);
-    color: white;
-    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
-}
-.controls button.success:hover {
-    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
-}
-
-.controls button.warning {
-    background: linear-gradient(135deg, #d97706, #f59e0b);
-    color: white;
-    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
-}
-.controls button.warning:hover {
-    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.4);
+.new-game-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.15);
 }
 
 
 /* ================================================================
-   9. 响应式
+   8. 响应式
    ================================================================ */
 
-@media (max-width: 540px) {
+@media (max-width: 580px) {
     .container {
-        padding: 16px 12px 20px;
+        max-width: 100%;
+        padding: 16px 14px 20px;
         border-radius: var(--radius-lg);
     }
     h1 {
-        font-size: 1.6rem;
-        letter-spacing: 4px;
+        font-size: 1.4rem;
+        letter-spacing: 3px;
     }
-    .subtitle {
-        font-size: 0.7rem;
-        margin-bottom: 14px;
+    .subtitle { margin-bottom: 10px; }
+
+    .board-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
     }
+
     .sudoku-board {
-        max-width: 100%;
+        width: 100%;
+        max-width: 340px;
+        height: auto;
+        aspect-ratio: 1;
     }
-    .cell {
-        font-size: 1.15rem;
+
+    .side-panel {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-width: 340px;
+        min-width: 0;
+        width: 100%;
+        gap: 6px;
     }
-    .cell .notes-container span {
-        font-size: 0.45rem;
+
+    .num-grid {
+        flex: 1 1 100%;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 3px;
     }
-    .num-pad button {
-        width: 32px;
-        height: 32px;
+    .num-grid button {
         font-size: 1rem;
+        aspect-ratio: 1;
     }
-    .num-pad button.erase-btn,
-    .num-pad button.notes-toggle,
-    .num-pad button.mark-cell-btn,
-    .num-pad button.candidate-edit-btn {
-        width: 40px;
-        font-size: 0.6rem;
+    .num-grid button.depleted { opacity: .2; }
+
+    .action-buttons {
+        flex: 1;
+        grid-template-columns: repeat(6, 1fr);
     }
-    .controls button {
-        padding: 7px 14px;
-        font-size: 0.75rem;
+    .action-buttons button {
+        padding: 10px 2px;
+        font-size: .68rem;
     }
-    .difficulty-wrap button {
-        padding: 4px 12px;
-        font-size: 0.72rem;
+
+    .secondary-actions {
+        margin-top: 0;
+    }
+    .secondary-actions button {
+        padding: 8px 2px;
+        font-size: .65rem;
+    }
+    .new-game-btn {
+        padding: 9px 0;
+        font-size: .72rem;
+        margin-top: 0;
     }
 }
 
 @media (max-width: 380px) {
     .container {
-        padding: 12px 8px 16px;
+        padding: 10px 8px 14px;
     }
-    h1 {
-        font-size: 1.3rem;
-    }
-    .cell {
-        font-size: 0.95rem;
-    }
-    .num-pad {
-        gap: 4px;
-    }
-    .num-pad button {
-        width: 28px;
-        height: 28px;
-        font-size: 0.8rem;
-    }
-    .num-pad button.erase-btn,
-    .num-pad button.notes-toggle,
-    .num-pad button.mark-cell-btn,
-    .num-pad button.candidate-edit-btn {
-        width: 34px;
-        font-size: 0.55rem;
-    }
+    h1 { font-size: 1.2rem; }
+    .cell { font-size: 1rem; }
+    .cell .notes-container span { font-size: .4rem; }
+    .sudoku-board { max-width: 280px; }
+    .side-panel { max-width: 280px; }
+    .num-grid button { font-size: .85rem; }
+    .action-buttons button { font-size: .6rem; padding: 7px 2px; }
+    .secondary-actions button { font-size: .6rem; padding: 6px 2px; }
+    .new-game-btn { font-size: .68rem; padding: 7px 0; }
 }
