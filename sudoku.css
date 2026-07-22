@@ -131,7 +131,7 @@ h1 {
     font-variant-numeric: tabular-nums;
 }
 
-.mistakes span { color: var(--color-cell-error-text); font-weight: 700; }
+.mistakes span { color: #78716c; font-weight: 700; }
 
 
 /* ================================================================
