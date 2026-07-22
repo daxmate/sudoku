@@ -23,10 +23,10 @@
 
 ## 使用
 
-直接打开 `sudoku.html` 即可游玩 —— 无需安装、无需服务器。
+直接打开 `index.html` 即可游玩 —— 无需安装、无需服务器。
 
 ```bash
-open sudoku.html
+open index.html
 ```
 
 或部署到任何静态托管服务（GitHub Pages、Netlify 等）。
@@ -43,17 +43,30 @@ open sudoku.html
 
 ```
 sudoku/
-├── sudoku.html    # HTML 骨架
-├── sudoku.css     # 全部样式
-├── sudoku-engine.js # 数独核心算法（生成、求解、验证）
-├── sudoku-game.js  # UI 控制器（界面交互、事件绑定）
-└── README.md      # 本文件
+├── index.html         # 入口页面
+├── css/
+│   ├── base.css       # CSS 变量 + 重置
+│   ├── board.css      # 棋盘 + 格子 + 动画
+│   ├── panel.css      # 操作面板 + 按钮
+│   ├── overlays.css   # 弹窗 + 排行榜 + 积分明细
+│   ├── theme.css      # 暗色主题覆盖
+│   └── main.css       # 布局 + 响应式
+├── js/
+│   ├── engine.js      # 数独核心算法（生成、求解、验证）
+│   ├── shared.js      # 共享命名空间
+│   ├── sound.js       # 音效合成
+│   ├── ui.js          # 棋盘渲染 + 弹窗 + 动画
+│   ├── features.js    # 积分 + 排行榜 + 存档
+│   ├── hint.js        # 提示推理逻辑
+│   └── game.js        # 入口控制器
+├── README.md          # 本文件
+└── LICENSE
 ```
 
 ## 技术细节
 
 - **核心引擎** (`SudokuEngine`) — 回溯算法生成唯一解谜题，完整求解器，候选计算
-- **UI 层** — 原生 DOM 操作，零依赖
+- **UI 层** — 原生 DOM 操作，零依赖，模块化拆分（7 个 JS 模块 / 6 个 CSS 文件）
 - **布局** — 双栏布局（棋盘左 + 操作面板右）
 - **图标** — 内联 SVG 图标，跟随 `currentColor` 配色
 - **弹窗** — 自定义浮层替代浏览器原生 `alert` / `confirm`
