@@ -286,6 +286,43 @@ h1 {
     animation: lineComplete 0.6s ease-out;
 }
 
+/* ---- 填数弹跳 ---- */
+@keyframes cellPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.12); }
+    70%  { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+.cell.pop {
+    animation: cellPop 0.3s ease-out;
+}
+
+/* ---- 错误抖动 ---- */
+@keyframes cellShake {
+    0%, 100% { transform: translateX(0); }
+    20%      { transform: translateX(-4px); }
+    40%      { transform: translateX(4px); }
+    60%      { transform: translateX(-3px); }
+    80%      { transform: translateX(3px); }
+}
+.cell.shake {
+    animation: cellShake 0.35s ease;
+}
+
+/* ---- 浮动加分文字（Step 3 复用） ---- */
+@keyframes scoreFloatUp {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-36px) scale(1.15); }
+}
+.score-float {
+    position: fixed;
+    font-weight: 600;
+    font-size: 14px;
+    pointer-events: none;
+    z-index: 100;
+    animation: scoreFloatUp 0.8s ease-out forwards;
+}
+
 /* 外围圆角 */
 .sudoku-board .cell:first-child {
     border-top-left-radius: var(--radius-md);

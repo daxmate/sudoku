@@ -375,6 +375,7 @@
         state.isGameOver = true;
         stopTimer();
         if (won) {
+            playVictorySound();
             showOverlay('🎉 恭喜你完成数独！太棒啦！', { single: true });
         } else {
             showOverlay('💔 游戏结束！错误已达上限。点击「新游戏」重新开始。', { single: true });
@@ -469,6 +470,11 @@
             notesPruneNumber(num, r, c);
             renderBoard();
 
+            // 声光反馈
+            playErrorSound();
+            const cell = boardEl.children[r * 9 + c];
+            if (cell) cell.classList.add('shake');
+
             // 检查是否超限
             if (state.mistakes >= state.maxMistakes) {
                 gameOver(false);
@@ -481,6 +487,11 @@
         state.notes[r][c].clear();
         notesPruneNumber(num, r, c);
         renderBoard();
+
+        // 声光反馈
+        playCorrectSound();
+        const cell = boardEl.children[r * 9 + c];
+        if (cell) cell.classList.add('pop');
 
         // 检查行/列/宫是否填满
         checkAndAnimateLineCompletion(r, c);
@@ -503,26 +514,52 @@
         return _audioCtx;
     };
 
+    const playNote = (freq, time, dur, vol = 0.1, type = 'sine') => {
+        const ctx = _getCtx();
+        if (!ctx) return;
+        try {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.value = freq;
+            gain.gain.setValueAtTime(0, time);
+            gain.gain.linearRampToValueAtTime(vol, time + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.001, time + dur);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(time);
+            osc.stop(time + dur + 0.05);
+        } catch (e) {}
+    };
+
     const playCompletionSound = () => {
         const ctx = _getCtx();
         if (!ctx) return;
         try {
-            const notes = [523.25, 659.25, 783.99]; // C5 E5 G5
-            notes.forEach((freq, i) => {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = freq;
-                const t = ctx.currentTime + i * 0.08;
-                gain.gain.setValueAtTime(0, t);
-                gain.gain.linearRampToValueAtTime(0.12, t + 0.02);
-                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(t);
-                osc.stop(t + 0.4);
-            });
+            const t = ctx.currentTime;
+            [523.25, 659.25, 783.99].forEach((f, i) => playNote(f, t + i * 0.08, 0.33, 0.1, 'sine'));
         } catch (e) {}
+    };
+
+    const playCorrectSound = () => {
+        const ctx = _getCtx();
+        if (!ctx) return;
+        playNote(880, ctx.currentTime, 0.08, 0.06, 'sine'); // A5 轻快短音
+    };
+
+    const playErrorSound = () => {
+        const ctx = _getCtx();
+        if (!ctx) return;
+        const t = ctx.currentTime;
+        playNote(220, t, 0.3, 0.08, 'sawtooth');   // A3 低沉
+        playNote(175, t + 0.06, 0.25, 0.05, 'sawtooth'); // F3 不协和
+    };
+
+    const playVictorySound = () => {
+        const ctx = _getCtx();
+        if (!ctx) return;
+        const t = ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => playNote(f, t + i * 0.12, 0.4, 0.12, 'sine'));
     };
 
     /**
