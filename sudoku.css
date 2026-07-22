@@ -447,16 +447,18 @@ h1 {
 }
 
 
-/* ---- 次级操作（自动标记火箭按钮）---- */
+/* ---- 底部行：全部标记（炸弹）+ 新游戏 ---- */
 
-.secondary-actions {
-    display: flex;
-    justify-content: center;
+.bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4px;
+    margin-top: auto;
 }
 
-.secondary-actions button.auto-mark-btn {
-    width: 46px;
-    height: 46px;
+.bottom-row button.auto-mark-btn {
+    width: 100%;
+    aspect-ratio: 1;
     border: none;
     border-radius: var(--radius-sm);
     background: #f1f4f8;
@@ -465,25 +467,20 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all .12s ease;
+    transition: all .15s ease;
     box-shadow: var(--shadow-btn);
 }
-.secondary-actions button.auto-mark-btn:hover {
+.bottom-row button.auto-mark-btn:hover {
     background: #e5e9f0;
     color: #065f46;
 }
-.secondary-actions button.auto-mark-btn.active {
+.bottom-row button.auto-mark-btn.active {
     background: #065f46;
     color: #fff;
 }
 
-
-
-/* ---- 新游戏（独立全宽按钮，参考图风格）---- */
-
-.new-game-btn {
+.bottom-row .new-game-btn {
     width: 100%;
-    padding: 11px 0;
     border: none;
     border-radius: var(--radius-sm);
     font-size: .8rem;
@@ -494,10 +491,8 @@ h1 {
     background: #f1f4f8;
     color: #6d7584;
     box-shadow: var(--shadow-btn);
-    margin-top: auto;
 }
-
-.new-game-btn:hover {
+.bottom-row .new-game-btn:hover {
     background: #e5e9f0;
     color: #4f46e5;
     transform: translateY(-1px);
@@ -566,12 +561,8 @@ h1 {
         height: 20px;
     }
 
-    .secondary-actions {
+    .bottom-row {
         margin-top: 0;
-    }
-    .secondary-actions button {
-        padding: 8px 2px;
-        font-size: .65rem;
     }
     .new-game-btn {
         padding: 9px 0;
@@ -592,6 +583,6 @@ h1 {
     .num-grid button { font-size: .85rem; }
     .action-buttons button { height: 32px; }
     .action-buttons button svg { width: 18px; height: 18px; }
-    .secondary-actions button { font-size: .6rem; padding: 6px 2px; }
+    .bottom-row { margin-top: 0; }
     .new-game-btn { font-size: .68rem; padding: 7px 0; }
 }
