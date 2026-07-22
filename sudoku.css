@@ -444,7 +444,7 @@ h1 {
 }
 
 
-}
+
 
 
 /* ---- 底部行：全部标记（炸弹）+ 新游戏 ---- */
@@ -457,6 +457,7 @@ h1 {
 }
 
 .bottom-row button.auto-mark-btn {
+    grid-column: 1;
     width: 100%;
     aspect-ratio: 1;
     border: none;
