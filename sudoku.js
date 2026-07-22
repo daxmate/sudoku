@@ -246,6 +246,41 @@ const SudokuEngine = (() => {
         return { puzzle, solution: full };
     };
 
+    /**
+     * 计算某个空格在当前盘面中的候选数字
+     * @param {number[][]} grid — 当前盘面
+     * @param {number} r — 行号
+     * @param {number} c — 列号
+     * @param {Set[]} notes — 笔记数组
+     * @param {Set[]} userRemovedNotes — 用户手动移除的记录
+     */
+    const calcCandidatesForCell = (grid, r, c, notes, userRemovedNotes) => {
+        if (grid[r][c] !== 0) {
+            notes[r][c].clear();
+            userRemovedNotes[r][c].clear();
+            return;
+        }
+
+        const present = new Set();
+        for (let i = 0; i < 9; i++) {
+            if (grid[r][i] !== 0) present.add(grid[r][i]);
+            if (grid[i][c] !== 0) present.add(grid[i][c]);
+        }
+        const sr = Math.floor(r / 3) * 3;
+        const sc = Math.floor(c / 3) * 3;
+        for (let rr = sr; rr < sr + 3; rr++) {
+            for (let cc = sc; cc < sc + 3; cc++) {
+                if (grid[rr][cc] !== 0) present.add(grid[rr][cc]);
+            }
+        }
+
+        const candidates = new Set();
+        for (let n = 1; n <= 9; n++) {
+            if (!present.has(n)) candidates.add(n);
+        }
+        userRemovedNotes[r][c].forEach(n => candidates.delete(n));
+        notes[r][c] = candidates;
+    };
 
     // ==============================================================
     // 对外暴露的 API
@@ -255,6 +290,7 @@ const SudokuEngine = (() => {
         solve,            // 求解任意盘面
         isValidPlacement, // 判断某个位置放某数是否合法
         deepCopy,         // 深拷贝 9×9 数组
+        calcCandidatesForCell, // 计算单个格的候选数字
     };
 })();
 
@@ -276,6 +312,7 @@ const SudokuEngine = (() => {
     const mistakesDisplay = document.getElementById('mistakesCount'); // 错误计数
     const notesToggleBtn = document.getElementById('notesToggle'); // 一键标记按钮
     const candidateEditBtn = document.getElementById('candidateEditBtn'); // 候选编辑按钮
+    const markCellBtn = document.getElementById('markCellBtn'); // 单格备注按钮
     const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
     const hintBtn = document.getElementById('hintBtn');         // 提示按钮
     const solveBtn = document.getElementById('solveBtn');       // 解答按钮
@@ -389,7 +426,6 @@ const SudokuEngine = (() => {
         state.notes = puzzle.map(row => row.map(() => new Set()));   // 每个格子一个 Set 存笔记
         state.userRemovedNotes = puzzle.map(row => row.map(() => new Set()));  // 追踪用户手动移除的候选
 
-        autoMarkNotes();  // 自动标记候选数
         renderBoard();    // 重新绘制棋盘
         startTimer();     // 开始计时
     };
@@ -1003,6 +1039,25 @@ const SudokuEngine = (() => {
 
 
     // ==============================================================
+    // 单格自动备注 — 只给当前选中的格子计算候选数
+    // ==============================================================
+
+    const autoMarkCell = () => {
+        if (state.isGameOver) return;
+        const { selectedRow: r, selectedCol: c } = state;
+        if (r < 0 || c < 0) return;
+        if (state.fixedCells[r][c]) return;
+        if (state.userGrid[r][c] !== 0) return;
+
+        SudokuEngine.calcCandidatesForCell(
+            state.userGrid, r, c,
+            state.notes, state.userRemovedNotes
+        );
+        renderBoard();
+    };
+
+
+    // ==============================================================
     // 初始化
     // ==============================================================
 
@@ -1023,6 +1078,9 @@ const SudokuEngine = (() => {
             autoMarkNotes();
             renderBoard();
         });
+
+        // 单格备注
+        markCellBtn.addEventListener('click', autoMarkCell);
 
         // 候选编辑模式切换
         candidateEditBtn.addEventListener('click', () => {

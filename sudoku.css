@@ -340,6 +340,18 @@ h1 {
     color: #fff;
 }
 
+/* 单格备注按钮：紫色调 */
+.num-pad button.mark-cell-btn {
+    background: #ede9fe;
+    color: #5b21b6;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 64px;
+}
+.num-pad button.mark-cell-btn:hover {
+    background: #ddd6fe;
+}
+
 /* 候选编辑按钮：绿色调 */
 .num-pad button.candidate-edit-btn {
     background: #d1fae5;
@@ -435,6 +447,7 @@ h1 {
     }
     .num-pad button.erase-btn,
     .num-pad button.notes-toggle,
+    .num-pad button.mark-cell-btn,
     .num-pad button.candidate-edit-btn {
         width: 44px;
         font-size: 0.7rem;
@@ -461,6 +474,7 @@ h1 {
     }
     .num-pad button.erase-btn,
     .num-pad button.notes-toggle,
+    .num-pad button.mark-cell-btn,
     .num-pad button.candidate-edit-btn {
         width: 36px;
         font-size: 0.6rem;
