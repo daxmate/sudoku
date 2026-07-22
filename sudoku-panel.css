@@ -1,0 +1,252 @@
+/* ================================================================
+   7. 右侧操作面板
+   ================================================================ */
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 140px;
+    max-width: 210px;
+}
+
+/* ---- 数字九宫格 ---- */
+
+.num-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+
+.num-grid button {
+    width: 100%;
+    aspect-ratio: 1;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: #f1f4f8;
+    color: #6d7584;
+    font-size: 1.3rem;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all .12s ease;
+    box-shadow: var(--shadow-btn);
+    font-family: var(--font-sans);
+}
+
+.num-grid button:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-btn-hover);
+}
+.num-grid button:active {
+    transform: translateY(0);
+}
+
+/* 数字耗尽 */
+.num-grid button.depleted {
+    opacity: .25;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    pointer-events: none;
+}
+
+
+/* ---- 功能按钮行（参考图风格：4个一行）---- */
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.action-buttons button {
+    border: none;
+    border-radius: var(--radius-sm);
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    transition: all .12s ease;
+    font-family: var(--font-sans);
+    box-shadow: var(--shadow-btn);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-buttons button svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.action-buttons button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-btn-hover);
+}
+.action-buttons button:active {
+    transform: translateY(0);
+}
+
+/* 擦除 */
+.action-buttons button {
+    color: #6d7584;
+    background: #f1f4f8;
+}
+.action-buttons button:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+
+.action-buttons button.erase-btn {
+    color: #b91c1c;
+}
+.action-buttons button.erase-btn:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.action-buttons button.notes-toggle.active {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.action-buttons button.warning {
+    color: #92400e;
+}
+.action-buttons button.warning:hover {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.action-buttons button.mark-cell-btn:hover {
+    background: #f5f3ff;
+    color: #6d28d9;
+}
+
+.hint-count {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: #94a3b8;
+    color: #fff;
+    font-size: .5rem;
+    font-weight: 500;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+}
+#hintBtn:disabled {
+    opacity: .4;
+    cursor: default;
+}
+
+
+
+
+
+/* ---- 底部行：全部标记（炸弹）+ 新游戏 ---- */
+
+.bottom-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: auto;
+}
+
+.bottom-row button.auto-mark-btn {
+    grid-column: 1;
+    width: 100%;
+    aspect-ratio: 1;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: #f1f4f8;
+    color: #6d7584;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s ease;
+    box-shadow: var(--shadow-btn);
+}
+.bottom-row button.auto-mark-btn:hover {
+    background: #e5e9f0;
+    color: #065f46;
+}
+.bottom-row button.auto-mark-btn.active {
+    background: #065f46;
+    color: #fff;
+}
+
+.bottom-row .new-game-btn {
+    grid-column: 2 / 4;
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+    font-family: var(--font-sans);
+    background: #f1f4f8;
+    color: #6d7584;
+    box-shadow: var(--shadow-btn);
+}
+.bottom-row .new-game-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+    transform: translateY(-1px);
+}
+
+.theme-btn {
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    background: #f1f4f8;
+    color: #6d7584;
+    cursor: pointer;
+    transition: all .12s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.theme-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+
+.leaderboard-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+.leaderboard-row .lb-btn { flex: 1; }
+.leaderboard-row .theme-btn { flex: 0 0 auto; width: 36px; }
+.lb-btn {
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    background: #f1f4f8;
+    color: #6d7584;
+    font-size: .75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s ease;
+    font-family: var(--font-sans);
+}
+.lb-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+
+
