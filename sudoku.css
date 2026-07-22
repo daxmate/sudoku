@@ -485,14 +485,6 @@ h1 {
     color: #fff;
 }
 
-.secondary-actions button.success {
-    background: #f1f4f8;
-    color: #6d7584;
-}
-.secondary-actions button.success:hover {
-    background: #e5e9f0;
-    color: #059669;
-}
 
 
 /* ---- 新游戏（独立全宽按钮，参考图风格）---- */

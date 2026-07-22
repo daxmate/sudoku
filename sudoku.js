@@ -315,7 +315,6 @@ const SudokuEngine = (() => {
     const markCellBtn = document.getElementById('markCellBtn'); // 单格备注按钮
     const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
     const hintBtn = document.getElementById('hintBtn');         // 提示按钮
-    const solveBtn = document.getElementById('solveBtn');       // 解答按钮
     const diffButtons = document.querySelectorAll('.difficulty-wrap button'); // 难度按钮列表
 
 
@@ -920,38 +919,6 @@ const SudokuEngine = (() => {
     };
 
 
-    // ==============================================================
-    // 事件处理 — 一键解答
-    // ==============================================================
-
-    /**
-     * 用确认框询问后，将所有非固定格填上正确答案
-     */
-    const solveBoard = () => {
-        if (state.isGameOver) return;
-
-        if (confirm('将自动填入所有正确答案，确定吗？')) {
-            const solution = state.solution;
-            const grid = state.userGrid;
-            const fixed = state.fixedCells;
-
-            for (let r = 0; r < 9; r++) {
-                for (let c = 0; c < 9; c++) {
-                    if (!fixed[r][c]) {
-                        grid[r][c] = solution[r][c];
-                        state.notes[r][c].clear();
-                    }
-                }
-            }
-            autoMarkNotes();
-            renderBoard();
-
-            if (checkWin()) {
-                gameOver(true);
-            }
-        }
-    };
-
 
     // ==============================================================
     // 事件处理 — 切换难度
@@ -1174,9 +1141,6 @@ const SudokuEngine = (() => {
 
         // 提示
         hintBtn.addEventListener('click', giveHint);
-
-        // 一键解答
-        solveBtn.addEventListener('click', solveBoard);
 
         // 难度切换
         diffButtons.forEach(btn => {
