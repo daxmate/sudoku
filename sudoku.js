@@ -315,6 +315,44 @@ const SudokuEngine = (() => {
     const markCellBtn = document.getElementById('markCellBtn'); // 单格备注按钮
     const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
     const hintBtn = document.getElementById('hintBtn');         // 提示按钮
+
+    // 自定义弹窗
+    const confirmOverlay = document.getElementById('confirmOverlay');
+    const confirmMsg = document.getElementById('confirmMsg');
+    const confirmOk = document.getElementById('confirmOk');
+    const confirmCancel = document.getElementById('confirmCancel');
+
+    const hideOverlay = () => {
+        confirmOverlay.classList.remove('show');
+        confirmOk.textContent = '确认';
+        confirmCancel.style.display = '';
+    };
+
+    const showOverlay = (msg, opts = {}) => {
+        confirmMsg.textContent = msg;
+        if (opts.single) {
+            confirmOk.textContent = '确定';
+            confirmCancel.style.display = 'none';
+        }
+        confirmOverlay.classList.add('show');
+        const cleanup = () => {
+            hideOverlay();
+            confirmOk.removeEventListener('click', fire);
+            if (!opts.single) {
+                confirmCancel.removeEventListener('click', cleanup);
+                confirmOverlay.removeEventListener('click', onBgClick);
+            }
+        };
+        const fire = () => { cleanup(); if (opts.onOk) opts.onOk(); };
+        const onBgClick = (e) => {
+            if (e.target === confirmOverlay) cleanup();
+        };
+        confirmOk.addEventListener('click', fire);
+        if (!opts.single) {
+            confirmCancel.addEventListener('click', cleanup);
+            confirmOverlay.addEventListener('click', onBgClick);
+        }
+    };
     const diffButtons = document.querySelectorAll('.difficulty-wrap button'); // 难度按钮列表
 
 
@@ -632,9 +670,9 @@ const SudokuEngine = (() => {
         state.isGameOver = true;
         stopTimer();
         if (won) {
-            alert('🎉 恭喜你完成数独！太棒啦！');
+            showOverlay('🎉 恭喜你完成数独！太棒啦！', { single: true });
         } else {
-            alert('💔 游戏结束！错误已达上限。点击「新游戏」重新开始。');
+            showOverlay('💔 游戏结束！错误已达上限。点击「新游戏」重新开始。', { single: true });
         }
     };
 
@@ -780,7 +818,7 @@ const SudokuEngine = (() => {
                     autoMarkNotes();
                     renderBoard();
                     flashHintCell(r, c);
-                    alert(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`);
+                    showOverlay(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -812,7 +850,7 @@ const SudokuEngine = (() => {
                     autoMarkNotes();
                     renderBoard();
                     flashHintCell(r, c);
-                    alert(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`);
+                    showOverlay(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -841,7 +879,7 @@ const SudokuEngine = (() => {
                     autoMarkNotes();
                     renderBoard();
                     flashHintCell(r, c);
-                    alert(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`);
+                    showOverlay(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -877,7 +915,7 @@ const SudokuEngine = (() => {
                         autoMarkNotes();
                         renderBoard();
                         flashHintCell(r, c);
-                        alert(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`);
+                        showOverlay(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`, { single: true });
                         if (checkWin()) gameOver(true);
                         return;
                     }
@@ -894,7 +932,7 @@ const SudokuEngine = (() => {
                     autoMarkNotes();
                     renderBoard();
                     flashHintCell(r, c);
-                    alert(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`);
+                    showOverlay(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -902,7 +940,7 @@ const SudokuEngine = (() => {
         }
 
         // 所有非固定格都正确
-        alert('所有格子都已正确！');
+        showOverlay('所有格子都已正确！', { single: true });
     };
 
     /**
@@ -1132,31 +1170,8 @@ const SudokuEngine = (() => {
             notesToggleBtn.classList.toggle('active', state.isCandidateEditMode);
         });
 
-        // 新游戏 — 用自定义弹窗代替浏览器 confirm
-        const confirmOverlay = document.getElementById('confirmOverlay');
-        const confirmMsg = document.getElementById('confirmMsg');
-        const confirmOk = document.getElementById('confirmOk');
-        const confirmCancel = document.getElementById('confirmCancel');
-
-        const showConfirm = (msg, onOk) => {
-            confirmMsg.textContent = msg;
-            confirmOverlay.classList.add('show');
-            const cleanup = () => {
-                confirmOverlay.classList.remove('show');
-                confirmOk.removeEventListener('click', onOk);
-                confirmCancel.removeEventListener('click', cleanup);
-                confirmOverlay.removeEventListener('click', onBgClick);
-            };
-            const onBgClick = (e) => {
-                if (e.target === confirmOverlay) cleanup();
-            };
-            confirmOk.addEventListener('click', () => { cleanup(); onOk(); });
-            confirmCancel.addEventListener('click', cleanup);
-            confirmOverlay.addEventListener('click', onBgClick);
-        };
-
         newGameBtn.addEventListener('click', () => {
-            showConfirm('开始新游戏？当前进度将丢失。', () => resetGame(state.difficulty));
+            showOverlay('开始新游戏？当前进度将丢失。', { onOk: () => resetGame(state.difficulty) });
         });
 
         // 提示
