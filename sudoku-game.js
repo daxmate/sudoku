@@ -482,12 +482,97 @@
         notesPruneNumber(num, r, c);
         renderBoard();
 
+        // 检查行/列/宫是否填满
+        checkAndAnimateLineCompletion(r, c);
+
         // 检查是否完成
         if (checkWin()) {
             gameOver(true);
         }
     };
 
+
+    // ==============================================================
+    // 声光反馈 — 行/列/宫填满
+    // ==============================================================
+
+    /** 播放简短的琶音 (C5→E5→G5) */
+    let _audioCtx = null;
+    const _getCtx = () => {
+        if (!_audioCtx) try { _audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
+        return _audioCtx;
+    };
+
+    const playCompletionSound = () => {
+        const ctx = _getCtx();
+        if (!ctx) return;
+        try {
+            const notes = [523.25, 659.25, 783.99]; // C5 E5 G5
+            notes.forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                const t = ctx.currentTime + i * 0.08;
+                gain.gain.setValueAtTime(0, t);
+                gain.gain.linearRampToValueAtTime(0.12, t + 0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(t);
+                osc.stop(t + 0.4);
+            });
+        } catch (e) {}
+    };
+
+    /**
+     * 检查刚填入 (r,c) 后所在行/列/宫是否全部填满
+     * 如果填满，添加高亮动效 class + 播放音效
+     */
+    const checkAndAnimateLineCompletion = (r, c) => {
+        const grid = state.userGrid;
+        let completed = false;
+
+        // 检查行
+        if (grid[r].every(v => v !== 0)) {
+            for (let cc = 0; cc < 9; cc++) {
+                const el = boardEl.children[r * 9 + cc];
+                if (el) el.classList.add('line-complete');
+            }
+            completed = true;
+        }
+
+        // 检查列
+        if (grid.every(row => row[c] !== 0)) {
+            for (let rr = 0; rr < 9; rr++) {
+                const el = boardEl.children[rr * 9 + c];
+                if (el) el.classList.add('line-complete');
+            }
+            completed = true;
+        }
+
+        // 检查宫
+        const sr = Math.floor(r / 3) * 3, sc = Math.floor(c / 3) * 3;
+        let boxFull = true;
+        for (let rr = sr; rr < sr + 3 && boxFull; rr++)
+            for (let cc = sc; cc < sc + 3; cc++)
+                if (grid[rr][cc] === 0) { boxFull = false; break; }
+        if (boxFull) {
+            for (let rr = sr; rr < sr + 3; rr++)
+                for (let cc = sc; cc < sc + 3; cc++) {
+                    const el = boardEl.children[rr * 9 + cc];
+                    if (el) el.classList.add('line-complete');
+                }
+            completed = true;
+        }
+
+        if (completed) {
+            playCompletionSound();
+            setTimeout(() => {
+                boardEl.querySelectorAll('.line-complete').forEach(el => el.classList.remove('line-complete'));
+            }, 700);
+        }
+    };
 
     // ==============================================================
     // 事件处理 — 提示
@@ -541,6 +626,7 @@
                     placeAndPrune(r, c, num);
                     renderBoard();
                     flashHintCell(r, c);
+                    checkAndAnimateLineCompletion(r, c);
                     showOverlay(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
@@ -569,6 +655,7 @@
                     placeAndPrune(r, c, num);
                     renderBoard();
                     flashHintCell(r, c);
+                    checkAndAnimateLineCompletion(r, c);
                     showOverlay(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
@@ -596,6 +683,7 @@
                     placeAndPrune(r, c, num);
                     renderBoard();
                     flashHintCell(r, c);
+                    checkAndAnimateLineCompletion(r, c);
                     showOverlay(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
@@ -630,6 +718,7 @@
                         placeAndPrune(r, c, num);
                         renderBoard();
                         flashHintCell(r, c);
+                        checkAndAnimateLineCompletion(r, c);
                         showOverlay(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`, { single: true });
                         if (checkWin()) gameOver(true);
                         return;
@@ -645,6 +734,7 @@
                     placeAndPrune(r, c, solution[r][c]);
                     renderBoard();
                     flashHintCell(r, c);
+                    checkAndAnimateLineCompletion(r, c);
                     showOverlay(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`, { single: true });
                     if (checkWin()) gameOver(true);
                     return;
