@@ -21,7 +21,8 @@
     const autoMarkBtn = document.getElementById('autoMarkBtn'); // 全部标记按钮
     const markCellBtn = document.getElementById('markCellBtn'); // 单格备注按钮
     const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
-    const hintBtn = document.getElementById('hintBtn');         // 提示按钮
+    const hintBtn = document.getElementById('hintBtn');
+    const hintCount = document.getElementById('hintCount');
 
     // 自定义弹窗
     const confirmOverlay = document.getElementById('confirmOverlay');
@@ -103,6 +104,7 @@
         score: 0,
         streak: 0,
         hintsUsed: 0,
+        maxHints: 3,
     };
 
 
@@ -169,6 +171,8 @@
         state.score = 0;
         state.streak = 0;
         state.hintsUsed = 0;
+        hintCount.textContent = state.maxHints;
+        hintBtn.disabled = false;
         updateScoreDisplay();
         scoreDetail.style.display = 'none';
 
@@ -722,7 +726,16 @@
     const giveHint = () => {
         if (state.isGameOver) return;
 
+        const remaining = state.maxHints - state.hintsUsed;
+        if (remaining <= 0) {
+            showOverlay('💡 提示次数已用完（最多 3 次）', { single: true });
+            return;
+        }
+
         state.hintsUsed++;
+        hintCount.textContent = remaining - 1;
+        if (remaining - 1 <= 0) hintBtn.disabled = true;
+
         // 提示扣分（显示在已选中格上，无选中格则扣在 0,0）
         const hintR = state.selectedRow >= 0 ? state.selectedRow : 0;
         const hintC = state.selectedCol >= 0 ? state.selectedCol : 0;

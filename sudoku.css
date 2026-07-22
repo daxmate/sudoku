@@ -544,6 +544,11 @@ h1 {
     color: #fff;
     font-size: .5rem;
     font-weight: 500;
+}
+#hintBtn:disabled {
+    opacity: .4;
+    cursor: default;
+}
     min-width: 14px;
     height: 14px;
     border-radius: 7px;
