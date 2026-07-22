@@ -23,6 +23,7 @@ el.newGame = document.getElementById('newGameBtn');
 el.hintBtn = document.getElementById('hintBtn');
 el.hintCount = document.getElementById('hintCount');
 el.leaderboardBtn = document.getElementById('leaderboardBtn');
+el.themeBtn = document.getElementById('themeBtn');
 el.lbOverlay = document.getElementById('lbOverlay');
 el.lbList = document.getElementById('lbList');
 el.lbClose = document.getElementById('lbClose');
@@ -336,6 +337,24 @@ const init = () => {
     });
     el.hintBtn.addEventListener('click', giveHint);
     el.leaderboardBtn.addEventListener('click', S.showLeaderboard);
+
+    // 主题切换
+    {
+        const applyTheme = (dark) => {
+            document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
+            el.themeBtn.classList.toggle('dark', dark);
+            try { localStorage.setItem('sudoku-theme', dark ? 'dark' : 'light'); } catch (e) {}
+        };
+        try {
+            const saved = localStorage.getItem('sudoku-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(saved ? saved === 'dark' : prefersDark);
+        } catch (e) {}
+        el.themeBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            applyTheme(!isDark);
+        });
+    }
     el.lbClose.addEventListener('click', () => el.lbOverlay.classList.remove('show'));
     el.lbOverlay.addEventListener('click', (e) => { if (e.target === el.lbOverlay) el.lbOverlay.classList.remove('show'); });
     el.lbFilters.addEventListener('click', (e) => {
