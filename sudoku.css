@@ -131,7 +131,8 @@ h1 {
     font-variant-numeric: tabular-nums;
 }
 
-.mistakes span { color: #78716c; font-weight: 700; }
+.mistakes span { color: #b85c5c; font-weight: 700; }
+.timer span { color: #5a8a6f; font-weight: 700; }
 
 
 /* ================================================================
