@@ -802,20 +802,38 @@ const SudokuEngine = (() => {
         const grid = state.userGrid;
         const solution = state.solution;
         const fixed = state.fixedCells;
-        const notes = state.notes;
 
-        // 确保笔记是最新的
-        autoMarkNotes();
+        // 计算某个空格当前可填的数字（不修改 state.notes）
+        const getCandidates = (r, c) => {
+            if (grid[r][c] !== 0) return new Set();
+            const present = new Set();
+            for (let i = 0; i < 9; i++) {
+                if (grid[r][i] !== 0) present.add(grid[r][i]);
+                if (grid[i][c] !== 0) present.add(grid[i][c]);
+            }
+            const sr = Math.floor(r / 3) * 3, sc = Math.floor(c / 3) * 3;
+            for (let rr = sr; rr < sr + 3; rr++)
+                for (let cc = sc; cc < sc + 3; cc++)
+                    if (grid[rr][cc] !== 0) present.add(grid[rr][cc]);
+            const cands = new Set();
+            for (let n = 1; n <= 9; n++) if (!present.has(n)) cands.add(n);
+            return cands;
+        };
+
+        const placeAndPrune = (r, c, num) => {
+            grid[r][c] = num;
+            state.notes[r][c].clear();
+            notesPruneNumber(num, r, c);
+        };
 
         // ---- 1. 唯余法：找一个只有一个候选数的空格 ----
         for (let r = 0; r < 9; r++) {
             for (let c = 0; c < 9; c++) {
                 if (fixed[r][c] || grid[r][c] !== 0) continue;
-                if (notes[r][c].size === 1) {
-                    const num = [...notes[r][c]][0];
-                    grid[r][c] = num;
-                    state.notes[r][c].clear();
-                    autoMarkNotes();
+                const cands = getCandidates(r, c);
+                if (cands.size === 1) {
+                    const num = [...cands][0];
+                    placeAndPrune(r, c, num);
                     renderBoard();
                     flashHintCell(r, c);
                     showOverlay(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`, { single: true });
@@ -829,25 +847,21 @@ const SudokuEngine = (() => {
         // 检查行
         for (let r = 0; r < 9; r++) {
             for (let num = 1; num <= 9; num++) {
-                // 找该行中 num 是否已在固定格或已填格中
                 let foundInRow = false;
                 for (let c = 0; c < 9; c++) {
                     if (grid[r][c] === num) { foundInRow = true; break; }
                 }
                 if (foundInRow) continue;
 
-                // 找该行中哪些空格可以填 num（num 在其笔记中）
                 const possible = [];
                 for (let c = 0; c < 9; c++) {
-                    if (!fixed[r][c] && grid[r][c] === 0 && notes[r][c].has(num)) {
+                    if (!fixed[r][c] && grid[r][c] === 0 && getCandidates(r, c).has(num)) {
                         possible.push(c);
                     }
                 }
                 if (possible.length === 1) {
                     const c = possible[0];
-                    grid[r][c] = num;
-                    state.notes[r][c].clear();
-                    autoMarkNotes();
+                    placeAndPrune(r, c, num);
                     renderBoard();
                     flashHintCell(r, c);
                     showOverlay(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`, { single: true });
@@ -868,15 +882,13 @@ const SudokuEngine = (() => {
 
                 const possible = [];
                 for (let r = 0; r < 9; r++) {
-                    if (!fixed[r][c] && grid[r][c] === 0 && notes[r][c].has(num)) {
+                    if (!fixed[r][c] && grid[r][c] === 0 && getCandidates(r, c).has(num)) {
                         possible.push(r);
                     }
                 }
                 if (possible.length === 1) {
                     const r = possible[0];
-                    grid[r][c] = num;
-                    state.notes[r][c].clear();
-                    autoMarkNotes();
+                    placeAndPrune(r, c, num);
                     renderBoard();
                     flashHintCell(r, c);
                     showOverlay(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`, { single: true });
@@ -903,16 +915,14 @@ const SudokuEngine = (() => {
                     const possible = [];
                     for (let rr = sr; rr < sr + 3; rr++) {
                         for (let cc = sc; cc < sc + 3; cc++) {
-                            if (!fixed[rr][cc] && grid[rr][cc] === 0 && notes[rr][cc].has(num)) {
+                            if (!fixed[rr][cc] && grid[rr][cc] === 0 && getCandidates(rr, cc).has(num)) {
                                 possible.push([rr, cc]);
                             }
                         }
                     }
                     if (possible.length === 1) {
                         const [r, c] = possible[0];
-                        grid[r][c] = num;
-                        state.notes[r][c].clear();
-                        autoMarkNotes();
+                        placeAndPrune(r, c, num);
                         renderBoard();
                         flashHintCell(r, c);
                         showOverlay(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`, { single: true });
@@ -927,9 +937,7 @@ const SudokuEngine = (() => {
         for (let r = 0; r < 9; r++) {
             for (let c = 0; c < 9; c++) {
                 if (!fixed[r][c] && grid[r][c] === 0) {
-                    grid[r][c] = solution[r][c];
-                    state.notes[r][c].clear();
-                    autoMarkNotes();
+                    placeAndPrune(r, c, solution[r][c]);
                     renderBoard();
                     flashHintCell(r, c);
                     showOverlay(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`, { single: true });
@@ -939,7 +947,6 @@ const SudokuEngine = (() => {
             }
         }
 
-        // 所有非固定格都正确
         showOverlay('所有格子都已正确！', { single: true });
     };
 
