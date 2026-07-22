@@ -462,6 +462,24 @@
                 btn.classList.toggle('active', btn.dataset.filter === filter);
             });
 
+            const totalGames = filtered.length;
+            const bestScore = totalGames > 0 ? Math.max(...filtered.map(e => e.score)) : 0;
+            const avgScore = Math.round(filtered.reduce((s, e) => s + e.score, 0) / totalGames);
+            const totalTime = filtered.reduce((s, e) => s + e.time, 0);
+
+            const fmtDuration = (sec) => {
+                const h = Math.floor(sec / 3600);
+                const m = Math.floor((sec % 3600) / 60);
+                return h > 0 ? `${h}h${m}m` : `${m}m`;
+            };
+
+            document.getElementById('lbStats').innerHTML = `
+                <div class="lb-stat"><div class="lb-stat-value">${totalGames}</div><div class="lb-stat-label">局数</div></div>
+                <div class="lb-stat"><div class="lb-stat-value best">${bestScore}</div><div class="lb-stat-label">最高</div></div>
+                <div class="lb-stat"><div class="lb-stat-value">${avgScore}</div><div class="lb-stat-label">平均</div></div>
+                <div class="lb-stat"><div class="lb-stat-value">${fmtDuration(totalTime)}</div><div class="lb-stat-label">总用时</div></div>
+            `;
+
             if (filtered.length === 0) {
                 lbList.innerHTML = '<p class="lb-empty">暂无游戏记录</p>';
                 return;

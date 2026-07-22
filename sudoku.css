@@ -805,6 +805,34 @@ h1 {
     background: #f1f4f8;
     color: #475569;
 }
+.lb-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    padding: 10px 20px 8px;
+}
+.lb-stat {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 8px 6px;
+    text-align: center;
+}
+.lb-stat-value {
+    font-size: .9rem;
+    font-weight: 600;
+    color: #1e293b;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.2;
+}
+.lb-stat-value.best {
+    color: #f59e0b;
+}
+.lb-stat-label {
+    font-size: .6rem;
+    color: #94a3b8;
+    margin-top: 1px;
+}
+
 .lb-filters {
     display: flex;
     gap: 4px;
