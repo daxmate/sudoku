@@ -1,0 +1,247 @@
+/* ==================================================================
+   数独游戏 — 基础样式（重置 + 变量 + 布局）
+   ================================================================== */
+
+/* ---------- CSS 变量：亮色默认 ---------- */
+
+:root {
+    --color-accent:        #6366f1;
+    --color-accent-dark:   #4f46e5;
+    --color-accent-light:  #a5b4fc;
+
+    --color-text:          #1e293b;
+    --color-text-muted:    #64748b;
+    --color-text-light:    #94a3b8;
+
+    --color-surface:       rgba(255, 255, 255, 0.94);
+    --color-bg:            #0f172a;
+
+    --color-board-border:  #334155;
+    --color-box-border:    #888;
+    --color-cell-bg:       #ffffff;
+    --color-cell-fixed:    #334155;
+    --color-cell-user:     #6b7db3;
+    --color-cell-selected: #eef2ff;
+    --color-cell-highlight:#f1f5f9;
+    --color-cell-same:     #dbeafe;
+    --color-cell-error:    #fef2f2;
+    --color-cell-error-text: #dc2626;
+    --color-note-text:     #94a3b8;
+
+    --radius-sm:   6px;
+    --radius-md:   10px;
+    --radius-lg:   20px;
+    --radius-xl:   28px;
+    --radius-full: 9999px;
+
+    --shadow-card:     0 25px 80px rgba(0,0,0,.35), 0 4px 16px rgba(0,0,0,.15);
+    --shadow-btn:      0 2px 6px rgba(0,0,0,.06);
+    --shadow-btn-hover: 0 6px 18px rgba(99,102,241,.2);
+    --shadow-board:    0 8px 32px rgba(0,0,0,.1);
+
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --ui-scale: 1;
+}
+
+/* ---------- CSS 变量：暗色 ---------- */
+
+[data-theme="dark"] {
+    --color-surface:       rgba(15, 23, 42, 0.94);
+    --color-text:          #e2e8f0;
+    --color-text-muted:    #94a3b8;
+    --color-text-light:    #64748b;
+
+    --color-board-border:  #475569;
+    --color-box-border:    #64748b;
+    --color-cell-bg:       #1e293b;
+    --color-cell-fixed:    #94a3b8;
+    --color-cell-user:     #818cf8;
+    --color-cell-selected: #1e1b4b;
+    --color-cell-highlight:#0f172a;
+    --color-cell-same:     #1e1b4b;
+    --color-cell-error:    #450a0a;
+    --color-cell-error-text: #fca5a5;
+    --color-note-text:     #64748b;
+
+    --shadow-btn:      0 2px 6px rgba(0,0,0,.25);
+    --shadow-btn-hover: 0 6px 18px rgba(99,102,241,.35);
+    --shadow-board:    0 8px 32px rgba(0,0,0,.4);
+}
+
+
+/* ---------- 全局重置 ---------- */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    background-image:
+        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,.15), transparent),
+        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(139,92,246,.08), transparent),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(59,130,246,.08), transparent);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+
+/* ---------- 主容器 ---------- */
+
+.game-container {
+    position: relative;
+    background: var(--color-surface);
+    backdrop-filter: blur(24px) saturate(1.4);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: var(--radius-xl);
+    padding: 22px 24px 24px;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: var(--shadow-card);
+}
+
+
+/* ---------- 标题 ---------- */
+
+.game-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: center;
+    margin-bottom: 2px;
+}
+.subtitle {
+    font-size: .65rem;
+    color: var(--color-text-light);
+    text-align: center;
+    margin-bottom: 14px;
+    letter-spacing: .3em;
+}
+
+
+/* ---------- 顶部信息栏 ---------- */
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 0 2px;
+}
+
+.timer,
+.mistakes,
+.score-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #6d7584;
+    background: #f1f4f8;
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    font-variant-numeric: tabular-nums;
+}
+
+.mistakes span { color: #b85c5c; font-weight: 500; }
+.timer span { color: #5a8a6f; font-weight: 500; }
+.score-display { font-size: .75rem; white-space: nowrap; }
+.score-display span { color: #5a6090; font-weight: 600; }
+
+
+/* ---------- 缩放控制 ---------- */
+
+.zoom-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f1f4f8;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+}
+.zoom-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 60px;
+    height: 4px;
+    background: #d1d5db;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+.zoom-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #6d7584;
+    cursor: pointer;
+    transition: background .12s ease;
+}
+.zoom-slider::-webkit-slider-thumb:hover { background: #4f46e5; }
+.zoom-slider::-moz-range-thumb {
+    width: 14px; height: 14px;
+    border-radius: 50%; border: none;
+    background: #6d7584; cursor: pointer;
+}
+.zoom-label {
+    font-size: .68rem;
+    font-weight: 500;
+    color: #6d7584;
+    min-width: 32px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ---------- 难度选择 ---------- */
+
+.difficulty-wrap {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 12px;
+    padding: 0 2px;
+}
+.diff-btn {
+    flex: 1;
+    border: 1.5px solid #e2e8f0;
+    border-radius: var(--radius-full);
+    padding: 6px 0;
+    font-size: .72rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s ease;
+    font-family: var(--font-sans);
+    background: transparent;
+    color: var(--color-text-muted);
+}
+.diff-btn:hover { border-color: #a5b4fc; }
+.diff-btn.active {
+    background: #4f46e5;
+    color: #fff;
+    border-color: #4f46e5;
+}
+
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 14px 12px 16px;
+        border-radius: var(--radius-lg);
+    }
+    .game-title { font-size: 1rem; }
+    .subtitle { margin-bottom: 10px; font-size: .6rem; }
+    .game-header { flex-wrap: wrap; gap: 4px; }
+    .timer, .mistakes, .score-display { font-size: .72rem; padding: 4px 8px; }
+    .timer svg, .mistakes svg, .score-display svg { width: 12px; height: 12px; }
+    .difficulty-wrap { gap: 3px; }
+    .diff-btn { font-size: .65rem; padding: 5px 0; }
+    .zoom-control { padding: 2px 6px; }
+    .zoom-slider { width: 44px; }
+}

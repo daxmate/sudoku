@@ -1,0 +1,286 @@
+/* ==================================================================
+   操作面板 — 数字键、功能按钮、底部行、排行榜按钮
+   ================================================================== */
+
+
+/* ---------- 右侧面板 ---------- */
+
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* ---------- 数字九宫格 ---------- */
+
+.num-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+}
+.num-grid button {
+    border: none;
+    border-radius: var(--radius-sm);
+    height: 40px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .12s ease;
+    font-family: var(--font-sans);
+    background: #f1f4f8;
+    color: #6d7584;
+    box-shadow: var(--shadow-btn);
+}
+.num-grid button:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+    transform: translateY(-1px);
+}
+.num-grid button:active {
+    transform: translateY(0);
+}
+.num-grid button.depleted {
+    opacity: .3;
+    pointer-events: none;
+}
+
+
+/* ---------- 功能按钮行 ---------- */
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+}
+
+.action-buttons button {
+    border: none;
+    border-radius: var(--radius-sm);
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    transition: all .12s ease;
+    font-family: var(--font-sans);
+    box-shadow: var(--shadow-btn);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-buttons button svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+.action-buttons button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-btn-hover);
+}
+.action-buttons button:active {
+    transform: translateY(0);
+}
+
+.action-buttons button {
+    color: #6d7584;
+    background: #f1f4f8;
+}
+.action-buttons button:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+
+/* 擦除 */
+.action-buttons button.erase-btn { color: #b91c1c; }
+.action-buttons button.erase-btn:hover {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+/* 笔记激活 */
+.action-buttons button.notes-toggle.active {
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+/* 提示 */
+.action-buttons button.warning { color: #92400e; }
+.action-buttons button.warning:hover {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+/* 单格候选 */
+.action-buttons button.mark-cell-btn:hover {
+    background: #f5f3ff;
+    color: #6d28d9;
+}
+
+.hint-count {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: #94a3b8;
+    color: #fff;
+    font-size: .5rem;
+    font-weight: 500;
+    min-width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.hint-btn-warning .hint-count { background: #dc2626; }
+
+
+/* ---------- 底部行：炸弹+新游戏+排行榜 ---------- */
+
+.bottom-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    margin-top: auto;
+}
+
+.bottom-row button.auto-mark-btn {
+    grid-column: 1;
+    width: 100%;
+    aspect-ratio: 1;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: #f1f4f8;
+    color: #6d7584;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s ease;
+    box-shadow: var(--shadow-btn);
+}
+.bottom-row button.auto-mark-btn:hover {
+    background: #e5e9f0;
+    color: #065f46;
+}
+.bottom-row button.auto-mark-btn.active {
+    background: #065f46;
+    color: #fff;
+}
+
+.bottom-row .new-game-btn {
+    grid-column: 2 / 4;
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: .8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+    font-family: var(--font-sans);
+    background: #f1f4f8;
+    color: #6d7584;
+    box-shadow: var(--shadow-btn);
+}
+.bottom-row .new-game-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+    transform: translateY(-1px);
+}
+
+
+/* ---------- 排行榜按钮 ---------- */
+
+.leaderboard-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+.lb-btn {
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    background: #f1f4f8;
+    color: #6d7584;
+    font-size: .75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s ease;
+    font-family: var(--font-sans);
+}
+.lb-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+
+.theme-btn {
+    width: 100%;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    background: #f1f4f8;
+    color: #6d7584;
+    cursor: pointer;
+    transition: all .12s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.theme-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+
+.leaderboard-row .lb-btn { flex: 1; }
+.leaderboard-row .theme-btn { flex: 0 0 auto; width: 36px; }
+
+
+/* ---------- 信息栏 ---------- */
+
+.info-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    font-size: .78rem;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .3s ease;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 16px rgba(0,0,0,.3);
+}
+.info-bar.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 480px) {
+    .side-panel { gap: 4px; }
+
+    .num-grid button { height: 34px; font-size: .85rem; }
+    .num-grid button.depleted { opacity: .2; }
+
+    .action-buttons { gap: 3px; }
+    .action-buttons button { height: 32px; }
+    .action-buttons button svg { width: 18px; height: 18px; }
+
+    .bottom-row { margin-top: 0; }
+    .bottom-row button.auto-mark-btn { height: auto; }
+    .bottom-row .new-game-btn { font-size: .72rem; }
+
+    .lb-btn { font-size: .7rem; padding: 6px; }
+}
