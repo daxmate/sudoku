@@ -447,40 +447,32 @@ h1 {
 }
 
 
-/* ---- 次级操作（编辑 / 解答）---- */
+/* ---- 次级操作（自动标记火箭按钮）---- */
 
 .secondary-actions {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
+    display: flex;
+    justify-content: center;
 }
 
-.secondary-actions button {
+.secondary-actions button.auto-mark-btn {
+    width: 46px;
+    height: 46px;
     border: none;
     border-radius: var(--radius-sm);
-    padding: 9px 2px;
-    font-size: .68rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all .12s ease;
-    font-family: var(--font-sans);
-    box-shadow: var(--shadow-btn);
-}
-
-.secondary-actions button:hover {
-    transform: translateY(-1px);
-    filter: brightness(1.1);
-}
-
-.secondary-actions button.candidate-edit-btn {
     background: #f1f4f8;
     color: #6d7584;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .12s ease;
+    box-shadow: var(--shadow-btn);
 }
-.secondary-actions button.candidate-edit-btn:hover {
+.secondary-actions button.auto-mark-btn:hover {
     background: #e5e9f0;
     color: #065f46;
 }
-.secondary-actions button.candidate-edit-btn.active {
+.secondary-actions button.auto-mark-btn.active {
     background: #065f46;
     color: #fff;
 }

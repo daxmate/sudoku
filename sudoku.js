@@ -310,8 +310,8 @@ const SudokuEngine = (() => {
     const boardEl = document.getElementById('board');           // 棋盘容器
     const timerDisplay = document.getElementById('timerDisplay'); // 计时器文字
     const mistakesDisplay = document.getElementById('mistakesCount'); // 错误计数
-    const notesToggleBtn = document.getElementById('notesToggle'); // 一键标记按钮
-    const candidateEditBtn = document.getElementById('candidateEditBtn'); // 候选编辑按钮
+    const notesToggleBtn = document.getElementById('notesToggle'); // 候选编辑按钮
+    const autoMarkBtn = document.getElementById('autoMarkBtn'); // 全部标记按钮
     const markCellBtn = document.getElementById('markCellBtn'); // 单格备注按钮
     const newGameBtn = document.getElementById('newGameBtn');   // 新游戏按钮
     const hintBtn = document.getElementById('hintBtn');         // 提示按钮
@@ -413,9 +413,9 @@ const SudokuEngine = (() => {
         mistakesDisplay.textContent = '0';
         state.isGameOver = false;
         state.isCandidateEditMode = false;
-        candidateEditBtn.classList.remove('active');
-        state.allNotesOn = false;
         notesToggleBtn.classList.remove('active');
+        state.allNotesOn = false;
+        autoMarkBtn.classList.remove('active');
         state.selectedRow = -1;
         state.selectedCol = -1;
 
@@ -1105,8 +1105,8 @@ const SudokuEngine = (() => {
             placeNumber(0);
         });
 
-        // 全部标记 — 切换开关
-        notesToggleBtn.addEventListener('click', () => {
+        // 全部标记 — 切换开关（次级操作区 → 火箭图标）
+        autoMarkBtn.addEventListener('click', () => {
             state.allNotesOn = !state.allNotesOn;
             if (state.allNotesOn) {
                 autoMarkNotes();
@@ -1119,17 +1119,17 @@ const SudokuEngine = (() => {
                     }
                 }
             }
-            notesToggleBtn.classList.toggle('active', state.allNotesOn);
+            autoMarkBtn.classList.toggle('active', state.allNotesOn);
             renderBoard();
         });
 
         // 单格备注
         markCellBtn.addEventListener('click', autoMarkCell);
 
-        // 候选编辑模式切换
-        candidateEditBtn.addEventListener('click', () => {
+        // 候选编辑模式切换（铅笔图标按钮）
+        notesToggleBtn.addEventListener('click', () => {
             state.isCandidateEditMode = !state.isCandidateEditMode;
-            candidateEditBtn.classList.toggle('active', state.isCandidateEditMode);
+            notesToggleBtn.classList.toggle('active', state.isCandidateEditMode);
         });
 
         // 新游戏
