@@ -45,6 +45,7 @@
     --shadow-board:    0 8px 32px rgba(0,0,0,.1);
 
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --ui-scale: 1;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -79,6 +80,8 @@ body {
     text-align: center;
     max-width: 800px;
     width: 100%;
+    transform: scale(var(--ui-scale));
+    transform-origin: center center;
 }
 
 
@@ -133,6 +136,43 @@ h1 {
 
 .mistakes span { color: #b85c5c; font-weight: 500; }
 .timer span { color: #5a8a6f; font-weight: 500; }
+
+.zoom-control {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f4f8;
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+}
+.zoom-btn {
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #6d7584;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all .12s ease;
+}
+.zoom-btn:hover {
+    background: #e5e9f0;
+    color: #4f46e5;
+}
+.zoom-label {
+    font-size: .68rem;
+    font-weight: 500;
+    color: #6d7584;
+    min-width: 32px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
 
 
 /* ================================================================
@@ -511,6 +551,10 @@ h1 {
         max-width: 100%;
         padding: 16px 14px 20px;
         border-radius: var(--radius-lg);
+        transform: none;
+    }
+    .zoom-control {
+        display: none;
     }
     h1 {
         font-size: 1.4rem;
