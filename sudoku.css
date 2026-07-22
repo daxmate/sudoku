@@ -451,7 +451,7 @@ h1 {
 
 .bottom-row {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 4px;
     margin-top: auto;
 }
@@ -480,6 +480,7 @@ h1 {
 }
 
 .bottom-row .new-game-btn {
+    grid-column: 2 / 4;
     width: 100%;
     border: none;
     border-radius: var(--radius-sm);
