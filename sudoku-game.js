@@ -220,74 +220,26 @@ const giveHint = () => {
     const hc = st.selectedCol >= 0 ? st.selectedCol : 0;
     S.addScore(-50, hr, hc);
 
-    const g = st.userGrid, sol = st.solution, fx = st.fixedCells;
+    const hint = S.findHint(st.userGrid, st.solution, st.fixedCells);
+    if (!hint) { S.showInfo('所有格子都已正确！'); return; }
 
-    const cands = (r, c) => {
-        if (g[r][c] !== 0) return new Set();
-        const p = new Set();
-        for (let i = 0; i < 9; i++) {
-            if (g[r][i] !== 0) p.add(g[r][i]);
-            if (g[i][c] !== 0) p.add(g[i][c]);
-        }
-        const sr = Math.floor(r / 3) * 3, sc = Math.floor(c / 3) * 3;
-        for (let rr = sr; rr < sr + 3; rr++)
-            for (let cc = sc; cc < sc + 3; cc++)
-                if (g[rr][cc] !== 0) p.add(g[rr][cc]);
-        const r2 = new Set();
-        for (let n = 1; n <= 9; n++) if (!p.has(n)) r2.add(n);
-        return r2;
+    const { r, c, num } = hint;
+    st.userGrid[r][c] = num;
+    st.notes[r][c].clear();
+    notesPruneNumber(num, r, c);
+    S.renderBoard();
+    S.flashHintCell(r, c);
+    S.checkAndAnimateLineCompletion(r, c);
+
+    const methodMap = {
+        naked: `唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`,
+        hidden_row: `隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`,
+        hidden_col: `隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`,
+        hidden_box: `隐唯法：第 ${Math.floor(r / 3) * 3 + 1} 行第 ${Math.floor(c / 3) * 3 + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`,
     };
+    S.showInfo(methodMap[hint.method] || `第 ${r + 1} 行第 ${c + 1} 列应该填 ${num}`);
 
-    const placeAndPrune = (r, c, num) => { g[r][c] = num; st.notes[r][c].clear(); notesPruneNumber(num, r, c); };
-    const reveal = (r, c, num, msg) => {
-        placeAndPrune(r, c, num);
-        S.renderBoard();
-        S.flashHintCell(r, c);
-        S.checkAndAnimateLineCompletion(r, c);
-        S.showInfo(msg);
-        if (checkWin()) gameOver(true);
-    };
-
-    // 唯余法
-    for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++) {
-        if (fx[r][c] || g[r][c] !== 0) continue;
-        const cs = cands(r, c);
-        if (cs.size === 1) { reveal(r, c, [...cs][0], `唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${[...cs][0]} 可以填`); return; }
-    }
-
-    // 隐唯法 — 行
-    for (let r = 0; r < 9; r++) for (let n = 1; n <= 9; n++) {
-        let ok = false; for (let c = 0; c < 9; c++) if (g[r][c] === n) { ok = true; break; }
-        if (ok) continue;
-        const ps = []; for (let c = 0; c < 9; c++) if (!fx[r][c] && g[r][c] === 0 && cands(r, c).has(n)) ps.push(c);
-        if (ps.length === 1) { reveal(r, ps[0], n, `隐唯法：第 ${r + 1} 行中只有第 ${ps[0] + 1} 列可以填 ${n}`); return; }
-    }
-
-    // 隐唯法 — 列
-    for (let c = 0; c < 9; c++) for (let n = 1; n <= 9; n++) {
-        let ok = false; for (let r = 0; r < 9; r++) if (g[r][c] === n) { ok = true; break; }
-        if (ok) continue;
-        const ps = []; for (let r = 0; r < 9; r++) if (!fx[r][c] && g[r][c] === 0 && cands(r, c).has(n)) ps.push(r);
-        if (ps.length === 1) { reveal(ps[0], c, n, `隐唯法：第 ${c + 1} 列中只有第 ${ps[0] + 1} 行可以填 ${n}`); return; }
-    }
-
-    // 隐唯法 — 宫
-    for (let br = 0; br < 3; br++) for (let bc = 0; bc < 3; bc++) for (let n = 1; n <= 9; n++) {
-        const sr = br * 3, sc = bc * 3;
-        let ok = false;
-        for (let rr = sr; rr < sr + 3 && !ok; rr++) for (let cc = sc; cc < sc + 3; cc++) if (g[rr][cc] === n) { ok = true; break; }
-        if (ok) continue;
-        const ps = [];
-        for (let rr = sr; rr < sr + 3; rr++) for (let cc = sc; cc < sc + 3; cc++)
-            if (!fx[rr][cc] && g[rr][cc] === 0 && cands(rr, cc).has(n)) ps.push([rr, cc]);
-        if (ps.length === 1) { reveal(ps[0][0], ps[0][1], n, `隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${ps[0][0] + 1},${ps[0][1] + 1}) 可以填 ${n}`); return; }
-    }
-
-    // 兜底
-    for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++)
-        if (!fx[r][c] && g[r][c] === 0) { reveal(r, c, sol[r][c], `第 ${r + 1} 行第 ${c + 1} 列应该填 ${sol[r][c]}`); return; }
-
-    S.showInfo('所有格子都已正确！');
+    if (checkWin()) gameOver(true);
 };
 
 
