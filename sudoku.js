@@ -352,6 +352,7 @@ const SudokuEngine = (() => {
         maxMistakes: 3,           // ← 想改错误上限，改这里
         isGameOver: false,
         isCandidateEditMode: false,
+        allNotesOn: false,
         timerSeconds: 0,
         timerInterval: null,
         difficulty: 'easy',
@@ -414,6 +415,8 @@ const SudokuEngine = (() => {
         state.isGameOver = false;
         state.isCandidateEditMode = false;
         candidateEditBtn.classList.remove('active');
+        state.allNotesOn = false;
+        notesToggleBtn.classList.remove('active');
         state.selectedRow = -1;
         state.selectedCol = -1;
 
@@ -520,6 +523,7 @@ const SudokuEngine = (() => {
 
         // 最后统一标记错误（红色高亮冲突的格子）
         markErrors();
+        updateNumPadState();
     };
 
 
@@ -555,6 +559,31 @@ const SudokuEngine = (() => {
             const c = parseInt(el.dataset.col);
             if (!fixed[r][c] && grid[r][c] !== 0 && hasError(r, c)) {
                 el.classList.add('error');
+            }
+        });
+    };
+
+    /**
+     * 统计每个数字在棋盘上的出现次数，耗尽时禁用数字按钮
+     */
+    const updateNumPadState = () => {
+        const counts = Array(10).fill(0);
+        const grid = state.userGrid;
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                const v = grid[r][c];
+                if (v > 0) counts[v]++;
+            }
+        }
+        document.querySelectorAll('.num-pad button[data-num]').forEach(btn => {
+            const num = parseInt(btn.dataset.num);
+            if (num === 0) return; // 擦除按钮不处理
+            if (counts[num] >= 9) {
+                btn.disabled = true;
+                btn.classList.add('depleted');
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('depleted');
             }
         });
     };
@@ -674,9 +703,10 @@ const SudokuEngine = (() => {
         // ---- 擦除 ----
         if (num === 0) {
             if (grid[r][c] !== 0) {
+                // 擦除前记住该格的原数字，用于清理笔记
+                // 但用户如果重新标记，自然会有新候选，所以不额外处理
                 grid[r][c] = 0;
                 state.notes[r][c].clear();
-                autoMarkNotes();
                 renderBoard();
             }
             return;
@@ -694,7 +724,7 @@ const SudokuEngine = (() => {
             // 仍然填入数字让玩家看到错在哪
             grid[r][c] = num;
             state.notes[r][c].clear();
-            autoMarkNotes();
+            notesPruneNumber(num, r, c);
             renderBoard();
 
             // 检查是否超限
@@ -707,7 +737,7 @@ const SudokuEngine = (() => {
         // ---- 正确填入 ----
         grid[r][c] = num;
         state.notes[r][c].clear();
-        autoMarkNotes();
+        notesPruneNumber(num, r, c);
         renderBoard();
 
         // 检查是否完成
@@ -1056,6 +1086,36 @@ const SudokuEngine = (() => {
         renderBoard();
     };
 
+    /**
+     * 在 (row, col) 填入数字后，从同行/同列/同宫的空格笔记中移除该数字
+     * 只清理不添加，不会自动填充新候选
+     */
+    const notesPruneNumber = (num, row, col) => {
+        if (state.isGameOver || num === 0) return;
+        // 行
+        for (let i = 0; i < 9; i++) {
+            if (state.userGrid[row][i] === 0) {
+                state.notes[row][i].delete(num);
+            }
+        }
+        // 列
+        for (let i = 0; i < 9; i++) {
+            if (state.userGrid[i][col] === 0) {
+                state.notes[i][col].delete(num);
+            }
+        }
+        // 宫
+        const sr = Math.floor(row / 3) * 3;
+        const sc = Math.floor(col / 3) * 3;
+        for (let rr = sr; rr < sr + 3; rr++) {
+            for (let cc = sc; cc < sc + 3; cc++) {
+                if (state.userGrid[rr][cc] === 0) {
+                    state.notes[rr][cc].delete(num);
+                }
+            }
+        }
+    };
+
 
     // ==============================================================
     // 初始化
@@ -1073,9 +1133,21 @@ const SudokuEngine = (() => {
             });
         });
 
-        // 一键标记
+        // 全部标记 — 切换开关
         notesToggleBtn.addEventListener('click', () => {
-            autoMarkNotes();
+            state.allNotesOn = !state.allNotesOn;
+            if (state.allNotesOn) {
+                autoMarkNotes();
+            } else {
+                // 清空所有笔记
+                for (let r = 0; r < 9; r++) {
+                    for (let c = 0; c < 9; c++) {
+                        state.notes[r][c].clear();
+                        state.userRemovedNotes[r][c].clear();
+                    }
+                }
+            }
+            notesToggleBtn.classList.toggle('active', state.allNotesOn);
             renderBoard();
         });
 

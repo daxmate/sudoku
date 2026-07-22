@@ -1,28 +1,78 @@
 /* ================================================================
-   数独游戏 - 全部样式
+   数独游戏 - 全部样式（现代版）
    ================================================================
-   如果你要改颜色、大小、间距、响应式断点，改这个文件即可。
+   现代极简风格，深色背景 + 毛玻璃浮起卡片。
+   如果你要改颜色，找 --color-* CSS 变量即可。
    ================================================================ */
 
 
 /* ================================================================
-   1. 全局重置与布局
+   1. CSS 变量 + 全局重置
    ================================================================ */
 
-/* 通用重置：去掉浏览器默认边距，统一盒模型 */
+:root {
+    /* 主色调 — 靛蓝系 */
+    --color-accent:      #6366f1;
+    --color-accent-dark: #4f46e5;
+    --color-accent-light: #a5b4fc;
+
+    /* 文字 */
+    --color-text:        #1e293b;
+    --color-text-muted:  #64748b;
+    --color-text-light:  #94a3b8;
+
+    /* 背景 */
+    --color-surface:     rgba(255, 255, 255, 0.92);
+    --color-bg:          #0f172a;
+
+    /* 棋盘 */
+    --color-board-border:#334155;
+    --color-box-border:  #1e293b;
+    --color-cell-bg:     #ffffff;
+    --color-cell-fixed:  #0f172a;
+    --color-cell-user:   #4f46e5;
+    --color-cell-selected: #eef2ff;
+    --color-cell-highlight: #f1f5f9;
+    --color-cell-same:   #dbeafe;
+    --color-cell-error:  #fef2f2;
+    --color-cell-error-text: #dc2626;
+    --color-note-text:   #94a3b8;
+
+    /* 按钮 */
+    --color-btn-bg:      #f1f5f9;
+    --color-btn-text:    #334155;
+    --color-btn-hover:   #e2e8f0;
+
+    /* 圆角 */
+    --radius-sm:  8px;
+    --radius-md:  12px;
+    --radius-lg:  20px;
+    --radius-xl:  28px;
+    --radius-full: 9999px;
+
+    /* 阴影 */
+    --shadow-card:   0 25px 80px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.15);
+    --shadow-btn:    0 2px 6px rgba(0, 0, 0, 0.08);
+    --shadow-btn-hover: 0 8px 24px rgba(99, 102, 241, 0.25);
+    --shadow-board:  0 8px 32px rgba(0, 0, 0, 0.12);
+
+    /* 字体 */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* 页面主体：
-   - 渐变背景（左上到右下浅蓝过渡）
-   - flex 居中让游戏卡片永远在屏幕正中间
-   - 四周留 20px 边距防止贴边 */
 body {
-    font-family: 'Segoe UI', 'Arial', sans-serif;
-    background: linear-gradient(145deg, #f0f4ff 0%, #d9e2f0 100%);
+    font-family: var(--font-sans);
+    background: var(--color-bg);
+    background-image:
+        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
+        radial-gradient(ellipse 60% 50% at 0% 100%, rgba(139, 92, 246, 0.08), transparent),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(59, 130, 246, 0.08), transparent);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -30,233 +80,231 @@ body {
     padding: 20px;
 }
 
-/* 毛玻璃卡片容器：
-   - 半透明背景 + blur 实现毛玻璃效果
-   - 大圆角 + 阴影营造浮起感
-   - max-width:600px 保证在大屏上不会太宽 */
+
+/* ================================================================
+   2. 主容器 — 毛玻璃卡片
+   ================================================================ */
+
 .container {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-radius: 32px;
-    padding: 30px 35px 35px 35px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+    background: var(--color-surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl);
+    padding: 28px 32px 32px;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     text-align: center;
-    max-width: 600px;
+    max-width: 580px;
     width: 100%;
     transition: all 0.3s ease;
 }
 
 
 /* ================================================================
-   2. 标题
+   3. 标题
    ================================================================ */
 
-/* 主标题 "数 独" — 大字号、深色、字间距 */
 h1 {
-    color: #1a2639;
-    font-size: 2.4rem;
-    font-weight: 700;
-    letter-spacing: 4px;
-    margin-bottom: 6px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    color: var(--color-text);
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 6px;
+    margin-bottom: 2px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* 副标题 — 次要颜色，小字 */
 .subtitle {
-    color: #4a5b73;
-    font-size: 0.9rem;
-    font-weight: 400;
-    letter-spacing: 2px;
+    color: var(--color-text-light);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     margin-bottom: 20px;
 }
 
 
 /* ================================================================
-   3. 顶部信息栏（计时器 + 错误计数）
+   4. 顶部信息栏
    ================================================================ */
 
-/* 左右布局：计时在左，错误在右 */
 .game-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
-    padding: 0 4px;
+    margin-bottom: 16px;
+    padding: 0 2px;
 }
 
-/* 计时器和错误计数共享样式：药丸形背景 */
 .timer,
 .mistakes {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: #2c3e50;
-    background: rgba(255, 255, 255, 0.5);
-    padding: 6px 16px;
-    border-radius: 30px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+    color: var(--color-text-muted);
+    background: var(--color-btn-bg);
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-variant-numeric: tabular-nums;
 }
 
-/* 错误数字用红色突出 */
 .mistakes span {
-    color: #e74c3c;
+    color: var(--color-cell-error-text);
     font-weight: 700;
 }
 
 
 /* ================================================================
-   4. 难度选择按钮
+   5. 难度选择
    ================================================================ */
 
-/* 按钮行：flex 居中，间距 8px */
 .difficulty-wrap {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 6px;
+    margin-bottom: 18px;
 }
 
-/* 每个难度按钮：透明背景、圆角药丸形 */
 .difficulty-wrap button {
     background: transparent;
-    border: 2px solid #cbd5e1;
-    padding: 6px 18px;
-    border-radius: 40px;
-    font-size: 0.85rem;
+    border: 1.5px solid #e2e8f0;
+    padding: 5px 16px;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
     font-weight: 600;
-    color: #475569;
+    color: var(--color-text-muted);
     cursor: pointer;
     transition: all 0.2s ease;
-    letter-spacing: 0.5px;
+    font-family: var(--font-sans);
 }
 
-/* 鼠标悬停时变深 */
 .difficulty-wrap button:hover {
-    border-color: #64748b;
-    color: #1e293b;
+    border-color: var(--color-accent-light);
+    color: var(--color-accent);
 }
 
-/* 当前选中的难度：深色背景 + 白色文字 + 投影 */
 .difficulty-wrap button.active {
-    background: #1a2639;
-    border-color: #1a2639;
+    background: var(--color-accent);
+    border-color: var(--color-accent);
     color: #fff;
-    box-shadow: 0 4px 10px rgba(26, 38, 57, 0.25);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 
 /* ================================================================
-   5. 数独棋盘
+   6. 数独棋盘
    ================================================================ */
 
-/* 棋盘外包装：仅用于居中 */
 .board-wrapper {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
-/* 9×9 网格：
-   - grid 布局，9 列等宽
-   - gap:1px 作为宫格之间的细线
-   - 背景色 #b0bec5 从 gap 透出就是网格线颜色
-   - aspect-ratio:1/1 保证正方形 */
 .sudoku-board {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     gap: 1px;
-    background-color: #b0bec5;
-    border: 3px solid #1a2639;
-    border-radius: 8px;
+    background: #e2e8f0;
+    border: 2px solid var(--color-board-border);
+    border-radius: var(--radius-md);
     overflow: hidden;
     width: 100%;
-    max-width: 450px;
+    max-width: 440px;
     aspect-ratio: 1 / 1;
+    box-shadow: var(--shadow-board);
 }
 
-/* 每个格子：居中、大字号、点击手势 */
+/* 格子基础样式 */
 .cell {
-    background-color: #ffffff;
+    background-color: var(--color-cell-bg);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 500;
-    color: #0b1a2a;
+    color: var(--color-text);
     cursor: pointer;
-    transition: background 0.12s ease, color 0.12s ease;
+    transition: background 0.1s ease, color 0.1s ease;
     aspect-ratio: 1 / 1;
-    user-select: none;      /* 防止双击选中文字 */
-    position: relative;     /* 给 notes-container 定位用 */
+    user-select: none;
+    position: relative;
 }
 
 /* ---- 3x3 宫格粗边框 ---- */
-/* 每第 3 列右边界加粗（第 9 列除外） */
-.cell:nth-child(3n) {
-    border-right: 2.5px solid #1a2639;
+.cell:nth-child(3n):not(:nth-child(9n)) {
+    border-right: 2px solid var(--color-box-border);
 }
-.cell:nth-child(9n) {
-    border-right: none;
-}
-/* 第 2 行（格子 19~27）和第 5 行（格子 46~54）下方加粗 */
-.cell:nth-child(n+19):nth-child(-n+27) {
-    border-bottom: 2.5px solid #1a2639;
-}
+.cell:nth-child(n+19):nth-child(-n+27),
 .cell:nth-child(n+46):nth-child(-n+54) {
-    border-bottom: 2.5px solid #1a2639;
+    border-bottom: 2px solid var(--color-box-border);
 }
 
-/* ---- 格子状态样式 ---- */
+/* 棋盘外围框线在圆角处更自然 */
+.sudoku-board .cell:first-child {
+    border-top-left-radius: var(--radius-md);
+}
+.sudoku-board .cell:nth-child(9) {
+    border-top-right-radius: var(--radius-md);
+}
+.sudoku-board .cell:nth-child(73) {
+    border-bottom-left-radius: var(--radius-md);
+}
+.sudoku-board .cell:last-child {
+    border-bottom-right-radius: var(--radius-md);
+}
 
-/* 固定（初始谜题）格子：粗体 */
+/* ---- 格子状态 ---- */
+
 .cell.fixed {
-    color: #1a2639;
+    color: var(--color-cell-fixed);
     font-weight: 700;
 }
 
-/* 用户填入的数字用蓝色区分 */
 .cell.user-input {
-    color: #2c6b9e;
+    color: var(--color-cell-user);
     font-weight: 600;
 }
 
-/* 当前选中的格子：蓝色背景 + 蓝色轮廓 */
+/* 选中格 — 使用 ring 而非 outline，视觉效果更现代 */
 .cell.selected {
-    background-color: #bbdefb !important;
-    outline: 2px solid #1976d2;
-    outline-offset: -2px;
+    background-color: var(--color-cell-selected) !important;
+    box-shadow: inset 0 0 0 2.5px var(--color-accent);
     z-index: 2;
 }
 
-/* 同行/同列的高亮格子 */
 .cell.highlighted {
-    background-color: #e8edf5;
+    background-color: var(--color-cell-highlight);
 }
 
-/* 与选中数字相同的格子 */
 .cell.same-number {
-    background-color: #90caf9;
+    background-color: var(--color-cell-same);
 }
 
-/* 错误格子：浅红背景 + 深红文字 */
 .cell.error {
-    background-color: #ffcdd2 !important;
-    color: #c62828 !important;
+    background-color: var(--color-cell-error) !important;
+    color: var(--color-cell-error-text) !important;
 }
 
-/* 提示动画：黄色闪烁 + 缩放脉冲 */
+/* 悬停微交互 */
+.cell:not(.fixed):hover {
+    background-color: #f8fafc;
+}
+
+/* 提示闪烁 */
 .cell.hint-glow {
-    background-color: #fff9c4 !important;
-    color: #1a2639 !important;
-    animation: hintPulse 0.6s ease 2;
+    background-color: #fef9c3 !important;
+    color: var(--color-text) !important;
+    animation: hintPulse 0.5s ease 2;
 }
 @keyframes hintPulse {
-    0%,
-    100% { transform: scale(1); }
-    50%  { transform: scale(1.12); }
+    0%, 100% { transform: scale(1); }
+    50%  { transform: scale(1.1); }
 }
 
-/* ---- 笔记模式（候选数字） ---- */
-/* 笔记容器是一个 3×3 小网格，放在格子里面 */
+/* ---- 候选数字 ---- */
+
 .cell .notes-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -265,218 +313,243 @@ h1 {
     height: 100%;
     padding: 1px;
 }
-/* 每个候选数字用极小字号排布 */
 .cell .notes-container span {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     font-weight: 500;
-    color: #4a5b73;
+    color: var(--color-note-text);
     line-height: 1;
 }
 
 
 /* ================================================================
-   6. 数字输入面板
+   7. 数字面板
    ================================================================ */
 
-/* 按钮行：居中，自动换行，间距 6px */
 .num-pad {
     display: flex;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
-/* 每个数字按钮：方形、浅灰背景 */
 .num-pad button {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-sm);
     border: none;
-    background: #f1f5f9;
-    color: #1e293b;
-    font-size: 1.3rem;
+    background: var(--color-btn-bg);
+    color: var(--color-btn-text);
+    font-size: 1.15rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-btn);
+    font-family: var(--font-sans);
 }
 
-/* 悬停时浮起效果 */
 .num-pad button:hover {
-    background: #e2e8f0;
+    background: var(--color-btn-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-btn-hover);
 }
 .num-pad button:active {
-    transform: translateY(0px);
+    transform: translateY(0);
 }
 
-/* 擦除按钮（✕）：红色调 */
+/* 数字耗尽状态 */
+.num-pad button.depleted {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    pointer-events: none;
+}
+
+/* ---- 功能按钮 ---- */
+
 .num-pad button.erase-btn {
-    background: #fee2e2;
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
     color: #b91c1c;
-    font-size: 0.85rem;
-    width: 52px;
+    font-size: 0.8rem;
+    width: 50px;
 }
 .num-pad button.erase-btn:hover {
-    background: #fecaca;
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
 }
 
-/* 笔记切换按钮：蓝色调 */
 .num-pad button.notes-toggle {
-    background: #dbeafe;
-    color: #1e40af;
-    font-size: 0.7rem;
+    background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+    color: #4338ca;
+    font-size: 0.65rem;
     font-weight: 700;
-    width: 52px;
+    width: 50px;
 }
-/* 笔记模式激活时背景加深 */
+.num-pad button.notes-toggle:hover {
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+}
 .num-pad button.notes-toggle.active {
-    background: #1e40af;
+    background: linear-gradient(135deg, #4338ca, #3730a3);
     color: #fff;
 }
 
-/* 单格备注按钮：紫色调 */
 .num-pad button.mark-cell-btn {
-    background: #ede9fe;
-    color: #5b21b6;
-    font-size: 0.7rem;
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    color: #6d28d9;
+    font-size: 0.65rem;
     font-weight: 700;
-    width: 64px;
+    width: 60px;
 }
 .num-pad button.mark-cell-btn:hover {
-    background: #ddd6fe;
+    background: linear-gradient(135deg, #ede9fe, #ddd6fe);
 }
 
-/* 候选编辑按钮：绿色调 */
 .num-pad button.candidate-edit-btn {
-    background: #d1fae5;
+    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
     color: #065f46;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 700;
-    width: 64px;
+    width: 60px;
 }
 .num-pad button.candidate-edit-btn:hover {
-    background: #a7f3d0;
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
 }
 .num-pad button.candidate-edit-btn.active {
-    background: #065f46;
+    background: linear-gradient(135deg, #065f46, #047857);
     color: #fff;
 }
 
 
 /* ================================================================
-   7. 底部控制按钮
+   8. 底部控制按钮
    ================================================================ */
 
-/* 按钮行：居中，间隔 12px */
 .controls {
     display: flex;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
-/* 通用按钮样式 */
 .controls button {
-    padding: 10px 22px;
+    padding: 9px 20px;
     border: none;
-    border-radius: 40px;
-    font-size: 0.9rem;
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
-    background: #eef2f7;
-    color: #1e293b;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-/* 悬停浮起 */
-.controls button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    font-family: var(--font-sans);
+    letter-spacing: 0.3px;
 }
 
-/* 颜色变体：primary=深色、success=绿色、warning=琥珀色 */
+.controls button:hover {
+    transform: translateY(-2px);
+}
+
 .controls button.primary {
-    background: #1a2639;
+    background: linear-gradient(135deg, #1e293b, #334155);
     color: white;
+    box-shadow: 0 4px 14px rgba(30, 41, 59, 0.3);
 }
 .controls button.primary:hover {
-    background: #2c3e5a;
+    box-shadow: 0 8px 24px rgba(30, 41, 59, 0.4);
 }
+
 .controls button.success {
-    background: #2e7d32;
+    background: linear-gradient(135deg, #059669, #10b981);
     color: white;
+    box-shadow: 0 4px 14px rgba(5, 150, 105, 0.3);
 }
 .controls button.success:hover {
-    background: #1b5e20;
+    box-shadow: 0 8px 24px rgba(5, 150, 105, 0.4);
 }
+
 .controls button.warning {
-    background: #f59e0b;
+    background: linear-gradient(135deg, #d97706, #f59e0b);
     color: white;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
 }
 .controls button.warning:hover {
-    background: #d97706;
+    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.4);
 }
 
 
 /* ================================================================
-   8. 响应式设计
+   9. 响应式
    ================================================================ */
 
-/* 小屏幕（手机横屏/大屏手机） */
-@media (max-width: 520px) {
+@media (max-width: 540px) {
     .container {
-        padding: 18px 14px 22px 14px;
+        padding: 16px 12px 20px;
+        border-radius: var(--radius-lg);
     }
     h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+        letter-spacing: 4px;
+    }
+    .subtitle {
+        font-size: 0.7rem;
+        margin-bottom: 14px;
+    }
+    .sudoku-board {
+        max-width: 100%;
     }
     .cell {
-        font-size: 1.2rem;       /* 格内数字缩小 */
+        font-size: 1.15rem;
+    }
+    .cell .notes-container span {
+        font-size: 0.45rem;
     }
     .num-pad button {
-        width: 34px;
-        height: 34px;
-        font-size: 1.0rem;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
     }
     .num-pad button.erase-btn,
     .num-pad button.notes-toggle,
     .num-pad button.mark-cell-btn,
     .num-pad button.candidate-edit-btn {
-        width: 44px;
-        font-size: 0.7rem;
+        width: 40px;
+        font-size: 0.6rem;
     }
     .controls button {
-        padding: 8px 14px;
-        font-size: 0.8rem;
+        padding: 7px 14px;
+        font-size: 0.75rem;
     }
     .difficulty-wrap button {
         padding: 4px 12px;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
     }
 }
 
-/* 极小屏幕（窄手机） */
-@media (max-width: 400px) {
+@media (max-width: 380px) {
+    .container {
+        padding: 12px 8px 16px;
+    }
+    h1 {
+        font-size: 1.3rem;
+    }
     .cell {
         font-size: 0.95rem;
+    }
+    .num-pad {
+        gap: 4px;
     }
     .num-pad button {
         width: 28px;
         height: 28px;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
     .num-pad button.erase-btn,
     .num-pad button.notes-toggle,
     .num-pad button.mark-cell-btn,
     .num-pad button.candidate-edit-btn {
-        width: 36px;
-        font-size: 0.6rem;
+        width: 34px;
+        font-size: 0.55rem;
     }
 }
