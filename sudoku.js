@@ -1194,29 +1194,24 @@ const SudokuEngine = (() => {
             });
         });
 
-        // 缩放控制
-        const zoomLevels = [0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3];
-        let zoomIdx = 3; // 默认 1.0
-        try {
-            const saved = parseInt(localStorage.getItem('sudoku-zoom'));
-            if (saved >= 0 && saved < zoomLevels.length) zoomIdx = saved;
-        } catch (e) {}
-
-        const zoomIn = document.getElementById('zoomIn');
-        const zoomOut = document.getElementById('zoomOut');
+        // 缩放控制（滑块）
+        const zoomSlider = document.getElementById('zoomSlider');
         const zoomLabel = document.getElementById('zoomLabel');
 
-        const applyZoom = (idx) => {
-            zoomIdx = Math.max(0, Math.min(zoomLevels.length - 1, idx));
-            const scale = zoomLevels[zoomIdx];
+        try {
+            const saved = parseInt(localStorage.getItem('sudoku-zoom'));
+            if (saved >= 70 && saved <= 130) zoomSlider.value = saved;
+        } catch (e) {}
+
+        const applyZoom = (val) => {
+            const scale = val / 100;
             document.documentElement.style.setProperty('--ui-scale', scale);
-            zoomLabel.textContent = Math.round(scale * 100) + '%';
-            try { localStorage.setItem('sudoku-zoom', zoomIdx); } catch (e) {}
+            zoomLabel.textContent = val + '%';
+            try { localStorage.setItem('sudoku-zoom', val); } catch (e) {}
         };
 
-        zoomOut.addEventListener('click', () => applyZoom(zoomIdx - 1));
-        zoomIn.addEventListener('click', () => applyZoom(zoomIdx + 1));
-        applyZoom(zoomIdx);
+        zoomSlider.addEventListener('input', () => applyZoom(parseInt(zoomSlider.value)));
+        applyZoom(parseInt(zoomSlider.value));
 
         // 键盘快捷键（全局）
         document.addEventListener('keydown', handleKeydown);
