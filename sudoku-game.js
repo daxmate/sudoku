@@ -428,7 +428,7 @@
             <div class="sd-row"><span class="sd-label">用时</span><span class="sd-val">${formatTime(state.timerSeconds)}</span></div>
             <div class="sd-row"><span class="sd-label">错误</span><span class="sd-val">${state.mistakes}</span></div>
             <div class="sd-row"><span class="sd-label">提示</span><span class="sd-val">${state.hintsUsed}</span></div>
-            <div class="sd-row sd-total"><span class="sd-label">🏆 总分</span><span class="sd-val">${total}</span></div>`;
+            <div class="sd-row sd-total"><span class="sd-label">总分</span><span class="sd-val">${total}</span></div>`;
 
         scoreDetail.innerHTML = html;
         scoreDetail.style.display = 'block';
@@ -442,7 +442,7 @@
             localStorage.setItem('sudoku-history', JSON.stringify(h));
         } catch (e) {}
 
-        const msg = won ? '🎉 恭喜你完成数独！' : '💔 游戏结束！错误已达上限。';
+        const msg = won ? '恭喜你完成数独！' : '游戏结束！错误已达上限。';
         showOverlay(msg, { single: true });
     };
 
@@ -491,7 +491,7 @@
                         <span class="lb-score ${rankClass}">${entry.score}</span>
                         <span class="lb-meta"><span class="lb-diff">${diffLabel[entry.difficulty] || entry.difficulty}</span>${fmtDate(entry.date)} · ${fmtTime(entry.time)}</span>
                     </div>
-                    <span class="lb-time">${entry.won ? '✅' : '❌'}</span>
+                    <span class="lb-time">${entry.won ? '✓' : '✗'}</span>
                 </div>`;
             });
 
@@ -802,7 +802,7 @@
 
         const remaining = state.maxHints - state.hintsUsed;
         if (remaining <= 0) {
-            showOverlay('💡 提示次数已用完（最多 3 次）', { single: true });
+            showOverlay('提示次数已用完（最多 3 次）', { single: true });
             return;
         }
 
@@ -853,7 +853,7 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showInfo(`💡 唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`);
+                    showInfo(`唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -882,7 +882,7 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showInfo(`💡 隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`);
+                    showInfo(`隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -910,7 +910,7 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showInfo(`💡 隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`);
+                    showInfo(`隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
@@ -945,7 +945,7 @@
                         renderBoard();
                         flashHintCell(r, c);
                         checkAndAnimateLineCompletion(r, c);
-                        showInfo(`💡 隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`);
+                        showInfo(`隐唯法：第 ${br + 1} 行第 ${bc + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`);
                         if (checkWin()) gameOver(true);
                         return;
                     }
@@ -961,14 +961,14 @@
                     renderBoard();
                     flashHintCell(r, c);
                     checkAndAnimateLineCompletion(r, c);
-                    showInfo(`💡 第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`);
+                    showInfo(`第 ${r + 1} 行第 ${c + 1} 列应该填 ${solution[r][c]}`);
                     if (checkWin()) gameOver(true);
                     return;
                 }
             }
         }
 
-        showInfo('✅ 所有格子都已正确！');
+        showInfo('所有格子都已正确！');
     };
 
     /**
