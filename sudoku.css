@@ -81,6 +81,7 @@ body {
     max-width: 800px;
     width: 100%;
     zoom: var(--ui-scale);
+    transition: all .15s ease;
 }
 
 
