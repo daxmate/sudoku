@@ -42,7 +42,8 @@ open sudoku.html
 sudoku/
 ├── sudoku.html    # HTML 骨架
 ├── sudoku.css     # 全部样式
-├── sudoku.js      # 核心引擎 + UI 逻辑
+├── sudoku-engine.js # 数独核心算法（生成、求解、验证）
+├── sudoku-game.js  # UI 控制器（界面交互、事件绑定）
 └── README.md      # 本文件
 ```
 
