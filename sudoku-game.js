@@ -29,7 +29,7 @@ el.settingsOverlay = document.getElementById('settingsOverlay');
 el.settingsClose = document.getElementById('settingsClose');
 el.settingSound = document.getElementById('settingSound');
 el.settingAnim = document.getElementById('settingAnim');
-el.settingDark = document.getElementById('settingDark');
+
 el.lbOverlay = document.getElementById('lbOverlay');
 el.lbList = document.getElementById('lbList');
 el.lbClose = document.getElementById('lbClose');
@@ -377,9 +377,6 @@ const init = () => {
         st.animOn = el.settingAnim.checked;
         saveSettings();
     });
-    el.settingDark.addEventListener('change', () => {
-        applyTheme(el.settingDark.checked);
-    });
     loadSettings();
 
     // 主题切换
@@ -387,7 +384,6 @@ const init = () => {
         const applyTheme = (dark) => {
             document.documentElement.setAttribute('data-theme', dark ? 'dark' : '');
             el.themeBtn.classList.toggle('dark', dark);
-            el.settingDark.checked = dark;
             try { localStorage.setItem('sudoku-theme', dark ? 'dark' : 'light'); } catch (e) {}
         };
         try {
