@@ -588,3 +588,70 @@ h1 {
     .bottom-row { margin-top: 0; }
     .new-game-btn { font-size: .68rem; padding: 7px 0; }
 }
+
+
+/* ================================================================
+   9. 自定义确认弹窗
+   ================================================================ */
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+.overlay.show {
+    display: flex;
+}
+
+.overlay-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px 28px 20px;
+    max-width: 280px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    text-align: center;
+}
+
+.overlay-msg {
+    font-size: .9rem;
+    color: #1e293b;
+    margin: 0 0 20px;
+    line-height: 1.5;
+}
+
+.overlay-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.overlay-btn {
+    flex: 1;
+    padding: 9px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: .82rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: all .12s ease;
+}
+.overlay-cancel {
+    background: #f1f4f8;
+    color: #6d7584;
+}
+.overlay-cancel:hover {
+    background: #e5e9f0;
+}
+.overlay-confirm {
+    background: #065f46;
+    color: #fff;
+}
+.overlay-confirm:hover {
+    background: #047857;
+}

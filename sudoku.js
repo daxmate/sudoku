@@ -1132,11 +1132,31 @@ const SudokuEngine = (() => {
             notesToggleBtn.classList.toggle('active', state.isCandidateEditMode);
         });
 
-        // 新游戏
+        // 新游戏 — 用自定义弹窗代替浏览器 confirm
+        const confirmOverlay = document.getElementById('confirmOverlay');
+        const confirmMsg = document.getElementById('confirmMsg');
+        const confirmOk = document.getElementById('confirmOk');
+        const confirmCancel = document.getElementById('confirmCancel');
+
+        const showConfirm = (msg, onOk) => {
+            confirmMsg.textContent = msg;
+            confirmOverlay.classList.add('show');
+            const cleanup = () => {
+                confirmOverlay.classList.remove('show');
+                confirmOk.removeEventListener('click', onOk);
+                confirmCancel.removeEventListener('click', cleanup);
+                confirmOverlay.removeEventListener('click', onBgClick);
+            };
+            const onBgClick = (e) => {
+                if (e.target === confirmOverlay) cleanup();
+            };
+            confirmOk.addEventListener('click', () => { cleanup(); onOk(); });
+            confirmCancel.addEventListener('click', cleanup);
+            confirmOverlay.addEventListener('click', onBgClick);
+        };
+
         newGameBtn.addEventListener('click', () => {
-            if (confirm('开始新游戏？当前进度将丢失。')) {
-                resetGame(state.difficulty);
-            }
+            showConfirm('开始新游戏？当前进度将丢失。', () => resetGame(state.difficulty));
         });
 
         // 提示
