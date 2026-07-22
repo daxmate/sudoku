@@ -14,7 +14,9 @@
 
     const boardEl = document.getElementById('board');           // 棋盘容器
     const timerDisplay = document.getElementById('timerDisplay'); // 计时器文字
-    const mistakesDisplay = document.getElementById('mistakesCount'); // 错误计数
+    const mistakesDisplay = document.getElementById('mistakesCount');
+    const scoreDisplay = document.getElementById('scoreDisplay');
+    const scoreDetail = document.getElementById('scoreDetail');
     const notesToggleBtn = document.getElementById('notesToggle'); // 候选编辑按钮
     const autoMarkBtn = document.getElementById('autoMarkBtn'); // 全部标记按钮
     const markCellBtn = document.getElementById('markCellBtn'); // 单格备注按钮
@@ -34,7 +36,7 @@
     };
 
     const showOverlay = (msg, opts = {}) => {
-        confirmMsg.textContent = msg;
+        confirmMsg.innerHTML = msg;
         if (opts.single) {
             confirmOk.textContent = '确定';
             confirmCancel.style.display = 'none';
@@ -98,6 +100,9 @@
         timerSeconds: 0,
         timerInterval: null,
         difficulty: 'easy',
+        score: 0,
+        streak: 0,
+        hintsUsed: 0,
     };
 
 
@@ -161,6 +166,11 @@
         autoMarkBtn.classList.remove('active');
         state.selectedRow = -1;
         state.selectedCol = -1;
+        state.score = 0;
+        state.streak = 0;
+        state.hintsUsed = 0;
+        updateScoreDisplay();
+        scoreDetail.style.display = 'none';
 
         // 生成谜题
         const { puzzle, solution } = SudokuEngine.generatePuzzle(difficulty);
@@ -374,12 +384,48 @@
     const gameOver = (won = false) => {
         state.isGameOver = true;
         stopTimer();
-        if (won) {
-            playVictorySound();
-            showOverlay('🎉 恭喜你完成数独！太棒啦！', { single: true });
-        } else {
-            showOverlay('💔 游戏结束！错误已达上限。点击「新游戏」重新开始。', { single: true });
-        }
+
+        if (won) playVictorySound();
+
+        // 构建积分明细
+        const mult = DIFF_MULT[state.difficulty] || 1;
+        const base = state.score * mult;
+        const cBonus = 100 * mult;
+        const nhBonus = state.hintsUsed === 0 ? 200 * mult : 0;
+        const neBonus = state.mistakes === 0 && won ? 150 * mult : 0;
+        const tBonus = won ? Math.max(0, Math.round((1800 - state.timerSeconds) * 0.5 * mult)) : 0;
+        const total = Math.round(base + cBonus + nhBonus + neBonus + tBonus);
+
+        const fmt = (n) => `${n > 0 ? '+' : ''}${Math.round(n)}`;
+        const dLabel = { easy: '简单', medium: '中等', hard: '困难', expert: '专家' }[state.difficulty];
+
+        let html = `
+            <div class="sd-row"><span class="sd-label">难度</span><span class="sd-val">${dLabel} (×${mult})</span></div>
+            <div class="sd-row"><span class="sd-label">基础分</span><span class="sd-val">${fmt(base)}</span></div>
+            <div class="sd-row"><span class="sd-label">通关奖励</span><span class="sd-val">${fmt(cBonus)}</span></div>`;
+        if (nhBonus) html += `<div class="sd-row"><span class="sd-label">无提示奖励</span><span class="sd-val">${fmt(nhBonus)}</span></div>`;
+        if (neBonus) html += `<div class="sd-row"><span class="sd-label">无错误奖励</span><span class="sd-val">${fmt(neBonus)}</span></div>`;
+        if (tBonus)  html += `<div class="sd-row"><span class="sd-label">时间奖励</span><span class="sd-val">${fmt(tBonus)}</span></div>`;
+        html += `
+            <div class="sd-row"><span class="sd-label">用时</span><span class="sd-val">${formatTime(state.timerSeconds)}</span></div>
+            <div class="sd-row"><span class="sd-label">错误</span><span class="sd-val">${state.mistakes}</span></div>
+            <div class="sd-row"><span class="sd-label">提示</span><span class="sd-val">${state.hintsUsed}</span></div>
+            <div class="sd-row sd-total"><span class="sd-label">🏆 总分</span><span class="sd-val">${total}</span></div>`;
+
+        scoreDetail.innerHTML = html;
+        scoreDetail.style.display = 'block';
+
+        // 保存历史
+        try {
+            const h = JSON.parse(localStorage.getItem('sudoku-history') || '[]');
+            h.unshift({ date: new Date().toISOString(), difficulty: state.difficulty, score: total,
+                time: state.timerSeconds, mistakes: state.mistakes, hints: state.hintsUsed, won });
+            if (h.length > 50) h.length = 50;
+            localStorage.setItem('sudoku-history', JSON.stringify(h));
+        } catch (e) {}
+
+        const msg = won ? '🎉 恭喜你完成数独！' : '💔 游戏结束！错误已达上限。';
+        showOverlay(msg, { single: true });
     };
 
 
@@ -470,10 +516,12 @@
             notesPruneNumber(num, r, c);
             renderBoard();
 
-            // 声光反馈
+            // 声光反馈 + 扣分
             playErrorSound();
             const cell = boardEl.children[r * 9 + c];
             if (cell) cell.classList.add('shake');
+            state.streak = 0;
+            addScore(-30, r, c);
 
             // 检查是否超限
             if (state.mistakes >= state.maxMistakes) {
@@ -488,10 +536,13 @@
         notesPruneNumber(num, r, c);
         renderBoard();
 
-        // 声光反馈
+        // 声光反馈 + 加分（含连击）
         playCorrectSound();
         const cell = boardEl.children[r * 9 + c];
         if (cell) cell.classList.add('pop');
+        state.streak++;
+        const sMult = state.streak >= 5 ? 3 : state.streak >= 3 ? 2 : state.streak >= 2 ? 1.5 : 1;
+        addScore(Math.round(10 * sMult), r, c);
 
         // 检查行/列/宫是否填满
         checkAndAnimateLineCompletion(r, c);
@@ -562,6 +613,51 @@
         [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => playNote(f, t + i * 0.12, 0.4, 0.12, 'sine'));
     };
 
+    // ==============================================================
+    // 积分系统
+    // ==============================================================
+
+    const DIFF_MULT = { easy: 1, medium: 1.5, hard: 2.5, expert: 4 };
+
+    const updateScoreDisplay = () => {
+        scoreDisplay.textContent = state.score;
+    };
+
+    /** 弹出浮动加分文字 */
+    const showFloatingScore = (points, r, c) => {
+        if (!points) return;
+        const cell = boardEl.children[r * 9 + c];
+        if (!cell) return;
+        const rect = cell.getBoundingClientRect();
+        const el = document.createElement('div');
+        el.className = 'score-float';
+        const sign = points > 0 ? '+' : '';
+        el.textContent = `${sign}${points}`;
+        el.style.color = points > 0 ? '#5a8a6f' : '#b85c5c';
+        el.style.left = (rect.left + rect.width / 2 - 14) + 'px';
+        el.style.top = rect.top + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 800);
+    };
+
+    const addScore = (points, r, c) => {
+        state.score += points;
+        if (state.score < 0) state.score = 0;
+        updateScoreDisplay();
+        showFloatingScore(points, r, c);
+    };
+
+    /** 计算最终总分 */
+    const calcFinalScore = () => {
+        const mult = DIFF_MULT[state.difficulty] || 1;
+        const base = state.score * mult;
+        const bonus = 100 * mult;
+        const noHint = state.hintsUsed === 0 ? 200 * mult : 0;
+        const noErr = state.mistakes === 0 ? 150 * mult : 0;
+        const time = Math.max(0, Math.round((1800 - state.timerSeconds) * 0.5 * mult));
+        return Math.round(base + bonus + noHint + noErr + time);
+    };
+
     /**
      * 检查刚填入 (r,c) 后所在行/列/宫是否全部填满
      * 如果填满，添加高亮动效 class + 播放音效
@@ -625,6 +721,12 @@
      */
     const giveHint = () => {
         if (state.isGameOver) return;
+
+        state.hintsUsed++;
+        // 提示扣分（显示在已选中格上，无选中格则扣在 0,0）
+        const hintR = state.selectedRow >= 0 ? state.selectedRow : 0;
+        const hintC = state.selectedCol >= 0 ? state.selectedCol : 0;
+        addScore(-50, hintR, hintC);
 
         const grid = state.userGrid;
         const solution = state.solution;
