@@ -45,7 +45,6 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
   display: flex;
   flex-direction: column;
   gap: 4px;
-  flex: 1;
 }
 
 .leaderboard-row {
@@ -77,9 +76,11 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
   background: var(--panel-hover-bg);
   color: var(--panel-mark-hover-text);
 }
+
 .auto-mark-btn.disabled {
   opacity: 0.45;
 }
+
 .auto-mark-btn.disabled:hover {
   background: var(--panel-bg);
   color: var(--panel-text);
@@ -106,23 +107,17 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
   transform: translateY(-1px);
 }
 
-@media (max-width: 640px) {
-  .bottom-section { gap: 2px; }
-  .bottom-row {
-    display: flex;
-    gap: 4px;
-  }
-  .auto-mark-btn { width: 32px; aspect-ratio: auto; height: 32px; padding: 2px; flex-shrink: 0; }
-  .auto-mark-btn svg { width: 20px; height: 20px; }
-  .new-game-btn { font-size: .68rem; padding: 4px; min-height: 32px; flex: 1; }
-  .lb-btn { font-size: .68rem; padding: 4px; min-height: 28px; }
-  .icon-btn { width: 28px; height: 28px; padding: 4px; flex-shrink: 0; }
-  .icon-btn svg { width: 14px; height: 14px; }
-}
-
 .leaderboard-row {
   display: flex;
   gap: 4px;
+}
+
+@media (max-width: 640px) {
+  .bottom-section { gap: 2px; }
+  .bottom-row { display: block; }
+  .auto-mark-btn { display: none; }
+  .new-game-btn { width: 100%; font-size: .72rem; padding: 6px; min-height: 36px; }
+  .leaderboard-row { display: none !important; }
 }
 
 .lb-btn {

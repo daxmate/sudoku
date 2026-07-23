@@ -13,6 +13,7 @@
         @select-difficulty="game.newGame($event)"
         @toggle-pause="game.togglePause()"
         @update-zoom="game.setZoom($event)"
+        @open-settings="showSettings = true"
       />
       <div class="board-row">
         <GameBoard />
@@ -20,11 +21,13 @@
           <ActionButtons
             :note-active="game.state.isNoteMode"
             :auto-calc-enabled="game.state.isAutoCalc"
+            :auto-mark-enabled="game.state.autoMarkFeature"
             :hints-remaining="game.state.hintsRemaining"
             @erase="game.eraseCell()"
             @toggle-notes="game.toggleNoteMode()"
             @auto-calc="game.autoCalcCell()"
             @hint="game.useHint()"
+            @toggle-auto-mark="game.toggleAutoMark()"
           />
           <NumberPad :player-grid="game.state.playerGrid" :show-depletion="game.state.depletionFeature" @place="game.placeNumber($event)" />
           <BottomPanel
@@ -60,6 +63,7 @@
       :sound="game.state.soundOn"
       :anim="game.state.isAnimOn"
       :vim-mode="game.state.vimMode"
+      :dark-mode="isDarkMode"
       @close="showSettings = false"
       @toggle-auto-calc="game.toggleAutoCalc($event)"
       @toggle-auto-mark="game.setAutoMarkFeature($event)"
@@ -67,6 +71,7 @@
       @toggle-sound="game.toggleSound()"
       @toggle-anim="game.toggleAnim()"
       @toggle-vim="game.toggleVimMode()"
+      @toggle-dark-mode="toggleDarkMode"
     />
     <ConfirmOverlay
       :visible="showConfirm"
@@ -101,6 +106,11 @@ const isDarkMode = ref(false)
 
 function toggleDarkMode() {
   isDarkMode.value = !isDarkMode.value
+  const isMobile = window.innerWidth <= 640
+  if (isMobile) {
+    document.body.style.background = isDarkMode.value ? '#0f172a' : '#fff'
+    document.body.style.backgroundImage = 'none'
+  }
 }
 
 const showSettings = ref(false)
@@ -146,6 +156,10 @@ const onKeydown = (e) => {
 }
 
 onMounted(() => {
+  if (window.innerWidth <= 640) {
+    document.body.style.background = '#fff'
+    document.body.style.backgroundImage = 'none'
+  }
   if (game.hasSavedGame()) {
     const saved = JSON.parse(localStorage.getItem('sudoku-saved-game'))
     game.restoreGame(saved)
@@ -159,6 +173,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
+  document.body.style.background = ''
+  document.body.style.backgroundImage = ''
 })
 </script>
 
@@ -169,6 +185,7 @@ onUnmounted(() => {
   --color-text-muted: #64748b;
   --color-text-light: #94a3b8;
   --color-surface: rgba(255, 255, 255, 0.94);
+  --color-surface-mobile: #fff;
 
   /* GameHeader - 状态标签 */
   --badge-bg: #f1f4f8;
@@ -301,6 +318,7 @@ onUnmounted(() => {
   --color-text-muted: #94a3b8;
   --color-text-light: #64748b;
   --color-surface: rgba(15, 23, 42, 0.94);
+  --color-surface-mobile: #0f172a;
   --badge-bg: #1e293b;
   --badge-text: #94a3b8;
   --diff-btn-border: #334155;
@@ -436,13 +454,16 @@ h1 {
 }
 
 @media (max-width: 640px) {
-  .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; }
+  .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; background: var(--color-surface-mobile); }
   .container {
     padding: 0;
     border-radius: 0;
     border: none;
     min-height: 100dvh;
     box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--color-surface-mobile);
   }
   h1 { padding: 8px 0 0; margin: 0; font-size: 1rem; letter-spacing: 2px; }
   .subtitle { display: none; }

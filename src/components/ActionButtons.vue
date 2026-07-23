@@ -25,6 +25,18 @@
       </svg>
     </button>
 
+    <button class="auto-mark-btn auto-mark-btn-mobile"
+      :class="{ disabled: !autoMarkEnabled }"
+      :title="autoMarkEnabled ? '全部标记' : '需要到设置中开启'"
+      @click="autoMarkEnabled ? $emit('toggleAutoMark') : null"
+    >
+      <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
+        <circle cx="15" cy="16" r="8.5" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="13.5" y="6" width="3" height="3" rx=".6" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M15 6q3-2 1-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+    </button>
+
     <button class="warning" :class="{ disabled: hintsRemaining <= 0 }" :title="hintsRemaining > 0 ? '提示' : '没有提示次数了'" @click="hintsRemaining > 0 ? $emit('hint') : null">
       <svg viewBox="0 0 30 30" width="24" height="24">
         <g fill="currentColor" fill-rule="evenodd">
@@ -42,9 +54,10 @@ defineProps({
   noteActive: Boolean,
   autoCalcEnabled: Boolean,
   hintsRemaining: { type: Number, default: 3 },
+  autoMarkEnabled: Boolean,
 })
 
-defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint'])
+defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint', 'toggleAutoMark'])
 </script>
 
 <style scoped>
@@ -96,6 +109,10 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint'])
 .warning.disabled { opacity: 0.45; }
 .warning.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
 
+.auto-mark-btn-mobile { display: none; }
+.auto-mark-btn.disabled { opacity: 0.45; }
+.auto-mark-btn.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
+
 .hint-count {
   position: absolute;
   top: -3px;
@@ -116,8 +133,8 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint'])
 
 @media (max-width: 640px) {
   .action-buttons {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 3px;
   }
   .action-buttons button {
     height: 36px;
@@ -126,5 +143,6 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint'])
     width: 20px;
     height: 20px;
   }
+  .auto-mark-btn-mobile { display: flex; align-items: center; justify-content: center; }
 }
 </style>
