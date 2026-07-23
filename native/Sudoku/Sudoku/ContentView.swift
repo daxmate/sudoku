@@ -24,13 +24,13 @@ struct ContentView: View {
     struct WebViewContainer: NSViewRepresentable {
         func makeNSView(context: Context) -> WKWebView {
             let config = WKWebViewConfiguration()
-            config.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-            config.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
+            config.setURLSchemeHandler(DistSchemeHandler(), forURLScheme: "custom")
 
             let wv = WKWebView(frame: .zero, configuration: config)
 
-            if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist") {
-                wv.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+            if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist"),
+               let html = try? String(contentsOf: url, encoding: .utf8) {
+                wv.loadHTMLString(html, baseURL: URL(string: "custom://dist/"))
             }
             return wv
         }
@@ -41,13 +41,13 @@ struct ContentView: View {
     struct WebViewContainer: UIViewRepresentable {
         func makeUIView(context: Context) -> WKWebView {
             let config = WKWebViewConfiguration()
-            config.preferences.setValue(true, forKey: "allowFileAccessFromFileURLs")
-            config.setValue(true, forKey: "allowUniversalAccessFromFileURLs")
+            config.setURLSchemeHandler(DistSchemeHandler(), forURLScheme: "custom")
 
             let wv = WKWebView(frame: .zero, configuration: config)
 
-            if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist") {
-                wv.loadFileURL(url, allowingReadAccessTo: url.deletingLastPathComponent())
+            if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist"),
+               let html = try? String(contentsOf: url, encoding: .utf8) {
+                wv.loadHTMLString(html, baseURL: URL(string: "custom://dist/"))
             }
             return wv
         }
