@@ -17,9 +17,11 @@
           <ActionButtons
             :note-active="game.state.isNoteMode"
             :auto-calc-enabled="game.state.isAutoCalc"
+            :hints-remaining="game.state.hintsRemaining"
             @erase="game.eraseCell()"
             @toggle-notes="game.toggleNoteMode()"
             @auto-calc="game.autoCalcCell()"
+            @hint="game.useHint()"
           />
           <NumberPad @place="game.placeNumber($event)" />
           <BottomPanel

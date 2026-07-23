@@ -25,14 +25,14 @@
       </svg>
     </button>
 
-    <button class="warning" title="提示">
+    <button class="warning" :class="{ disabled: hintsRemaining <= 0 }" :title="hintsRemaining > 0 ? '提示' : '没有提示次数了'" @click="hintsRemaining > 0 ? $emit('hint') : null">
       <svg viewBox="0 0 30 30" width="24" height="24">
         <g fill="currentColor" fill-rule="evenodd">
           <path fill="none" d="M0 0h30v30H0z" />
           <path d="M17.296 25.714c.507 0 .918.48.918 1.072 0 .591-.41 1.071-.918 1.071h-4.592c-.507 0-.918-.48-.918-1.071 0-.592.41-1.072.918-1.072zM15 2.143c.449 0 .89.03 1.322.09a11.84 11.84 0 00-.305 2.122A7.468 7.468 0 0015 4.285c-4.14 0-7.5 3.386-7.5 7.566 0 2.745 1.46 5.23 3.777 6.57.653.377.991 1.094 1.167 2.117.088.515.534.89 1.056.89h2.684c.5 0 .932-.344 1.044-.83.227-.98.731-1.733 1.51-2.186a7.553 7.553 0 002.977-3.188 11.92 11.92 0 001.917.956 9.684 9.684 0 01-3.817 4.084c-.233.136-.399.383-.499.817a3.214 3.214 0 01-3.132 2.49H13.5a3.214 3.214 0 01-3.168-2.67c-.078-.453-.17-.65-.127-.625a9.716 9.716 0 01-4.848-8.425c0-5.36 4.316-9.708 9.643-9.708z"/>
         </g>
       </svg>
-      <span class="hint-count">3</span>
+      <span class="hint-count">{{ hintsRemaining }}</span>
     </button>
   </div>
 </template>
@@ -41,9 +41,10 @@
 defineProps({
   noteActive: Boolean,
   autoCalcEnabled: Boolean,
+  hintsRemaining: { type: Number, default: 3 },
 })
 
-defineEmits(['erase', 'toggleNotes', 'autoCalc'])
+defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint'])
 </script>
 
 <style scoped>
@@ -92,6 +93,8 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc'])
 .auto-calc-btn.disabled { opacity: 0.45; }
 .auto-calc-btn.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
 .warning { color: var(--action-warning-text); }
+.warning.disabled { opacity: 0.45; }
+.warning.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
 
 .hint-count {
   position: absolute;

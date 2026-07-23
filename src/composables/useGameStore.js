@@ -16,6 +16,8 @@ const state = reactive({
   errors: new Set(),
   elapsedSeconds: 0,
   isPaused: false,
+  hintsRemaining: 3,
+  hintCell: null,
 })
 
 function initNotes() {
@@ -64,6 +66,8 @@ function newGame(difficulty = state.difficulty) {
   state.errors.clear()
   state.elapsedSeconds = 0
   state.isPaused = false
+  state.hintsRemaining = 3
+  state.hintCell = null
   startTimer()
 }
 
@@ -175,6 +179,37 @@ function togglePause() {
   state.isPaused = !state.isPaused
 }
 
+function useHint() {
+  if (state.hintsRemaining <= 0) return
+
+  // 找所有空格
+  const emptyCells = []
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (state.playerGrid[r][c] === 0) {
+        emptyCells.push({ row: r, col: c })
+      }
+    }
+  }
+  if (emptyCells.length === 0) return
+
+  // 选一个随机空格
+  const cell = emptyCells[Math.floor(Math.random() * emptyCells.length)]
+  const { row, col } = cell
+  const num = state.solution[row][col]
+
+  // 填入正确数字
+  state.playerGrid[row][col] = num
+  state.hintsRemaining--
+
+  // 记录提示的格子（用于动画）
+  state.hintCell = `${row},${col}`
+  setTimeout(() => { state.hintCell = null }, 1200)
+
+  // 清除同行/列/宫的该数字笔记
+  clearNotesForNumber(num, row, col)
+}
+
 export function useGameStore() {
   return {
     state,
@@ -189,6 +224,7 @@ export function useGameStore() {
     setAutoMarkFeature,
     startTimer,
     stopTimer,
+    useHint,
     togglePause,
   }
 }

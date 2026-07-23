@@ -1,7 +1,7 @@
 <template>
   <div
     class="cell"
-    :class="{ fixed, user, selected, highlighted, 'same-number': sameNumber, error }"
+    :class="{ fixed, user, selected, highlighted, 'same-number': sameNumber, error, hinted }"
     @click="$emit('select')"
     role="button"
     :tabindex="0"
@@ -25,6 +25,7 @@ defineProps({
   value: { type: Number, default: 0 },
   fixed: Boolean,
   user: Boolean,
+  hinted: Boolean,
   selected: Boolean,
   highlighted: Boolean,
   sameNumber: Boolean,
@@ -66,6 +67,29 @@ defineEmits(['select'])
 .cell.error {
   background-color: var(--cell-error) !important;
   color: var(--cell-error-text) !important;
+}
+
+.cell.hinted {
+  animation: hintPop .5s ease-out;
+}
+
+@keyframes hintPop {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(-8px);
+    opacity: .6;
+  }
+  100% {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
 }
 
 .notes-grid {
