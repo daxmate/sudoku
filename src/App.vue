@@ -61,6 +61,7 @@
       :sound="game.state.soundOn"
       :anim="game.state.isAnimOn"
       :vim-mode="game.state.vimMode"
+      :dark-mode="isDarkMode"
       @close="showSettings = false"
       @toggle-auto-calc="game.toggleAutoCalc($event)"
       @toggle-auto-mark="game.setAutoMarkFeature($event)"
@@ -68,6 +69,7 @@
       @toggle-sound="game.toggleSound()"
       @toggle-anim="game.toggleAnim()"
       @toggle-vim="game.toggleVimMode()"
+      @toggle-dark-mode="toggleDarkMode"
     />
     <ConfirmOverlay
       :visible="showConfirm"
