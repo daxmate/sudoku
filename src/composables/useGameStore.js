@@ -59,11 +59,6 @@ function newGame(difficulty = state.difficulty) {
 
 function selectCell(row, col) {
   state.selectedCell = { row, col }
-
-  // 自动计算设置开启时，自动显示候选
-  if (state.isAutoCalc && state.playerGrid[row][col] === 0) {
-    state.notes[row][col] = calcCandidates(row, col)
-  }
 }
 
 function placeNumber(num) {
