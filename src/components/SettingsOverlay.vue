@@ -26,7 +26,7 @@
       <div class="setting-row">
         <label>动画</label>
         <label class="toggle">
-          <input type="checkbox" checked />
+          <input type="checkbox" :checked="anim" @change="$emit('toggleAnim')" />
           <span class="toggle-track"></span>
         </label>
       </div>
@@ -43,8 +43,9 @@ defineProps({
   autoCalc: Boolean,
   autoMark: Boolean,
   depletion: Boolean,
+  anim: Boolean,
 })
-defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion'])
+defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleAnim'])
 </script>
 
 <style scoped>

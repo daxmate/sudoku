@@ -23,6 +23,7 @@ const state = reactive({
   isAutoMark: false,
   autoMarkFeature: false,
   depletionFeature: false,
+  isAnimOn: true,
   mistakes: 0,
   errors: new Set(),
   elapsedSeconds: 0,
@@ -114,6 +115,7 @@ function checkWin() {
 }
 
 function checkAndAnimateLineCompletion(r, c) {
+  if (!state.isAnimOn) return
   const g = state.playerGrid
   const keys = []
 
@@ -168,8 +170,10 @@ function placeNumber(num) {
     state.mistakes++
     state.streak = 0
     state.score = Math.max(0, state.score - 30)
-    state.shakeCell = `${row},${col}`
-    setTimeout(() => { if (state.shakeCell === `${row},${col}`) state.shakeCell = null }, 350)
+    if (state.isAnimOn) {
+      state.shakeCell = `${row},${col}`
+      setTimeout(() => { if (state.shakeCell === `${row},${col}`) state.shakeCell = null }, 350)
+    }
     if (state.mistakes >= 3) {
       state.isGameOver = true
       state.gameWon = false
@@ -184,8 +188,10 @@ function placeNumber(num) {
     const m = DIFF_MULT[state.difficulty] || 1
     state.score += Math.round(10 * sm * m)
     checkAndAnimateLineCompletion(row, col)
-    state.popCell = `${row},${col}`
-    setTimeout(() => { if (state.popCell === `${row},${col}`) state.popCell = null }, 300)
+    if (state.isAnimOn) {
+      state.popCell = `${row},${col}`
+      setTimeout(() => { if (state.popCell === `${row},${col}`) state.popCell = null }, 300)
+    }
     // 检查是否全部填完
     if (checkWin()) {
       state.isGameOver = true
@@ -261,6 +267,10 @@ function setAutoMarkFeature(on) {
 
 function toggleDepletion() {
   state.depletionFeature = !state.depletionFeature
+}
+
+function toggleAnim() {
+  state.isAnimOn = !state.isAnimOn
 }
 
 let timerInterval = null
@@ -371,8 +381,10 @@ function useHint() {
   state.score = Math.max(0, state.score - 50)
 
   // 记录提示的格子（用于动画）
-  state.hintCell = `${r},${c}`
-  setTimeout(() => { state.hintCell = null }, 1200)
+  if (state.isAnimOn) {
+    state.hintCell = `${r},${c}`
+    setTimeout(() => { state.hintCell = null }, 1200)
+  }
 
   // 清除同行/列/宫的该数字笔记
   clearNotesForNumber(num, r, c)
@@ -434,6 +446,7 @@ function saveGame() {
     isAutoMark: state.isAutoMark,
     autoMarkFeature: state.autoMarkFeature,
     depletionFeature: state.depletionFeature,
+    isAnimOn: state.isAnimOn,
     zoom: state.zoom,
   }
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)) } catch (e) { /* ignore */ }
@@ -453,6 +466,7 @@ function restoreGame(saved) {
   state.isAutoMark = saved.isAutoMark
   state.autoMarkFeature = saved.autoMarkFeature
   state.depletionFeature = saved.depletionFeature || false
+  state.isAnimOn = saved.isAnimOn !== false
   state.zoom = saved.zoom || 100
   state.errors.clear()
   state.selectedCell = null
@@ -487,6 +501,7 @@ export function useGameStore() {
     toggleAutoMark,
     setAutoMarkFeature,
     toggleDepletion,
+    toggleAnim,
     startTimer,
     stopTimer,
     useHint,
