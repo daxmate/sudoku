@@ -20,12 +20,15 @@ struct ContentView: View {
     }
 }
 
+class WebViewCoordinator {
+    let schemeHandler = DistSchemeHandler()
+}
+
 #if os(macOS)
     struct WebViewContainer: NSViewRepresentable {
         func makeNSView(context: Context) -> WKWebView {
             let config = WKWebViewConfiguration()
-            config.setURLSchemeHandler(DistSchemeHandler(), forURLScheme: "custom")
-
+            config.setURLSchemeHandler(context.coordinator.schemeHandler, forURLScheme: "custom")
             let wv = WKWebView(frame: .zero, configuration: config)
 
             if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist"),
@@ -36,13 +39,14 @@ struct ContentView: View {
         }
 
         func updateNSView(_ nsView: WKWebView, context: Context) {}
+
+        func makeCoordinator() -> WebViewCoordinator { WebViewCoordinator() }
     }
 #else
     struct WebViewContainer: UIViewRepresentable {
         func makeUIView(context: Context) -> WKWebView {
             let config = WKWebViewConfiguration()
-            config.setURLSchemeHandler(DistSchemeHandler(), forURLScheme: "custom")
-
+            config.setURLSchemeHandler(context.coordinator.schemeHandler, forURLScheme: "custom")
             let wv = WKWebView(frame: .zero, configuration: config)
 
             if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist"),
@@ -53,6 +57,8 @@ struct ContentView: View {
         }
 
         func updateUIView(_ uiView: WKWebView, context: Context) {}
+
+        func makeCoordinator() -> WebViewCoordinator { WebViewCoordinator() }
     }
 #endif
 
