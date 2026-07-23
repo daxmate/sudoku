@@ -25,7 +25,7 @@
       </svg>
     </button>
 
-    <button class="auto-mark-btn auto-mark-btn-mobile"
+    <button class="auto-mark-btn mobile-only"
       :class="{ disabled: !autoMarkEnabled }"
       :title="autoMarkEnabled ? '全部标记' : '需要到设置中开启'"
       @click="autoMarkEnabled ? $emit('toggleAutoMark') : null"
@@ -109,7 +109,7 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint', 'toggleAutoMark'])
 .warning.disabled { opacity: 0.45; }
 .warning.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
 
-.auto-mark-btn-mobile { display: none; }
+.action-buttons button.mobile-only { display: none; }
 .auto-mark-btn.disabled { opacity: 0.45; }
 .auto-mark-btn.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
 
@@ -143,6 +143,6 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint', 'toggleAutoMark'])
     width: 20px;
     height: 20px;
   }
-  .auto-mark-btn-mobile { display: flex; align-items: center; justify-content: center; }
+  .action-buttons button.mobile-only { display: flex; align-items: center; justify-content: center; }
 }
 </style>
