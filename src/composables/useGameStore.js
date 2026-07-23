@@ -432,6 +432,7 @@ function pushFloatingScore(row, col, text, color) {
 }
 
 function saveGameHistory(won) {
+  console.log('saveGameHistory called, won:', won, 'score:', state.score, 'history after save:', (() => { try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]').length } catch(e) { return 'err' } })())
   const fmt = (s) => {
     const m = Math.floor(s / 60)
     const sec = s % 60
