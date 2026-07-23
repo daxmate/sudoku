@@ -65,13 +65,9 @@ function newGame(difficulty = state.difficulty) {
 }
 
 function selectCell(row, col) {
-  if (state.isAutoCalc && state.selectedCell) {
-    const { row: pr, col: pc } = state.selectedCell
-    state.notes[pr][pc].clear()
-  }
-
   state.selectedCell = { row, col }
 
+  // 自动计算：显示当前格的候选数（保留之前的笔记）
   if (state.isAutoCalc && state.playerGrid[row][col] === 0) {
     state.notes[row][col] = calcCandidates(row, col)
   }
@@ -121,9 +117,6 @@ function toggleAutoCalc() {
     const { row, col } = state.selectedCell
     if (state.playerGrid[row][col] === 0)
       state.notes[row][col] = calcCandidates(row, col)
-  } else if (state.selectedCell) {
-    const { row, col } = state.selectedCell
-    state.notes[row][col].clear()
   }
 }
 
