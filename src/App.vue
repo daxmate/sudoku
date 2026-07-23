@@ -182,6 +182,7 @@ onUnmounted(() => {
   --cell-same: #dbeafe;
   --cell-error: #fef2f2;
   --cell-error-text: #dc2626;
+  --cell-hint: #fef9c3;
   --note-text: #94a3b8;
 
   /* NumberPad */
@@ -296,6 +297,7 @@ onUnmounted(() => {
   --cell-same: #1e1b4b;
   --cell-error: #450a0a;
   --cell-error-text: #fca5a5;
+  --cell-hint: #3d3520;
   --note-text: #64748b;
   --numpad-bg: #1e293b;
   --numpad-text: #e2e8f0;

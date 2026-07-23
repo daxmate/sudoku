@@ -75,26 +75,13 @@ defineEmits(['select'])
 }
 
 .cell.hinted {
-  animation: hintPop .5s ease-out;
+  background-color: var(--cell-hint) !important;
+  animation: hintPulse .5s ease 2;
 }
 
-@keyframes hintPop {
-  0% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  30% {
-    transform: translateY(-4px);
-    opacity: 1;
-  }
-  70% {
-    transform: translateY(-8px);
-    opacity: .6;
-  }
-  100% {
-    transform: translateY(-12px);
-    opacity: 0;
-  }
+@keyframes hintPulse {
+  0%, 100% { transform: scale(1); }
+  50%  { transform: scale(1.1); }
 }
 
 .notes-grid {
