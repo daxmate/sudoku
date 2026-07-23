@@ -1,7 +1,8 @@
 <template>
   <div
     class="cell"
-    :class="{ fixed, user, selected, highlighted, 'same-number': sameNumber, error, hinted }"
+    :data-selected="selected"
+    :class="{ fixed, user, highlighted, 'same-number': sameNumber, error, hinted }"
     @click="$emit('select')"
     role="button"
     :tabindex="0"
@@ -54,7 +55,7 @@ defineEmits(['select'])
 .cell.fixed { color: var(--cell-fixed); }
 .cell.user { color: var(--cell-user); }
 
-.cell.selected {
+.cell[data-selected="true"] {
   background-color: var(--cell-selected) !important;
   box-shadow: inset 0 0 0 2.5px #6366f1;
   z-index: 2;
