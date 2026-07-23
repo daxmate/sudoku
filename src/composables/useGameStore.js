@@ -9,7 +9,6 @@ const state = reactive({
   selectedCell: null,
   notes: [],
   isNoteMode: false,
-  isEraseMode: false,
   isAutoCalc: false,
   isAutoMark: false,
 })
@@ -41,21 +40,17 @@ function calcCandidates(row, col) {
 
 function refreshAutoMark() {
   if (!state.isAutoMark) return
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      if (state.playerGrid[r][c] === 0) {
+  for (let r = 0; r < 9; r++)
+    for (let c = 0; c < 9; c++)
+      if (state.playerGrid[r][c] === 0)
         state.notes[r][c] = calcCandidates(r, c)
-      }
-    }
-  }
 }
 
 function refreshSelectedCellNotes() {
   if (!state.isAutoCalc || !state.selectedCell) return
   const { row, col } = state.selectedCell
-  if (state.playerGrid[row][col] === 0) {
+  if (state.playerGrid[row][col] === 0)
     state.notes[row][col] = calcCandidates(row, col)
-  }
 }
 
 function newGame(difficulty = state.difficulty) {
@@ -67,26 +62,16 @@ function newGame(difficulty = state.difficulty) {
   state.selectedCell = null
   state.notes = initNotes()
   state.isNoteMode = false
-  state.isEraseMode = false
 }
 
 function selectCell(row, col) {
-  // 自动计算模式下，先清空上一格的笔记
   if (state.isAutoCalc && state.selectedCell) {
-    const { row: prevRow, col: prevCol } = state.selectedCell
-    state.notes[prevRow][prevCol].clear()
+    const { row: pr, col: pc } = state.selectedCell
+    state.notes[pr][pc].clear()
   }
 
   state.selectedCell = { row, col }
 
-  // 擦除模式
-  if (state.isEraseMode && state.puzzle[row][col] === 0) {
-    state.playerGrid[row][col] = 0
-    state.notes[row][col].clear()
-    return
-  }
-
-  // 自动计算：显示当前格的候选数
   if (state.isAutoCalc && state.playerGrid[row][col] === 0) {
     state.notes[row][col] = calcCandidates(row, col)
   }
@@ -96,12 +81,6 @@ function placeNumber(num) {
   if (!state.selectedCell) return
   const { row, col } = state.selectedCell
   if (state.puzzle[row][col] !== 0) return
-
-  if (state.isEraseMode) {
-    state.playerGrid[row][col] = 0
-    state.notes[row][col].clear()
-    return
-  }
 
   if (state.isNoteMode) {
     const cellNotes = state.notes[row][col]
@@ -129,35 +108,22 @@ function eraseCell() {
   const { row, col } = state.selectedCell
   if (state.puzzle[row][col] !== 0) return
   state.playerGrid[row][col] = 0
-  state.notes[row][col].clear()
+  // 不清理笔记
 }
 
 function toggleNoteMode() {
   state.isNoteMode = !state.isNoteMode
-  if (state.isNoteMode) state.isEraseMode = false
-}
-
-function toggleEraseMode() {
-  state.isEraseMode = !state.isEraseMode
-  if (state.isEraseMode) state.isNoteMode = false
 }
 
 function toggleAutoCalc() {
   state.isAutoCalc = !state.isAutoCalc
-  if (state.isAutoCalc) {
-    // 开启时立即显示当前格的候选数
-    if (state.selectedCell) {
-      const { row, col } = state.selectedCell
-      if (state.playerGrid[row][col] === 0) {
-        state.notes[row][col] = calcCandidates(row, col)
-      }
-    }
-  } else {
-    // 关闭时清除当前格笔记
-    if (state.selectedCell) {
-      const { row, col } = state.selectedCell
-      state.notes[row][col].clear()
-    }
+  if (state.isAutoCalc && state.selectedCell) {
+    const { row, col } = state.selectedCell
+    if (state.playerGrid[row][col] === 0)
+      state.notes[row][col] = calcCandidates(row, col)
+  } else if (state.selectedCell) {
+    const { row, col } = state.selectedCell
+    state.notes[row][col].clear()
   }
 }
 
@@ -178,7 +144,6 @@ export function useGameStore() {
     placeNumber,
     eraseCell,
     toggleNoteMode,
-    toggleEraseMode,
     toggleAutoCalc,
     toggleAutoMark,
   }

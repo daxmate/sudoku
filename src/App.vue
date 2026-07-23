@@ -9,10 +9,9 @@
         <div class="side-panel">
           <ActionButtons
             :note-active="game.state.isNoteMode"
-            :erase-active="game.state.isEraseMode"
             :auto-calc-active="game.state.isAutoCalc"
+            @erase="game.eraseCell()"
             @toggle-notes="game.toggleNoteMode()"
-            @toggle-erase="game.toggleEraseMode()"
             @toggle-auto-calc="game.toggleAutoCalc()"
           />
           <NumberPad @place="game.placeNumber($event)" />
