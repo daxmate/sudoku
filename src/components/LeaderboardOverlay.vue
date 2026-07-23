@@ -27,7 +27,7 @@
         <div v-for="(entry, idx) in filteredEntries" :key="idx" class="lb-entry">
           <div class="lb-rank" :class="rankClass(idx)">{{ idx + 1 }}</div>
           <div class="lb-info">
-            <div class="lb-score" :class="{ top1: idx === 0 }">{{ entry.time }}</div>
+            <div class="lb-score" :class="{ top1: idx === 0 }">{{ entry.score != null ? entry.score + ' 分' : entry.time }}</div>
             <div class="lb-meta">
               <span class="lb-diff">{{ diffLabel(entry.difficulty) }}</span>
               {{ fmtDate(entry.date) }}

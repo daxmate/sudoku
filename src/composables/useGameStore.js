@@ -1,6 +1,8 @@
 import { reactive, ref } from 'vue'
 import SudokuEngine from '../utils/sudokuEngine.js'
 
+const DIFF_MULT = { easy: 1, medium: 1.5, hard: 2.5, expert: 4 }
+
 function loadZoom() {
   try {
     const s = parseInt(localStorage.getItem('sudoku-zoom'))
@@ -30,6 +32,8 @@ const state = reactive({
   zoom: loadZoom(),
   isGameOver: false,
   gameWon: false,
+  score: 0,
+  streak: 0,
 })
 
 function initNotes() {
@@ -79,6 +83,8 @@ function newGame(difficulty = state.difficulty) {
   state.errors.clear()
   state.isGameOver = false
   state.gameWon = false
+  state.score = 0
+  state.streak = 0
   state.elapsedSeconds = 0
   state.isPaused = false
   state.hintsRemaining = 3
@@ -121,6 +127,8 @@ function placeNumber(num) {
   if (state.solution[row][col] !== num) {
     state.errors.add(errKey)
     state.mistakes++
+    state.streak = 0
+    state.score = Math.max(0, state.score - 30)
     if (state.mistakes >= 3) {
       state.isGameOver = true
       state.gameWon = false
@@ -130,6 +138,10 @@ function placeNumber(num) {
     }
   } else {
     state.errors.delete(errKey)
+    state.streak++
+    const sm = state.streak >= 5 ? 3 : state.streak >= 3 ? 2 : state.streak >= 2 ? 1.5 : 1
+    const m = DIFF_MULT[state.difficulty] || 1
+    state.score += Math.round(10 * sm * m)
     // 检查是否全部填完
     if (checkWin()) {
       state.isGameOver = true
@@ -308,6 +320,7 @@ function useHint() {
   // 填入正确数字
   state.playerGrid[r][c] = num
   state.hintsRemaining--
+  state.score = Math.max(0, state.score - 50)
 
   // 记录提示的格子（用于动画）
   state.hintCell = `${r},${c}`
@@ -338,11 +351,14 @@ function saveGameHistory(won) {
     const sec = s % 60
     return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
   }
+  const m = DIFF_MULT[state.difficulty] || 1
+  const totalScore = won ? state.score : 0
   try {
     const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
     h.unshift({
       date: new Date().toISOString(),
       difficulty: state.difficulty,
+      score: totalScore,
       time: fmt(state.elapsedSeconds),
       seconds: state.elapsedSeconds,
       mistakes: state.mistakes,

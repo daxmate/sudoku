@@ -6,6 +6,7 @@
       <GameHeader
         :difficulty="game.state.difficulty"
         :mistakes="game.state.mistakes"
+        :score="game.state.score"
         :elapsed-seconds="game.state.elapsedSeconds"
         :paused="game.state.isPaused"
         :zoom="game.state.zoom"

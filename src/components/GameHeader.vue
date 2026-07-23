@@ -27,7 +27,7 @@
       <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
         <path d="M8 1l1.76 3.57 3.94.57-2.85 2.78.67 3.93L8 9.75l-3.52 1.85.67-3.93L2.3 5.14l3.94-.57L8 1z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
       </svg>
-      <span>0</span>
+      <span>{{ score }}</span>
     </div>
     <div class="zoom-control">
       <input type="range" class="zoom-slider" min="50" max="150" step="5" v-model.number="localZoom" @change="$emit('updateZoom', localZoom)" />
@@ -49,6 +49,7 @@ import { computed, ref, watch } from 'vue'
 const props = defineProps({
   difficulty: { type: String, default: 'medium' },
   mistakes: { type: Number, default: 0 },
+  score: { type: Number, default: 0 },
   elapsedSeconds: { type: Number, default: 0 },
   paused: Boolean,
   zoom: { type: Number, default: 100 },
