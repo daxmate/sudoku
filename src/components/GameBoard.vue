@@ -10,6 +10,7 @@
         :selected="cell.selected"
         :highlighted="cell.highlighted"
         :same-number="cell.sameNumber"
+        :error="cell.error"
         :notes="cell.notes"
         @select="selectCell(cell.row, cell.col)"
         :class="boxBorderClasses(idx)"
@@ -42,6 +43,7 @@ const cells = computed(() => {
         (Math.floor(row / 3) === Math.floor(sel.row / 3) &&
          Math.floor(col / 3) === Math.floor(sel.col / 3))),
       sameNumber: selVal !== 0 && value !== 0 && value === selVal,
+      error: state.errors.has(`${row},${col}`),
       notes: [...(state.notes[row]?.[col] || [])],
     }
   })

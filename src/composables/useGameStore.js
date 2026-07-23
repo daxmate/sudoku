@@ -12,6 +12,8 @@ const state = reactive({
   isAutoCalc: false,
   isAutoMark: false,
   autoMarkFeature: false,
+  mistakes: 0,
+  errors: new Set(),
 })
 
 function initNotes() {
@@ -56,6 +58,8 @@ function newGame(difficulty = state.difficulty) {
   state.selectedCell = null
   state.notes = initNotes()
   state.isNoteMode = false
+  state.mistakes = 0
+  state.errors.clear()
 }
 
 function selectCell(row, col) {
@@ -76,6 +80,15 @@ function placeNumber(num) {
 
   state.playerGrid[row][col] = num
   clearNotesForNumber(num, row, col)
+
+  // 错误检测
+  const errKey = `${row},${col}`
+  if (state.solution[row][col] !== num) {
+    state.errors.add(errKey)
+    state.mistakes++
+  } else {
+    state.errors.delete(errKey)
+  }
 }
 
 function clearNotesForNumber(num, row, col) {
@@ -93,7 +106,8 @@ function eraseCell() {
   const { row, col } = state.selectedCell
   if (state.puzzle[row][col] !== 0) return
   state.playerGrid[row][col] = 0
-  // 不清理笔记
+  // 擦除时清除错误标记
+  state.errors.delete(`${row},${col}`)
 }
 
 function toggleNoteMode() {

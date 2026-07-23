@@ -12,7 +12,7 @@
         <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
         <path d="M5.5 5.5l5 5m-5 0l5-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
       </svg>
-      <span>错误 0 / 3</span>
+      <span>错误 {{ mistakes }} / 3</span>
     </div>
     <div class="stat-badge">
       <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
@@ -37,6 +37,7 @@
 <script setup>
 defineProps({
   difficulty: { type: String, default: 'medium' },
+  mistakes: { type: Number, default: 0 },
 })
 defineEmits(['selectDifficulty'])
 </script>

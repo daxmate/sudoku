@@ -5,6 +5,7 @@
       <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
       <GameHeader
         :difficulty="game.state.difficulty"
+        :mistakes="game.state.mistakes"
         @select-difficulty="game.newGame($event)"
       />
       <div class="board-row">
