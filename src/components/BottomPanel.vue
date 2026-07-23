@@ -35,6 +35,11 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
+}
+
+.leaderboard-row {
+  margin-top: auto;
 }
 
 .bottom-row {
