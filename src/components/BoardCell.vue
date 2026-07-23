@@ -10,9 +10,11 @@
     <template v-if="value !== 0">
       <span class="cell-value">{{ value }}</span>
     </template>
-    <template v-else>
+    <template v-else-if="notes && notes.length > 0">
       <div class="notes-grid">
-        <span v-for="n in 9" :key="n" class="note-num"></span>
+        <span v-for="n in 9" :key="n" class="note-num" :class="{ 'has-note': notes.includes(n) }">
+          {{ notes.includes(n) ? n : '' }}
+        </span>
       </div>
     </template>
   </div>
@@ -26,6 +28,7 @@ defineProps({
   highlighted: Boolean,
   sameNumber: Boolean,
   error: Boolean,
+  notes: { type: Array, default: () => [] },
 })
 
 defineEmits(['select'])
@@ -80,5 +83,9 @@ defineEmits(['select'])
   font-weight: 400;
   color: var(--note-text);
   line-height: 1;
+}
+
+.note-num.has-note {
+  font-weight: 500;
 }
 </style>

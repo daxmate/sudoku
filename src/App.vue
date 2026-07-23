@@ -7,7 +7,7 @@
       <div class="board-row">
         <GameBoard />
         <div class="side-panel">
-          <ActionButtons @erase="game.eraseCell()" />
+          <ActionButtons :note-active="game.state.isNoteMode" @erase="game.eraseCell()" @toggle-notes="game.toggleNoteMode()" />
           <NumberPad @place="game.placeNumber($event)" />
           <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" @toggle-theme="toggleDarkMode" />
         </div>
