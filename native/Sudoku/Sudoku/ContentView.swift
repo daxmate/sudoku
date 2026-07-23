@@ -28,12 +28,12 @@ class WebViewCoordinator {
     struct WebViewContainer: NSViewRepresentable {
         func makeNSView(context: Context) -> WKWebView {
             let config = WKWebViewConfiguration()
-            config.setURLSchemeHandler(context.coordinator.schemeHandler, forURLScheme: "custom")
+            config.setURLSchemeHandler(context.coordinator.schemeHandler, forURLScheme: "sudoku")
             let wv = WKWebView(frame: .zero, configuration: config)
 
             if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist"),
                let html = try? String(contentsOf: url, encoding: .utf8) {
-                wv.loadHTMLString(html, baseURL: URL(string: "custom://dist/"))
+                wv.loadHTMLString(html, baseURL: URL(string: "sudoku://bundle/"))
             }
             return wv
         }
@@ -46,12 +46,12 @@ class WebViewCoordinator {
     struct WebViewContainer: UIViewRepresentable {
         func makeUIView(context: Context) -> WKWebView {
             let config = WKWebViewConfiguration()
-            config.setURLSchemeHandler(context.coordinator.schemeHandler, forURLScheme: "custom")
+            config.setURLSchemeHandler(context.coordinator.schemeHandler, forURLScheme: "sudoku")
             let wv = WKWebView(frame: .zero, configuration: config)
 
             if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist"),
                let html = try? String(contentsOf: url, encoding: .utf8) {
-                wv.loadHTMLString(html, baseURL: URL(string: "custom://dist/"))
+                wv.loadHTMLString(html, baseURL: URL(string: "sudoku://bundle/"))
             }
             return wv
         }
