@@ -2,7 +2,7 @@
   <div
     class="cell"
     :data-selected="selected"
-    :class="{ fixed, user, highlighted, 'same-number': sameNumber, error, hinted }"
+    :class="{ fixed, user, highlighted, 'same-number': sameNumber, error, hinted, 'line-complete': lineComplete }"
     @click="$emit('select')"
     role="button"
     :tabindex="0"
@@ -31,6 +31,7 @@ defineProps({
   highlighted: Boolean,
   sameNumber: Boolean,
   error: Boolean,
+  lineComplete: Boolean,
   notes: { type: Array, default: () => [] },
 })
 
@@ -115,5 +116,15 @@ defineEmits(['select'])
 
 .note-num.has-note {
   font-weight: 500;
+}
+
+.cell.line-complete {
+  animation: lineComplete .6s ease-out;
+}
+
+@keyframes lineComplete {
+  0%   { box-shadow: inset 0 0 0 0 rgba(99,102,241,.15); }
+  50%  { box-shadow: inset 0 0 18px 3px rgba(99,102,241,.20); }
+  100% { box-shadow: inset 0 0 0 0 rgba(99,102,241,0); }
 }
 </style>

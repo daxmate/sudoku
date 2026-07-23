@@ -33,6 +33,7 @@ const state = reactive({
   zoom: loadZoom(),
   isGameOver: false,
   gameWon: false,
+  completedCells: new Set(),
   score: 0,
   streak: 0,
 })
@@ -84,6 +85,7 @@ function newGame(difficulty = state.difficulty) {
   state.errors.clear()
   state.isGameOver = false
   state.gameWon = false
+  state.completedCells = new Set()
   state.score = 0
   state.streak = 0
   state.elapsedSeconds = 0
@@ -105,6 +107,38 @@ function checkWin() {
     }
   }
   return true
+}
+
+function checkAndAnimateLineCompletion(r, c) {
+  const g = state.playerGrid
+  const keys = []
+
+  // 检查行
+  if (g[r].every(v => v !== 0)) {
+    for (let cc = 0; cc < 9; cc++) keys.push(`${r},${cc}`)
+  }
+
+  // 检查列
+  if (g.every(row => row[c] !== 0)) {
+    for (let rr = 0; rr < 9; rr++) keys.push(`${rr},${c}`)
+  }
+
+  // 检查宫
+  const sr = Math.floor(r / 3) * 3, sc = Math.floor(c / 3) * 3
+  let boxFull = true
+  for (let rr = sr; rr < sr + 3 && boxFull; rr++)
+    for (let cc = sc; cc < sc + 3; cc++)
+      if (g[rr][cc] === 0) { boxFull = false; break }
+  if (boxFull) {
+    for (let rr = sr; rr < sr + 3; rr++)
+      for (let cc = sc; cc < sc + 3; cc++)
+        keys.push(`${rr},${cc}`)
+  }
+
+  if (keys.length) {
+    keys.forEach(k => state.completedCells.add(k))
+    setTimeout(() => keys.forEach(k => state.completedCells.delete(k)), 700)
+  }
 }
 
 function placeNumber(num) {
@@ -143,6 +177,7 @@ function placeNumber(num) {
     const sm = state.streak >= 5 ? 3 : state.streak >= 3 ? 2 : state.streak >= 2 ? 1.5 : 1
     const m = DIFF_MULT[state.difficulty] || 1
     state.score += Math.round(10 * sm * m)
+    checkAndAnimateLineCompletion(row, col)
     // 检查是否全部填完
     if (checkWin()) {
       state.isGameOver = true

@@ -12,6 +12,7 @@
         :same-number="cell.sameNumber"
         :error="cell.error"
         :hinted="cell.hinted"
+        :line-complete="cell.lineComplete"
         :notes="cell.notes"
         @select="selectCell(cell.row, cell.col)"
         :class="boxBorderClasses(idx)"
@@ -46,6 +47,7 @@ const cells = computed(() => {
       sameNumber: selVal !== 0 && value !== 0 && value === selVal,
       error: state.errors.has(`${row},${col}`),
       hinted: state.hintCell === `${row},${col}`,
+      lineComplete: state.completedCells.has(`${row},${col}`),
       notes: [...(state.notes[row]?.[col] || [])],
     }
   })
