@@ -9,6 +9,7 @@ const state = reactive({
   selectedCell: null,
   notes: [],
   isNoteMode: false,
+  isEraseMode: false,
 })
 
 function initNotes() {
@@ -26,10 +27,16 @@ function newGame(difficulty = state.difficulty) {
   state.selectedCell = null
   state.notes = initNotes()
   state.isNoteMode = false
+  state.isEraseMode = false
 }
 
 function selectCell(row, col) {
   state.selectedCell = { row, col }
+  // 擦除模式下点击格子直接擦除
+  if (state.isEraseMode && state.puzzle[row][col] === 0) {
+    state.playerGrid[row][col] = 0
+    state.notes[row][col].clear()
+  }
 }
 
 function clearSelection() {
@@ -41,6 +48,14 @@ function placeNumber(num) {
   const { row, col } = state.selectedCell
   if (state.puzzle[row][col] !== 0) return
 
+  // 擦除模式：清空格子
+  if (state.isEraseMode) {
+    state.playerGrid[row][col] = 0
+    state.notes[row][col].clear()
+    return
+  }
+
+  // 笔记模式：切换笔记
   if (state.isNoteMode) {
     const cellNotes = state.notes[row][col]
     if (cellNotes.has(num)) cellNotes.delete(num)
@@ -48,6 +63,7 @@ function placeNumber(num) {
     return
   }
 
+  // 普通模式：填数字
   state.playerGrid[row][col] = num
   clearNotesForNumber(num, row, col)
 }
@@ -72,6 +88,12 @@ function eraseCell() {
 
 function toggleNoteMode() {
   state.isNoteMode = !state.isNoteMode
+  if (state.isNoteMode) state.isEraseMode = false
+}
+
+function toggleEraseMode() {
+  state.isEraseMode = !state.isEraseMode
+  if (state.isEraseMode) state.isNoteMode = false
 }
 
 export function useGameStore() {
@@ -83,5 +105,6 @@ export function useGameStore() {
     placeNumber,
     eraseCell,
     toggleNoteMode,
+    toggleEraseMode,
   }
 }

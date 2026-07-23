@@ -1,6 +1,6 @@
 <template>
   <div class="action-buttons">
-    <button class="erase-btn" title="擦除" @click="$emit('erase')">
+    <button class="erase-btn" :class="{ active: eraseActive }" title="擦除" @click="$emit('toggleErase')">
       <svg viewBox="0 0 30 31" width="24" height="24">
         <path fill="currentColor" fill-rule="evenodd" d="M27.13 25.11a1 1 0 01.12 2h-6.9a1 1 0 01-.11-2H27.13zM21.48 4.08l.17.14.16.15 3.76 3.76a4 4 0 01.15 5.5l-.15.16-11.32 11.32h2.04a1 1 0 011 .89v.11a1 1 0 01-.88 1H6.52a3 3 0 01-1.98-.74l-.14-.14-2.23-2.22a4 4 0 01-.15-5.5l.15-.16L16.15 4.37a4 4 0 015.33-.29zm-11.52 9.3l-6.38 6.38a2 2 0 00-.11 2.7l.11.13 2.23 2.23a1 1 0 00.58.28l.13.01h4.9l5.13-5.13-6.59-6.6zm7.87-7.82l-.14.1-.13.13-6.18 6.18 6.59 6.6 6.19-6.2a2 2 0 00.11-2.7l-.11-.12-3.77-3.76a2 2 0 00-2.56-.22z"/>
       </svg>
@@ -35,9 +35,10 @@
 <script setup>
 defineProps({
   noteActive: Boolean,
+  eraseActive: Boolean,
 })
 
-defineEmits(['erase', 'toggleNotes'])
+defineEmits(['toggleErase', 'toggleNotes'])
 </script>
 
 <style scoped>
@@ -83,10 +84,9 @@ defineEmits(['erase', 'toggleNotes'])
 
 .erase-btn { color: var(--action-erase-text); }
 .erase-btn:hover { background: var(--action-erase-hover-bg) !important; color: var(--action-erase-hover-text) !important; }
+.erase-btn.active { color: var(--action-notes-active-text, #6366f1); }
 
-.notes-toggle.active {
-  color: var(--action-notes-active-text, #6366f1);
-}
+.notes-toggle.active { color: var(--action-notes-active-text, #6366f1); }
 
 .warning { color: var(--action-warning-text); }
 .warning:hover { background: var(--action-warning-hover-bg) !important; color: var(--action-warning-hover-text) !important; }
