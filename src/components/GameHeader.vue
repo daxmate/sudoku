@@ -30,7 +30,7 @@
       <span>0</span>
     </div>
     <div class="zoom-control">
-      <input type="range" class="zoom-slider" min="50" max="150" step="5" :value="zoom" @input="localZoom = Number($event.target.value)" @change="$emit('updateZoom', Number($event.target.value))" />
+      <input type="range" class="zoom-slider" min="50" max="150" step="5" v-model.number="localZoom" @change="$emit('updateZoom', localZoom)" />
       <span class="zoom-label">{{ localZoom }}%</span>
     </div>
   </div>
