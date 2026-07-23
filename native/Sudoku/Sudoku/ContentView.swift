@@ -38,28 +38,44 @@ struct ContentView: View {
     }
 #else
     struct WebViewContainer: UIViewRepresentable {
+
         func makeUIView(context: Context) -> WKWebView {
             let wv = WKWebView(frame: .zero)
+            wv.navigationDelegate = context.coordinator
 
-            // 把 dist 拷贝到 Documents 目录，绕过 Bundle 沙盒限制
             let fm = FileManager.default
             let docs = fm.urls(for: .documentDirectory, in: .userDomainMask).first!
             let distTarget = docs.appendingPathComponent("dist")
 
             if !fm.fileExists(atPath: distTarget.path) {
-                if let distSrc = Bundle.main.url(forResource: "dist", withExtension: nil) {
-                    try? fm.copyItem(at: distSrc, to: distTarget)
+                if let src = Bundle.main.url(forResource: "dist", withExtension: nil) {
+                    try? fm.copyItem(at: src, to: distTarget)
                 }
             }
 
             let indexUrl = distTarget.appendingPathComponent("index.html")
             if fm.fileExists(atPath: indexUrl.path) {
+                // 从 Documents 加载——这是 app 自己的沙盒，WKWebView 应该能访问
                 wv.loadFileURL(indexUrl, allowingReadAccessTo: distTarget)
             }
             return wv
         }
 
         func updateUIView(_ uiView: WKWebView, context: Context) {}
+
+        func makeCoordinator() -> Coordinator { Coordinator() }
+
+        class Coordinator: NSObject, WKNavigationDelegate {
+            func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+                print("❌ Navigation failed:", error.localizedDescription)
+            }
+            func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+                print("❌ Provisional nav failed:", error.localizedDescription)
+            }
+            func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+                print("✅ Page loaded successfully")
+            }
+        }
     }
 #endif
 
