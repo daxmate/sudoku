@@ -7,45 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F5984BD3012143D0023122E /* dist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5984BC3012143D0023122E /* dist */; };
+		5F5984C0301215020023122E /* dist in Resources */ = {isa = PBXBuildFile; fileRef = 5F5984BF301215020023122E /* dist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5F2E9C37301200C3009E9542 /* Sudoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sudoku.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		5F5984BC3012143D0023122E /* dist */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dist; path = ../../dist; sourceTree = "<group>"; };
+		5F5984BF301215020023122E /* dist */ = {isa = PBXFileReference; lastKnownFileType = folder; name = dist; path = ../../dist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		5F5984BE301214420023122E /* Exceptions for "dist" folder in "Sudoku" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"assets/index-_XkyAL9G.js",
-				"assets/index-Bm6OGbcM.css",
-				favicon.svg,
-				icon.svg,
-				icons.svg,
-				index.html,
-				manifest.json,
-				sw.js,
-			);
-			target = 5F2E9C36301200C3009E9542 /* Sudoku */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5F2E9C39301200C3009E9542 /* Sudoku */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Sudoku;
 			sourceTree = "<group>";
-		};
-		5F5984B3301213C80023122E /* dist */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				5F5984BE301214420023122E /* Exceptions for "dist" folder in "Sudoku" target */,
-			);
-			name = dist;
-			path = /Users/dax/codes/sudoku/dist;
-			sourceTree = "<absolute>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -63,10 +37,9 @@
 		5F2E9C2E301200C3009E9542 = {
 			isa = PBXGroup;
 			children = (
-				5F5984BC3012143D0023122E /* dist */,
+				5F5984BF301215020023122E /* dist */,
 				5F2E9C39301200C3009E9542 /* Sudoku */,
 				5F2E9C38301200C3009E9542 /* Products */,
-				5F5984B3301213C80023122E /* dist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -95,7 +68,6 @@
 			);
 			fileSystemSynchronizedGroups = (
 				5F2E9C39301200C3009E9542 /* Sudoku */,
-				5F5984B3301213C80023122E /* dist */,
 			);
 			name = Sudoku;
 			packageProductDependencies = (
@@ -143,7 +115,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F5984BD3012143D0023122E /* dist in Resources */,
+				5F5984C0301215020023122E /* dist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
