@@ -1,11 +1,20 @@
 <template>
   <div class="game-header">
-    <div class="stat-badge">
+    <div class="stat-badge timer-badge">
       <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
         <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.2"/>
         <path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <span>00:00</span>
+      <span>{{ formattedTime }}</span>
+      <button class="pause-btn" @click.stop="$emit('togglePause')" :title="paused ? '继续' : '暂停'">
+        <svg v-if="paused" viewBox="0 0 16 16" width="10" height="10" fill="currentColor">
+          <path d="M4 2l10 6-10 6V2z"/>
+        </svg>
+        <svg v-else viewBox="0 0 16 16" width="10" height="10" fill="currentColor">
+          <rect x="3" y="2" width="3.5" height="12" rx="1"/>
+          <rect x="9.5" y="2" width="3.5" height="12" rx="1"/>
+        </svg>
+      </button>
     </div>
     <div class="stat-badge">
       <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
@@ -35,11 +44,23 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   difficulty: { type: String, default: 'medium' },
   mistakes: { type: Number, default: 0 },
+  elapsedSeconds: { type: Number, default: 0 },
+  paused: Boolean,
 })
-defineEmits(['selectDifficulty'])
+defineEmits(['selectDifficulty', 'togglePause'])
+
+function pad(n) { return String(n).padStart(2, '0') }
+
+const formattedTime = computed(() => {
+  const m = Math.floor(props.elapsedSeconds / 60)
+  const s = props.elapsedSeconds % 60
+  return `${pad(m)}:${pad(s)}`
+})
 </script>
 
 <style scoped>
@@ -103,6 +124,26 @@ defineEmits(['selectDifficulty'])
   min-width: 32px;
   text-align: center;
   font-variant-numeric: tabular-nums;
+}
+
+.timer-badge { gap: 6px; position: relative; }
+
+.pause-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--badge-text);
+  opacity: .7;
+  transition: opacity .15s ease;
+  border-radius: 3px;
+}
+
+.pause-btn:hover {
+  opacity: 1;
 }
 
 .difficulty-wrap {

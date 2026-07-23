@@ -6,7 +6,10 @@
       <GameHeader
         :difficulty="game.state.difficulty"
         :mistakes="game.state.mistakes"
+        :elapsed-seconds="game.state.elapsedSeconds"
+        :paused="game.state.isPaused"
         @select-difficulty="game.newGame($event)"
+        @toggle-pause="game.togglePause()"
       />
       <div class="board-row">
         <GameBoard />
@@ -83,6 +86,7 @@ function startNewGame() {
 
 onMounted(() => {
   game.newGame('medium')
+  game.startTimer()
 })
 </script>
 

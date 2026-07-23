@@ -1,4 +1,4 @@
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import SudokuEngine from '../utils/sudokuEngine.js'
 
 const state = reactive({
@@ -14,6 +14,8 @@ const state = reactive({
   autoMarkFeature: false,
   mistakes: 0,
   errors: new Set(),
+  elapsedSeconds: 0,
+  isPaused: false,
 })
 
 function initNotes() {
@@ -60,6 +62,9 @@ function newGame(difficulty = state.difficulty) {
   state.isNoteMode = false
   state.mistakes = 0
   state.errors.clear()
+  state.elapsedSeconds = 0
+  state.isPaused = false
+  startTimer()
 }
 
 function selectCell(row, col) {
@@ -148,6 +153,28 @@ function setAutoMarkFeature(on) {
   }
 }
 
+let timerInterval = null
+
+function startTimer() {
+  stopTimer()
+  timerInterval = setInterval(() => {
+    if (!state.isPaused) {
+      state.elapsedSeconds++
+    }
+  }, 1000)
+}
+
+function stopTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval)
+    timerInterval = null
+  }
+}
+
+function togglePause() {
+  state.isPaused = !state.isPaused
+}
+
 export function useGameStore() {
   return {
     state,
@@ -160,5 +187,8 @@ export function useGameStore() {
     toggleAutoCalc,
     toggleAutoMark,
     setAutoMarkFeature,
+    startTimer,
+    stopTimer,
+    togglePause,
   }
 }
