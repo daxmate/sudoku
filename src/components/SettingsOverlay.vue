@@ -55,7 +55,6 @@ defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark'])
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
 }
 
 .overlay-box {

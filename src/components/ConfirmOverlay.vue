@@ -28,7 +28,6 @@ defineEmits(['confirm', 'cancel'])
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
 }
 
 .overlay-box {

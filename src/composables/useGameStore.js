@@ -86,6 +86,7 @@ function newGame(difficulty = state.difficulty) {
 }
 
 function selectCell(row, col) {
+  if (state.isGameOver) return
   state.selectedCell = { row, col }
 }
 

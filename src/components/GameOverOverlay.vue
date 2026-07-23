@@ -1,22 +1,32 @@
 <template>
-  <div v-if="visible" class="overlay" @click.self="$emit('restart')" @keydown.enter="$emit('restart')">
+  <div v-if="visible" class="overlay">
     <div class="overlay-box">
       <div class="overlay-icon">{{ won ? '🎉' : '💥' }}</div>
       <p class="overlay-msg">{{ won ? '恭喜你完成数独！' : '游戏结束！错误已达上限。' }}</p>
       <div class="overlay-actions">
-        <button class="overlay-btn overlay-confirm" @click="$emit('restart')">再来一局</button>
+        <button ref="restartBtn" class="overlay-btn overlay-confirm" @click="$emit('restart')">再来一局</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { ref, watch, nextTick } from 'vue'
+
+const props = defineProps({
   visible: Boolean,
   won: Boolean,
 })
 
 defineEmits(['restart'])
+
+const restartBtn = ref(null)
+
+watch(() => props.visible, (v) => {
+  if (v) {
+    nextTick(() => restartBtn.value?.focus())
+  }
+})
 </script>
 
 <style scoped>
@@ -28,7 +38,6 @@ defineEmits(['restart'])
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
 }
 
 .overlay-box {

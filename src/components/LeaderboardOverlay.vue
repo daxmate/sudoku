@@ -99,7 +99,6 @@ function rankClass(idx) {
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(4px);
 }
 
 .overlay-box {
