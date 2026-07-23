@@ -4,6 +4,7 @@
       <h1>数 独</h1>
       <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
       <GameHeader />
+      <GameBoard />
     </div>
   </div>
 </template>
@@ -11,6 +12,7 @@
 <script setup>
 import { ref } from 'vue'
 import GameHeader from './components/GameHeader.vue'
+import GameBoard from './components/GameBoard.vue'
 
 const isDarkMode = ref(false)
 </script>
@@ -33,6 +35,16 @@ const isDarkMode = ref(false)
   --color-diff-btn-active-text: #4f46e5;
   --color-zoom-bg: #d1d5db;
   --color-zoom-thumb: #6d7584;
+  --color-board-border: #334155;
+  --color-box-border: #888;
+  --color-cell-bg: #fff;
+  --color-cell-fixed: #334155;
+  --color-cell-selected: #eef2ff;
+  --color-cell-highlight: #f1f5f9;
+  --color-cell-same: #dbeafe;
+  --color-cell-error: #fef2f2;
+  --color-cell-error-text: #dc2626;
+  --color-note-text: #94a3b8;
   --container-shadow: 0 25px 80px rgba(0,0,0,.35), 0 4px 16px rgba(0,0,0,.15);
 
   /* 深色主题变量 */
@@ -51,6 +63,16 @@ const isDarkMode = ref(false)
   --color-diff-btn-active-text-dark: #fff;
   --color-zoom-bg-dark: #334155;
   --color-zoom-thumb-dark: #6366f1;
+  --color-board-border-dark: #475569;
+  --color-box-border-dark: #64748b;
+  --color-cell-bg-dark: #1e293b;
+  --color-cell-fixed-dark: #94a3b8;
+  --color-cell-selected-dark: #1e1b4b;
+  --color-cell-highlight-dark: #0f172a;
+  --color-cell-same-dark: #1e1b4b;
+  --color-cell-error-dark: #450a0a;
+  --color-cell-error-text-dark: #fca5a5;
+  --color-note-text-dark: #64748b;
   --container-shadow-dark: 0 25px 80px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.25);
 }
 
@@ -76,6 +98,16 @@ const isDarkMode = ref(false)
   --color-diff-btn-active-text: var(--color-diff-btn-active-text-dark);
   --color-zoom-bg: var(--color-zoom-bg-dark);
   --color-zoom-thumb: var(--color-zoom-thumb-dark);
+  --color-board-border: var(--color-board-border-dark);
+  --color-box-border: var(--color-box-border-dark);
+  --color-cell-bg: var(--color-cell-bg-dark);
+  --color-cell-fixed: var(--color-cell-fixed-dark);
+  --color-cell-selected: var(--color-cell-selected-dark);
+  --color-cell-highlight: var(--color-cell-highlight-dark);
+  --color-cell-same: var(--color-cell-same-dark);
+  --color-cell-error: var(--color-cell-error-dark);
+  --color-cell-error-text: var(--color-cell-error-text-dark);
+  --color-note-text: var(--color-note-text-dark);
   --container-shadow: var(--container-shadow-dark);
 }
 
