@@ -7,14 +7,16 @@
       :disabled="count[n] >= 9"
       @click="$emit('place', n)"
     >
-      <span class="num-label">{{ n }}</span>
-      <div class="num-dots">
-        <span
-          v-for="i in 9"
-          :key="i"
-          class="dot"
-          :class="{ filled: i <= count[n] }"
-        ></span>
+      <div class="num-body">
+        <div class="num-dots">
+          <span
+            v-for="i in 9"
+            :key="i"
+            class="dot"
+            :class="{ filled: i <= count[n] }"
+          ></span>
+        </div>
+        <span class="num-label">{{ n }}</span>
       </div>
     </button>
   </div>
@@ -49,11 +51,7 @@ const count = computed(() => {
 }
 
 .num-grid button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
+  position: relative;
   border: none;
   border-radius: 6px;
   background: var(--numpad-bg);
@@ -62,7 +60,7 @@ const count = computed(() => {
   transition: all .12s ease;
   box-shadow: 0 2px 6px rgba(0,0,0,.06);
   font-family: 'Inter', sans-serif;
-  padding: 6px;
+  padding: 4px;
   min-height: 50px;
 }
 
@@ -85,33 +83,50 @@ const count = computed(() => {
   pointer-events: none;
 }
 
+.num-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
 .num-label {
+  position: relative;
+  z-index: 1;
   font-size: 1.15rem;
   font-weight: 400;
   line-height: 1;
 }
 
 .num-dots {
+  position: absolute;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5px;
-  width: 24px;
+  gap: 2px;
+  width: 28px;
+  z-index: 0;
 }
 
 .dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 1.5px;
   background: var(--numpad-text);
-  opacity: .12;
+  opacity: .06;
   transition: opacity .15s ease;
 }
 
 .dot.filled {
-  opacity: .6;
+  opacity: .25;
+}
+
+.depleted .dot {
+  opacity: .02;
 }
 
 .depleted .dot.filled {
-  opacity: .35;
+  opacity: .08;
 }
 </style>
