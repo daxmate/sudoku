@@ -66,6 +66,7 @@ function refreshAutoMark() {
 }
 
 function newGame(difficulty = state.difficulty) {
+  clearSavedGame()
   const { puzzle, solution } = SudokuEngine.generatePuzzle(difficulty)
   state.puzzle = puzzle
   state.solution = solution
@@ -134,6 +135,7 @@ function placeNumber(num) {
       stopTimer()
     }
   }
+  saveGame()
 }
 
 function clearNotesForNumber(num, row, col) {
@@ -154,11 +156,13 @@ function eraseCell() {
   state.playerGrid[row][col] = 0
   // 擦除时清除错误标记
   state.errors.delete(`${row},${col}`)
+  saveGame()
 }
 
 function toggleNoteMode() {
   if (state.isGameOver) return
   state.isNoteMode = !state.isNoteMode
+  saveGame()
 }
 
 function autoCalcCell() {
@@ -307,6 +311,7 @@ function useHint() {
 
   // 清除同行/列/宫的该数字笔记
   clearNotesForNumber(num, r, c)
+  saveGame()
 
   // 设置提示信息
   const methodMap = {
@@ -318,6 +323,62 @@ function useHint() {
   }
   state.hintMessage = methodMap[method] || methodMap.fallback
   setTimeout(() => { state.hintMessage = '' }, 3000)
+}
+
+const SAVE_KEY = 'sudoku-saved-game'
+
+function saveGame() {
+  if (state.isGameOver) return
+  const data = {
+    puzzle: state.puzzle,
+    solution: state.solution,
+    playerGrid: state.playerGrid,
+    notes: state.notes.map(r => r.map(s => [...s])),
+    mistakes: state.mistakes,
+    elapsedSeconds: state.elapsedSeconds,
+    difficulty: state.difficulty,
+    hintsRemaining: state.hintsRemaining,
+    isNoteMode: state.isNoteMode,
+    isAutoCalc: state.isAutoCalc,
+    isAutoMark: state.isAutoMark,
+    autoMarkFeature: state.autoMarkFeature,
+    zoom: state.zoom,
+  }
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)) } catch (e) { /* ignore */ }
+}
+
+function restoreGame(saved) {
+  state.puzzle = saved.puzzle
+  state.solution = saved.solution
+  state.playerGrid = saved.playerGrid
+  state.notes = saved.notes.map(r => r.map(a => new Set(a)))
+  state.mistakes = saved.mistakes
+  state.elapsedSeconds = saved.elapsedSeconds
+  state.difficulty = saved.difficulty
+  state.hintsRemaining = saved.hintsRemaining
+  state.isNoteMode = saved.isNoteMode
+  state.isAutoCalc = saved.isAutoCalc
+  state.isAutoMark = saved.isAutoMark
+  state.autoMarkFeature = saved.autoMarkFeature
+  state.zoom = saved.zoom || 100
+  state.errors.clear()
+  state.selectedCell = null
+  state.isPaused = false
+  state.hintCell = null
+  state.hintMessage = ''
+  startTimer()
+}
+
+function hasSavedGame() {
+  try {
+    const r = localStorage.getItem(SAVE_KEY)
+    if (!r) return false
+    return JSON.parse(r) && true
+  } catch (e) { return false }
+}
+
+function clearSavedGame() {
+  try { localStorage.removeItem(SAVE_KEY) } catch (e) { /* ignore */ }
 }
 
 export function useGameStore() {
@@ -337,5 +398,9 @@ export function useGameStore() {
     useHint,
     togglePause,
     setZoom,
+    saveGame,
+    hasSavedGame,
+    restoreGame,
+    clearSavedGame,
   }
 }

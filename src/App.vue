@@ -123,9 +123,19 @@ const onKeydown = (e) => {
 }
 
 onMounted(() => {
-  game.newGame('medium')
-  game.startTimer()
+  if (game.hasSavedGame()) {
+    const saved = JSON.parse(localStorage.getItem('sudoku-saved-game'))
+    game.restoreGame(saved)
+  } else {
+    game.newGame('medium')
+    game.startTimer()
+  }
   window.addEventListener('keydown', onKeydown)
+  window.addEventListener('beforeunload', () => game.saveGame())
+})
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKeydown)
 })
 </script>
 
