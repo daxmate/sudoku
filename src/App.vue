@@ -9,7 +9,7 @@
         <div class="side-panel">
           <ActionButtons />
           <NumberPad />
-          <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" />
+          <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" />
         </div>
       </div>
 
@@ -20,6 +20,10 @@
       @confirm="startNewGame"
       @cancel="showConfirm = false"
     />
+    <LeaderboardOverlay
+      :visible="showLeaderboard"
+      @close="showLeaderboard = false"
+    />
     </div>
   </div>
 </template>
@@ -28,6 +32,7 @@
 import { ref } from 'vue'
 import SettingsOverlay from './components/SettingsOverlay.vue'
 import ConfirmOverlay from './components/ConfirmOverlay.vue'
+import LeaderboardOverlay from './components/LeaderboardOverlay.vue'
 import GameHeader from './components/GameHeader.vue'
 import GameBoard from './components/GameBoard.vue'
 import ActionButtons from './components/ActionButtons.vue'
@@ -37,6 +42,7 @@ import BottomPanel from './components/BottomPanel.vue'
 const isDarkMode = ref(false)
 const showSettings = ref(false)
 const showConfirm = ref(false)
+const showLeaderboard = ref(false)
 
 function startNewGame() {
   showConfirm.value = false
