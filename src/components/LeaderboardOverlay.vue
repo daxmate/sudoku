@@ -82,7 +82,7 @@ function refresh() {
   ]
 }
 
-onMounted(() => refresh())
+onMounted(() => { console.log('LB mounted, refreshing...'); refresh(); console.log('Entries after refresh:', JSON.stringify(entries.value)) })
 
 const displayEntries = computed(() => {
   const all = entries.value
