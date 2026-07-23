@@ -38,6 +38,8 @@ const state = reactive({
   gameWon: false,
   completedCells: new Set(),
   popCell: null,
+  floatingScores: [],
+  _scoreId: 0,
   shakeCell: null,
   score: 0,
   streak: 0,
@@ -174,6 +176,8 @@ function placeNumber(num) {
     state.mistakes++
     state.streak = 0
     state.score = Math.max(0, state.score - 30)
+    const errLoss = state.score === 0 ? 0 : Math.min(state.score, 30)
+    pushFloatingScore(row, col, `-${errLoss}`, '#dc2626')
     if (state.isAnimOn) {
       state.shakeCell = `${row},${col}`
       setTimeout(() => { if (state.shakeCell === `${row},${col}`) state.shakeCell = null }, 350)
@@ -192,7 +196,9 @@ function placeNumber(num) {
     state.streak++
     const sm = state.streak >= 5 ? 3 : state.streak >= 3 ? 2 : state.streak >= 2 ? 1.5 : 1
     const m = DIFF_MULT[state.difficulty] || 1
-    state.score += Math.round(10 * sm * m)
+    const pts = Math.round(10 * sm * m)
+    state.score += pts
+    pushFloatingScore(row, col, `+${pts}`)
     if (state.soundOn) playCorrectSound()
     checkAndAnimateLineCompletion(row, col)
     if (state.isAnimOn) {
@@ -416,6 +422,14 @@ function useHint() {
 
 const SAVE_KEY = 'sudoku-saved-game'
 const HISTORY_KEY = 'sudoku-history'
+
+function pushFloatingScore(row, col, text, color) {
+  const id = ++state._scoreId
+  state.floatingScores.push({ id, row, col, text, color: color || '#22c55e' })
+  setTimeout(() => {
+    state.floatingScores = state.floatingScores.filter(s => s.id !== id)
+  }, 800)
+}
 
 function saveGameHistory(won) {
   const fmt = (s) => {

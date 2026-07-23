@@ -226,6 +226,13 @@ onUnmounted(() => {
   --overlay-cancel-hover-bg: #e5e9f0;
   --overlay-cancel-hover-text: #dc2626;
 
+  /* GameOverOverlay score detail */
+  --score-detail-bg: #f8fafc;
+  --score-detail-text: #475569;
+  --score-detail-label: #64748b;
+  --score-detail-border: #e2e8f0;
+  --score-detail-total: #4f46e5;
+
   /* LeaderboardOverlay */
   --lb-header-border: #e2e8f0;
   --lb-close-text: #94a3b8;
@@ -338,6 +345,14 @@ onUnmounted(() => {
   --overlay-cancel-text: #94a3b8;
   --overlay-cancel-hover-bg: #475569;
   --overlay-cancel-hover-text: #e2e8f0;
+
+  /* GameOverOverlay score detail */
+  --score-detail-bg: #1a2332;
+  --score-detail-text: #cbd5e1;
+  --score-detail-label: #64748b;
+  --score-detail-border: #334155;
+  --score-detail-total: #818cf8;
+
   --lb-header-border: #334155;
   --lb-close-text: #64748b;
   --lb-close-hover-bg: #475569;

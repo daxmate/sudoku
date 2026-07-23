@@ -1,6 +1,6 @@
 <template>
   <div class="board-wrapper">
-    <div class="board">
+    <div class="board" style="position:relative">
       <BoardCell
         v-for="(cell, idx) in cells"
         :key="idx"
@@ -19,6 +19,17 @@
         @select="selectCell(cell.row, cell.col)"
         :class="boxBorderClasses(idx)"
       />
+      <!-- 浮动加分文字 -->
+      <div
+        v-for="s in state.floatingScores"
+        :key="s.id"
+        class="float-score"
+        :style="{
+          top: (s.row * 48 + 8) + 'px',
+          left: (s.col * 48 + 6) + 'px',
+          color: s.color,
+        }"
+      >{{ s.text }}</div>
     </div>
   </div>
 </template>
@@ -81,6 +92,26 @@ function boxBorderClasses(idx) {
   width: 432px;
   height: 432px;
   box-shadow: var(--board-shadow);
+}
+
+.float-score {
+  position: absolute;
+  z-index: 10;
+  font-size: .75rem;
+  font-weight: 700;
+  pointer-events: none;
+  animation: floatUp .8s ease-out forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-28px) scale(1.15);
+  }
 }
 </style>
 
