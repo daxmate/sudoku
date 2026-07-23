@@ -15,10 +15,16 @@ class DistSchemeHandler: NSObject, WKURLSchemeHandler {
         if path.isEmpty || path == "/" { path = "/index.html" }
 
         let cleanPath = path.hasPrefix("/") ? String(path.dropFirst()) : path
-        guard let fileUrl = Bundle.main.url(forResource: cleanPath, withExtension: nil, subdirectory: "dist"),
-              let data = try? Data(contentsOf: fileUrl) else {
-            urlSchemeTask.didFailWithError(NSError(domain: "DistHandler", code: 404,
-                userInfo: [NSLocalizedDescriptionKey: "File not found: \(path)"]))
+
+        // 用 dist 目录路径 + 相对路径拼接，支持嵌套子目录
+        guard let distUrl = Bundle.main.url(forResource: "dist", withExtension: nil) else {
+            urlSchemeTask.didFailWithError(NSError(domain: "DistHandler", code: 404))
+            return
+        }
+
+        let fileUrl = distUrl.appendingPathComponent(cleanPath)
+        guard let data = try? Data(contentsOf: fileUrl) else {
+            urlSchemeTask.didFailWithError(NSError(domain: "DistHandler", code: 404))
             return
         }
 
