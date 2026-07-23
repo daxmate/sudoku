@@ -29,7 +29,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useGameStore } from './composables/useGameStore.js'
 import SettingsOverlay from './components/SettingsOverlay.vue'
 import ConfirmOverlay from './components/ConfirmOverlay.vue'
 import LeaderboardOverlay from './components/LeaderboardOverlay.vue'
@@ -38,6 +39,8 @@ import GameBoard from './components/GameBoard.vue'
 import ActionButtons from './components/ActionButtons.vue'
 import NumberPad from './components/NumberPad.vue'
 import BottomPanel from './components/BottomPanel.vue'
+
+const game = useGameStore()
 
 const isDarkMode = ref(false)
 
@@ -50,8 +53,13 @@ const showConfirm = ref(false)
 const showLeaderboard = ref(false)
 
 function startNewGame() {
+  game.newGame()
   showConfirm.value = false
 }
+
+onMounted(() => {
+  game.newGame('medium')
+})
 </script>
 
 <style scoped>
