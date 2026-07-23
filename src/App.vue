@@ -26,7 +26,7 @@
             @auto-calc="game.autoCalcCell()"
             @hint="game.useHint()"
           />
-          <NumberPad @place="game.placeNumber($event)" />
+          <NumberPad :player-grid="game.state.playerGrid" @place="game.placeNumber($event)" />
           <BottomPanel
             :auto-mark-enabled="game.state.autoMarkFeature"
             @open-settings="showSettings = true"
