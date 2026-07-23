@@ -7,7 +7,7 @@
       <div class="board-row">
         <GameBoard />
         <div class="side-panel">
-          <ActionButtons />
+          <ActionButtons @erase="game.eraseCell()" />
           <NumberPad @place="game.placeNumber($event)" />
           <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" @toggle-theme="toggleDarkMode" />
         </div>

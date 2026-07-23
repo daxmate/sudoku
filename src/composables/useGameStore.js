@@ -35,6 +35,14 @@ function placeNumber(num) {
   state.playerGrid[row][col] = num
 }
 
+function eraseCell() {
+  if (!state.selectedCell) return
+  const { row, col } = state.selectedCell
+  // 给定数字不能擦除
+  if (state.puzzle[row][col] !== 0) return
+  state.playerGrid[row][col] = 0
+}
+
 export function useGameStore() {
   return {
     state: readonly(state),
@@ -42,5 +50,6 @@ export function useGameStore() {
     selectCell,
     clearSelection,
     placeNumber,
+    eraseCell,
   }
 }
