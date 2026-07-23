@@ -26,7 +26,7 @@
             @auto-calc="game.autoCalcCell()"
             @hint="game.useHint()"
           />
-          <NumberPad :player-grid="game.state.playerGrid" @place="game.placeNumber($event)" />
+          <NumberPad :player-grid="game.state.playerGrid" :show-depletion="game.state.depletionFeature" @place="game.placeNumber($event)" />
           <BottomPanel
             :auto-mark-enabled="game.state.autoMarkFeature"
             @open-settings="showSettings = true"
@@ -55,9 +55,11 @@
       :visible="showSettings"
       :auto-calc="game.state.isAutoCalc"
       :auto-mark="game.state.autoMarkFeature"
+      :depletion="game.state.depletionFeature"
       @close="showSettings = false"
       @toggle-auto-calc="game.toggleAutoCalc($event)"
       @toggle-auto-mark="game.setAutoMarkFeature($event)"
+      @toggle-depletion="game.toggleDepletion()"
     />
     <ConfirmOverlay
       :visible="showConfirm"

@@ -9,6 +9,7 @@
     >
       <div class="num-body">
         <div
+          v-if="showDepletion"
           class="num-ring"
           :style="ringStyle(n)"
         ></div>
@@ -23,6 +24,7 @@ import { computed } from 'vue'
 
 const props = defineProps({
   playerGrid: { type: Array, default: () => [] },
+  showDepletion: { type: Boolean, default: false },
 })
 
 defineEmits(['place'])

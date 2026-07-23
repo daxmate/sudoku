@@ -22,6 +22,7 @@ const state = reactive({
   isAutoCalc: false,
   isAutoMark: false,
   autoMarkFeature: false,
+  depletionFeature: false,
   mistakes: 0,
   errors: new Set(),
   elapsedSeconds: 0,
@@ -215,6 +216,10 @@ function setAutoMarkFeature(on) {
   }
 }
 
+function toggleDepletion() {
+  state.depletionFeature = !state.depletionFeature
+}
+
 let timerInterval = null
 
 function startTimer() {
@@ -385,6 +390,7 @@ function saveGame() {
     isAutoCalc: state.isAutoCalc,
     isAutoMark: state.isAutoMark,
     autoMarkFeature: state.autoMarkFeature,
+    depletionFeature: state.depletionFeature,
     zoom: state.zoom,
   }
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)) } catch (e) { /* ignore */ }
@@ -403,6 +409,7 @@ function restoreGame(saved) {
   state.isAutoCalc = saved.isAutoCalc
   state.isAutoMark = saved.isAutoMark
   state.autoMarkFeature = saved.autoMarkFeature
+  state.depletionFeature = saved.depletionFeature || false
   state.zoom = saved.zoom || 100
   state.errors.clear()
   state.selectedCell = null
@@ -436,6 +443,7 @@ export function useGameStore() {
     toggleAutoCalc,
     toggleAutoMark,
     setAutoMarkFeature,
+    toggleDepletion,
     startTimer,
     stopTimer,
     useHint,

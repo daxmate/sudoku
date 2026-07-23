@@ -17,9 +17,9 @@
         </label>
       </div>
       <div class="setting-row">
-        <label>音效</label>
+        <label>数字耗尽提示</label>
         <label class="toggle">
-          <input type="checkbox" checked />
+          <input type="checkbox" :checked="depletion" @change="$emit('toggleDepletion')" />
           <span class="toggle-track"></span>
         </label>
       </div>
@@ -42,8 +42,9 @@ defineProps({
   visible: Boolean,
   autoCalc: Boolean,
   autoMark: Boolean,
+  depletion: Boolean,
 })
-defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark'])
+defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion'])
 </script>
 
 <style scoped>
