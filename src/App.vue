@@ -4,7 +4,12 @@
       <h1>数 独</h1>
       <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
       <GameHeader />
-      <GameBoard />
+      <div class="board-row">
+        <GameBoard />
+        <div class="side-panel">
+          <NumberPad />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -13,13 +18,14 @@
 import { ref } from 'vue'
 import GameHeader from './components/GameHeader.vue'
 import GameBoard from './components/GameBoard.vue'
+import NumberPad from './components/NumberPad.vue'
 
 const isDarkMode = ref(false)
 </script>
 
 <style scoped>
 .app {
-  /* ---------- 浅色主题变量 ---------- */
+  /* 浅色主题变量 */
   --color-text: #1e293b;
   --color-text-muted: #64748b;
   --color-text-light: #94a3b8;
@@ -45,6 +51,10 @@ const isDarkMode = ref(false)
   --color-cell-error: #fef2f2;
   --color-cell-error-text: #dc2626;
   --color-note-text: #94a3b8;
+  --color-numpad-bg: #f1f4f8;
+  --color-numpad-text: #6d7584;
+  --color-numpad-hover-bg: #e5e9f0;
+  --color-numpad-hover-text: #4f46e5;
   --container-shadow: 0 25px 80px rgba(0,0,0,.35), 0 4px 16px rgba(0,0,0,.15);
 
   /* 深色主题变量 */
@@ -73,6 +83,10 @@ const isDarkMode = ref(false)
   --color-cell-error-dark: #450a0a;
   --color-cell-error-text-dark: #fca5a5;
   --color-note-text-dark: #64748b;
+  --color-numpad-bg-dark: #1e293b;
+  --color-numpad-text-dark: #e2e8f0;
+  --color-numpad-hover-bg-dark: #334155;
+  --color-numpad-hover-text-dark: #e2e8f0;
   --container-shadow-dark: 0 25px 80px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.25);
 }
 
@@ -108,6 +122,10 @@ const isDarkMode = ref(false)
   --color-cell-error: var(--color-cell-error-dark);
   --color-cell-error-text: var(--color-cell-error-text-dark);
   --color-note-text: var(--color-note-text-dark);
+  --color-numpad-bg: var(--color-numpad-bg-dark);
+  --color-numpad-text: var(--color-numpad-text-dark);
+  --color-numpad-hover-bg: var(--color-numpad-hover-bg-dark);
+  --color-numpad-hover-text: var(--color-numpad-hover-text-dark);
   --container-shadow: var(--container-shadow-dark);
 }
 
@@ -141,5 +159,21 @@ h1 {
   letter-spacing: 2.5px;
   text-transform: uppercase;
   margin-bottom: 14px;
+}
+
+.board-row {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 140px;
+  max-width: 210px;
 }
 </style>
