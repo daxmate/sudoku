@@ -70,24 +70,16 @@ defineEmits(['confirm', 'cancel'])
   background: var(--overlay-btn-bg);
   color: var(--overlay-btn-text);
 }
-
 .overlay-confirm:hover {
   background: var(--overlay-btn-hover-bg);
 }
 
 .overlay-cancel {
-  background: #f1f4f8;
-  color: #6d7584;
+  background: var(--overlay-cancel-bg);
+  color: var(--overlay-cancel-text);
 }
-
 .overlay-cancel:hover {
-  background: #e5e9f0;
-  color: #dc2626;
+  background: var(--overlay-cancel-hover-bg);
+  color: var(--overlay-cancel-hover-text);
 }
-</style>
-
-<!-- 暗色主题 -->
-<style>
-.app.dark .overlay-cancel { background: #334155; color: #94a3b8; }
-.app.dark .overlay-cancel:hover { background: #475569; color: #e2e8f0; }
 </style>

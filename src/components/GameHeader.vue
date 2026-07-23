@@ -51,8 +51,8 @@
   gap: 5px;
   font-size: 0.82rem;
   font-weight: 500;
-  color: var(--color-badge-text);
-  background: var(--color-badge-bg);
+  color: var(--badge-text);
+  background: var(--badge-bg);
   padding: 5px 12px;
   border-radius: 9999px;
   font-variant-numeric: tabular-nums;
@@ -62,7 +62,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: var(--color-badge-bg);
+  background: var(--badge-bg);
   padding: 3px 8px;
   border-radius: 9999px;
 }
@@ -72,7 +72,7 @@
   appearance: none;
   width: 60px;
   height: 4px;
-  background: var(--color-zoom-bg);
+  background: var(--zoom-bg);
   border-radius: 2px;
   outline: none;
   cursor: pointer;
@@ -83,7 +83,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--color-zoom-thumb);
+  background: var(--zoom-thumb);
   cursor: pointer;
   transition: background .12s ease;
 }
@@ -91,7 +91,7 @@
 .zoom-label {
   font-size: .68rem;
   font-weight: 500;
-  color: var(--color-badge-text);
+  color: var(--badge-text);
   min-width: 32px;
   text-align: center;
   font-variant-numeric: tabular-nums;
@@ -106,25 +106,25 @@
 
 .difficulty-wrap button {
   background: transparent;
-  border: 1.5px solid var(--color-diff-btn-border);
+  border: 1.5px solid var(--diff-btn-border);
   padding: 4px 14px;
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-diff-btn-text);
+  color: var(--diff-btn-text);
   cursor: pointer;
   transition: all .2s ease;
   font-family: 'Inter', sans-serif;
 }
 
 .difficulty-wrap button:hover {
-  border-color: var(--color-diff-btn-hover-border);
-  color: var(--color-diff-btn-hover-text);
+  border-color: var(--diff-btn-hover-border);
+  color: var(--diff-btn-hover-text);
 }
 
 .difficulty-wrap button.active {
-  background: var(--color-diff-btn-active-bg);
-  border-color: var(--color-diff-btn-active-border);
-  color: var(--color-diff-btn-active-text);
+  background: var(--diff-btn-active-bg);
+  border-color: var(--diff-btn-active-border);
+  color: var(--diff-btn-active-text);
 }
 </style>

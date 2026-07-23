@@ -52,24 +52,22 @@ function boxBorderClasses(idx) {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 0;
-  background: #d1d5db;
-  border: 2px solid var(--color-board-border);
+  background: var(--board-line);
+  border: 2px solid var(--board-border);
   border-radius: 10px;
   overflow: hidden;
   width: 432px;
   height: 432px;
-  box-shadow: 0 8px 32px rgba(0,0,0,.1);
+  box-shadow: var(--board-shadow);
 }
 </style>
 
 <style>
-/* 单元格之间的细线 */
 .board > .cell {
-  border: 0.5px solid #cbd5e1;
+  border: 0.5px solid var(--cell-border);
   position: relative;
 }
 
-/* 宫格竖分隔线 — 用 ::before 画在网格之上 */
 .board > .cell.box-border-right::before {
   content: '';
   position: absolute;
@@ -77,12 +75,11 @@ function boxBorderClasses(idx) {
   top: 0;
   bottom: 0;
   width: 1.5px;
-  background: var(--color-box-border, #888);
+  background: var(--box-border);
   z-index: 1;
   pointer-events: none;
 }
 
-/* 宫格横分隔线 — 用 ::after 画在网格之上 */
 .board > .cell.box-border-bottom::after {
   content: '';
   position: absolute;
@@ -90,7 +87,7 @@ function boxBorderClasses(idx) {
   right: 0;
   bottom: -0.5px;
   height: 1.5px;
-  background: var(--color-box-border, #888);
+  background: var(--box-border);
   z-index: 1;
   pointer-events: none;
 }

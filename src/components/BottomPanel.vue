@@ -1,6 +1,5 @@
 <template>
   <div class="bottom-section">
-    <!-- 底部行：全部标记 + 新游戏 -->
     <div class="bottom-row">
       <button class="auto-mark-btn" title="全部标记">
         <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
@@ -11,8 +10,6 @@
       </button>
       <button class="new-game-btn" @click="$emit('newGame')">新游戏</button>
     </div>
-
-    <!-- 底部按钮行：排行榜 + 主题 + 设置 -->
     <div class="leaderboard-row">
       <button class="lb-btn" @click="$emit('openLeaderboard')">排行榜</button>
       <button class="icon-btn" title="切换暗色主题" @click="$emit('toggleTheme')">
@@ -57,8 +54,8 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
   aspect-ratio: 1;
   border: none;
   border-radius: 6px;
-  background: #f1f4f8;
-  color: #6d7584;
+  background: var(--panel-bg);
+  color: var(--panel-text);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -68,8 +65,8 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
 }
 
 .auto-mark-btn:hover {
-  background: #e5e9f0;
-  color: #065f46;
+  background: var(--panel-hover-bg);
+  color: var(--panel-mark-hover-text);
 }
 
 .new-game-btn {
@@ -81,14 +78,14 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
   cursor: pointer;
   transition: all .15s ease;
   font-family: 'Inter', sans-serif;
-  background: #f1f4f8;
-  color: #6d7584;
+  background: var(--panel-bg);
+  color: var(--panel-text);
   box-shadow: 0 2px 6px rgba(0,0,0,.06);
 }
 
 .new-game-btn:hover {
-  background: #e5e9f0;
-  color: #4f46e5;
+  background: var(--panel-hover-bg);
+  color: var(--panel-hover-text);
   transform: translateY(-1px);
 }
 
@@ -102,8 +99,8 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
   border: none;
   border-radius: 6px;
   padding: 8px;
-  background: #f1f4f8;
-  color: #6d7584;
+  background: var(--panel-bg);
+  color: var(--panel-text);
   font-size: .75rem;
   font-weight: 500;
   cursor: pointer;
@@ -112,8 +109,8 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
 }
 
 .lb-btn:hover {
-  background: #e5e9f0;
-  color: #4f46e5;
+  background: var(--panel-hover-bg);
+  color: var(--panel-hover-text);
 }
 
 .icon-btn {
@@ -122,8 +119,8 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
   border: none;
   border-radius: 6px;
   padding: 8px;
-  background: #f1f4f8;
-  color: #6d7584;
+  background: var(--panel-bg);
+  color: var(--panel-text);
   cursor: pointer;
   transition: all .12s ease;
   display: flex;
@@ -132,7 +129,7 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
 }
 
 .icon-btn:hover {
-  background: #e5e9f0;
-  color: #4f46e5;
+  background: var(--panel-hover-bg);
+  color: var(--panel-hover-text);
 }
 </style>

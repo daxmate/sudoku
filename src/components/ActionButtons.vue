@@ -1,13 +1,11 @@
 <template>
   <div class="action-buttons">
-    <!-- 擦除 -->
     <button class="erase-btn" title="擦除">
       <svg viewBox="0 0 30 31" width="24" height="24">
         <path fill="currentColor" fill-rule="evenodd" d="M27.13 25.11a1 1 0 01.12 2h-6.9a1 1 0 01-.11-2H27.13zM21.48 4.08l.17.14.16.15 3.76 3.76a4 4 0 01.15 5.5l-.15.16-11.32 11.32h2.04a1 1 0 011 .89v.11a1 1 0 01-.88 1H6.52a3 3 0 01-1.98-.74l-.14-.14-2.23-2.22a4 4 0 01-.15-5.5l.15-.16L16.15 4.37a4 4 0 015.33-.29zm-11.52 9.3l-6.38 6.38a2 2 0 00-.11 2.7l.11.13 2.23 2.23a1 1 0 00.58.28l.13.01h4.9l5.13-5.13-6.59-6.6zm7.87-7.82l-.14.1-.13.13-6.18 6.18 6.59 6.6 6.19-6.2a2 2 0 00.11-2.7l-.11-.12-3.77-3.76a2 2 0 00-2.56-.22z"/>
       </svg>
     </button>
 
-    <!-- 候选标记 -->
     <button class="mark-cell-btn" title="候选">
       <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
         <rect x="3" y="2" width="24" height="26" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
@@ -16,14 +14,12 @@
       </svg>
     </button>
 
-    <!-- 编辑标记 -->
     <button class="notes-toggle" title="编辑标记">
       <svg viewBox="0 0 30 31" width="24" height="24">
         <path fill="currentColor" d="M25.43 4.76a5.42 5.42 0 01.19 7.52l-.18.2-13.5 13.48a.91.91 0 01-1.21.08l-.1-.08-5.07-5.08-.59 4.34 3.25-.44c.44-.05.84.2 1 .58l.03.11.02.11c.06.47-.24.91-.7 1.03l-.1.02-4.45.6a.94.94 0 01-.79-.27.92.92 0 01-.26-.65v-.13l1-7.4a.92.92 0 01.19-.44l.08-.09L17.71 4.76a5.45 5.45 0 017.72 0zm.35 20.08a1 1 0 110 2h-8.7a1 1 0 010-2h8.7zM21.4 10.18L9.43 22.13 11.3 24l11.95-11.95-1.86-1.86zm-3.23-3.23L6.2 18.91l1.92 1.91L20.07 8.86l-1.9-1.9zm3.42-1.93c-.69 0-1.35.2-1.92.56l-.15.1 5.01 5 .1-.14c.33-.5.51-1.09.55-1.7l.01-.22a3.58 3.58 0 00-3.6-3.6z"/>
       </svg>
     </button>
 
-    <!-- 提示 -->
     <button class="warning" title="提示">
       <svg viewBox="0 0 30 30" width="24" height="24">
         <g fill="currentColor" fill-rule="evenodd">
@@ -56,8 +52,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6d7584;
-  background: #f1f4f8;
+  color: var(--action-text);
+  background: var(--action-bg);
 }
 
 .action-buttons button svg {
@@ -69,51 +65,30 @@
 .action-buttons button:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(99,102,241,.2);
+  background: var(--action-hover-bg);
+  color: var(--action-hover-text);
 }
 
 .action-buttons button:active {
   transform: translateY(0);
 }
 
-.action-buttons button:hover {
-  background: #e5e9f0;
-  color: #4f46e5;
-}
+.erase-btn { color: var(--action-erase-text); }
+.erase-btn:hover { background: var(--action-erase-hover-bg) !important; color: var(--action-erase-hover-text) !important; }
 
-.erase-btn {
-  color: #b91c1c;
-}
+.notes-toggle.active { background: var(--action-notes-active-bg); color: var(--action-notes-active-text); }
 
-.erase-btn:hover {
-  background: #fef2f2 !important;
-  color: #dc2626 !important;
-}
+.warning { color: var(--action-warning-text); }
+.warning:hover { background: var(--action-warning-hover-bg) !important; color: var(--action-warning-hover-text) !important; }
 
-.notes-toggle.active {
-  background: #eef2ff;
-  color: #4f46e5;
-}
-
-.warning {
-  color: #92400e;
-}
-
-.warning:hover {
-  background: #fef3c7 !important;
-  color: #d97706 !important;
-}
-
-.mark-cell-btn:hover {
-  background: #f5f3ff !important;
-  color: #6d28d9 !important;
-}
+.mark-cell-btn:hover { background: var(--action-mark-hover-bg) !important; color: var(--action-mark-hover-text) !important; }
 
 .hint-count {
   position: absolute;
   top: -3px;
   right: -3px;
-  background: #94a3b8;
-  color: #fff;
+  background: var(--hint-count-bg);
+  color: var(--hint-count-text);
   font-size: .5rem;
   font-weight: 500;
   min-width: 14px;

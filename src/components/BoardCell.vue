@@ -1,13 +1,7 @@
 <template>
   <div
     class="cell"
-    :class="{
-      fixed: fixed,
-      selected: selected,
-      highlighted: highlighted,
-      'same-number': sameNumber,
-      error: error,
-    }"
+    :class="{ fixed, selected, highlighted, 'same-number': sameNumber, error }"
   >
     <template v-if="value !== 0">
       <span class="cell-value">{{ value }}</span>
@@ -23,11 +17,11 @@
 <script setup>
 defineProps({
   value: { type: Number, default: 0 },
-  fixed: { type: Boolean, default: false },
-  selected: { type: Boolean, default: false },
-  highlighted: { type: Boolean, default: false },
-  sameNumber: { type: Boolean, default: false },
-  error: { type: Boolean, default: false },
+  fixed: Boolean,
+  selected: Boolean,
+  highlighted: Boolean,
+  sameNumber: Boolean,
+  error: Boolean,
 })
 </script>
 
@@ -36,7 +30,7 @@ defineProps({
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-cell-bg);
+  background-color: var(--cell-bg);
   font-size: 1.55rem;
   font-weight: 400;
   color: var(--color-text);
@@ -46,27 +40,21 @@ defineProps({
   transition: background .1s ease, color .1s ease;
 }
 
-.cell.fixed {
-  color: var(--color-cell-fixed);
-}
+.cell.fixed { color: var(--cell-fixed); }
 
 .cell.selected {
-  background-color: var(--color-cell-selected) !important;
+  background-color: var(--cell-selected) !important;
   box-shadow: inset 0 0 0 2.5px #6366f1;
   z-index: 2;
 }
 
-.cell.highlighted {
-  background-color: var(--color-cell-highlight);
-}
+.cell.highlighted { background-color: var(--cell-highlight); }
 
-.cell.same-number {
-  background-color: var(--color-cell-same);
-}
+.cell.same-number { background-color: var(--cell-same); }
 
 .cell.error {
-  background-color: var(--color-cell-error) !important;
-  color: var(--color-cell-error-text) !important;
+  background-color: var(--cell-error) !important;
+  color: var(--cell-error-text) !important;
 }
 
 .notes-grid {
@@ -84,7 +72,7 @@ defineProps({
   align-items: center;
   font-size: .5rem;
   font-weight: 400;
-  color: var(--color-note-text);
+  color: var(--note-text);
   line-height: 1;
 }
 </style>

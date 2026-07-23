@@ -27,7 +27,6 @@
 defineProps({
   visible: Boolean,
 })
-
 defineEmits(['close'])
 </script>
 
@@ -80,16 +79,12 @@ h3 {
   cursor: pointer;
 }
 
-.toggle input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+.toggle input { opacity: 0; width: 0; height: 0; }
 
 .toggle-track {
   position: absolute;
   inset: 0;
-  background: #cbd5e1;
+  background: var(--toggle-bg);
   border-radius: 999px;
   transition: background .15s ease;
 }
@@ -101,13 +96,13 @@ h3 {
   left: 3px;
   width: 14px;
   height: 14px;
-  background: #fff;
+  background: var(--toggle-knob);
   border-radius: 50%;
   transition: transform .15s ease;
 }
 
 .toggle input:checked + .toggle-track {
-  background: #6366f1;
+  background: var(--toggle-active);
 }
 
 .toggle input:checked + .toggle-track::after {
@@ -134,16 +129,7 @@ h3 {
   background: var(--overlay-btn-bg);
   color: var(--overlay-btn-text);
 }
-
 .overlay-confirm:hover {
   background: var(--overlay-btn-hover-bg);
 }
-</style>
-
-<!-- 暗色主题覆盖（非 scoped，从 .app.dark 父级匹配） -->
-<style>
-.app.dark .toggle-track { background: #475569; }
-.app.dark .toggle-track::after { background: #94a3b8; }
-.app.dark .toggle input:checked + .toggle-track { background: #6366f1; }
-.app.dark .toggle input:checked + .toggle-track::after { background: #fff; }
 </style>
