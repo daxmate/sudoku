@@ -95,7 +95,8 @@ function boxBorderClasses(idx) {
   border: 2px solid var(--board-border);
   border-radius: 10px;
   overflow: hidden;
-  width: min(432px, calc(100dvw - 3rem));
+  width: min(432px, 100%);
+  box-sizing: border-box;
   aspect-ratio: 1;
   box-shadow: var(--board-shadow);
 }
