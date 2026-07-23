@@ -6,7 +6,13 @@
       </svg>
     </button>
 
-    <button class="mark-cell-btn" title="候选">
+    <button class="notes-toggle" :class="{ active: noteActive }" title="笔记" @click="$emit('toggleNotes')">
+      <svg viewBox="0 0 30 31" width="24" height="24">
+        <path fill="currentColor" d="M25.43 4.76a5.42 5.42 0 01.19 7.52l-.18.2-13.5 13.48a.91.91 0 01-1.21.08l-.1-.08-5.07-5.08-.59 4.34 3.25-.44c.44-.05.84.2 1 .58l.03.11.02.11c.06.47-.24.91-.7 1.03l-.1.02-4.45.6a.94.94 0 01-.79-.27.92.92 0 01-.26-.65v-.13l1-7.4a.92.92 0 01.19-.44l.08-.09L17.71 4.76a5.45 5.45 0 017.72 0zm.35 20.08a1 1 0 110 2h-8.7a1 1 0 010-2h8.7zM21.4 10.18L9.43 22.13 11.3 24l11.95-11.95-1.86-1.86zm-3.23-3.23L6.2 18.91l1.92 1.91L20.07 8.86l-1.9-1.9zm3.42-1.93c-.69 0-1.35.2-1.92.56l-.15.1 5.01 5 .1-.14c.33-.5.51-1.09.55-1.7l.01-.22a3.58 3.58 0 00-3.6-3.6z"/>
+      </svg>
+    </button>
+
+    <button class="auto-calc-btn" :class="{ active: autoCalcActive }" title="自动计算" @click="$emit('toggleAutoCalc')">
       <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
         <rect x="3" y="2" width="24" height="26" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
         <rect x="6" y="5" width="18" height="6.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
@@ -14,7 +20,7 @@
       </svg>
     </button>
 
-    <button class="notes-toggle" :class="{ active: noteActive }" title="笔记" @click="$emit('toggleNotes')">
+    <button class="warning" title="提示">
       <svg viewBox="0 0 30 31" width="24" height="24">
         <path fill="currentColor" d="M25.43 4.76a5.42 5.42 0 01.19 7.52l-.18.2-13.5 13.48a.91.91 0 01-1.21.08l-.1-.08-5.07-5.08-.59 4.34 3.25-.44c.44-.05.84.2 1 .58l.03.11.02.11c.06.47-.24.91-.7 1.03l-.1.02-4.45.6a.94.94 0 01-.79-.27.92.92 0 01-.26-.65v-.13l1-7.4a.92.92 0 01.19-.44l.08-.09L17.71 4.76a5.45 5.45 0 017.72 0zm.35 20.08a1 1 0 110 2h-8.7a1 1 0 010-2h8.7zM21.4 10.18L9.43 22.13 11.3 24l11.95-11.95-1.86-1.86zm-3.23-3.23L6.2 18.91l1.92 1.91L20.07 8.86l-1.9-1.9zm3.42-1.93c-.69 0-1.35.2-1.92.56l-.15.1 5.01 5 .1-.14c.33-.5.51-1.09.55-1.7l.01-.22a3.58 3.58 0 00-3.6-3.6z"/>
       </svg>
@@ -36,9 +42,10 @@
 defineProps({
   noteActive: Boolean,
   eraseActive: Boolean,
+  autoCalcActive: Boolean,
 })
 
-defineEmits(['toggleErase', 'toggleNotes'])
+defineEmits(['toggleErase', 'toggleNotes', 'toggleAutoCalc'])
 </script>
 
 <style scoped>
@@ -88,10 +95,12 @@ defineEmits(['toggleErase', 'toggleNotes'])
 
 .notes-toggle.active { color: var(--action-notes-active-text, #6366f1); }
 
+.auto-calc-btn.active { color: var(--action-notes-active-text, #6366f1); }
+
 .warning { color: var(--action-warning-text); }
 .warning:hover { background: var(--action-warning-hover-bg) !important; color: var(--action-warning-hover-text) !important; }
 
-.mark-cell-btn:hover { background: var(--action-mark-hover-bg) !important; color: var(--action-mark-hover-text) !important; }
+.auto-calc-btn:hover { background: var(--action-mark-hover-bg) !important; color: var(--action-mark-hover-text) !important; }
 
 .hint-count {
   position: absolute;

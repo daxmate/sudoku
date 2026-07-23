@@ -10,8 +10,10 @@
           <ActionButtons
             :note-active="game.state.isNoteMode"
             :erase-active="game.state.isEraseMode"
+            :auto-calc-active="game.state.isAutoCalc"
             @toggle-notes="game.toggleNoteMode()"
             @toggle-erase="game.toggleEraseMode()"
+            @toggle-auto-calc="game.toggleAutoCalc()"
           />
           <NumberPad @place="game.placeNumber($event)" />
           <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" @toggle-theme="toggleDarkMode" />

@@ -10,12 +10,43 @@ const state = reactive({
   notes: [],
   isNoteMode: false,
   isEraseMode: false,
+  isAutoCalc: false,
 })
 
 function initNotes() {
   return Array.from({ length: 9 }, () =>
     Array.from({ length: 9 }, () => new Set())
   )
+}
+
+function calcCandidates(row, col) {
+  const g = state.playerGrid
+  const present = new Set()
+  for (let i = 0; i < 9; i++) {
+    if (g[row][i] !== 0) present.add(g[row][i])
+    if (g[i][col] !== 0) present.add(g[i][col])
+  }
+  const sr = Math.floor(row / 3) * 3
+  const sc = Math.floor(col / 3) * 3
+  for (let r = sr; r < sr + 3; r++)
+    for (let c = sc; c < sc + 3; c++)
+      if (g[r][c] !== 0) present.add(g[r][c])
+
+  const candidates = new Set()
+  for (let n = 1; n <= 9; n++)
+    if (!present.has(n)) candidates.add(n)
+  return candidates
+}
+
+function refreshAutoCalc() {
+  if (!state.isAutoCalc) return
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (state.playerGrid[r][c] === 0) {
+        state.notes[r][c] = calcCandidates(r, c)
+      }
+    }
+  }
 }
 
 function newGame(difficulty = state.difficulty) {
@@ -28,19 +59,17 @@ function newGame(difficulty = state.difficulty) {
   state.notes = initNotes()
   state.isNoteMode = false
   state.isEraseMode = false
+  // 如果开启了自动计算，新游戏后也计算
+  if (state.isAutoCalc) refreshAutoCalc()
 }
 
 function selectCell(row, col) {
   state.selectedCell = { row, col }
-  // 擦除模式下点击格子直接擦除
   if (state.isEraseMode && state.puzzle[row][col] === 0) {
     state.playerGrid[row][col] = 0
     state.notes[row][col].clear()
+    if (state.isAutoCalc) refreshAutoCalc()
   }
-}
-
-function clearSelection() {
-  state.selectedCell = null
 }
 
 function placeNumber(num) {
@@ -48,14 +77,13 @@ function placeNumber(num) {
   const { row, col } = state.selectedCell
   if (state.puzzle[row][col] !== 0) return
 
-  // 擦除模式：清空格子
   if (state.isEraseMode) {
     state.playerGrid[row][col] = 0
     state.notes[row][col].clear()
+    if (state.isAutoCalc) refreshAutoCalc()
     return
   }
 
-  // 笔记模式：切换笔记
   if (state.isNoteMode) {
     const cellNotes = state.notes[row][col]
     if (cellNotes.has(num)) cellNotes.delete(num)
@@ -63,9 +91,9 @@ function placeNumber(num) {
     return
   }
 
-  // 普通模式：填数字
   state.playerGrid[row][col] = num
   clearNotesForNumber(num, row, col)
+  if (state.isAutoCalc) refreshAutoCalc()
 }
 
 function clearNotesForNumber(num, row, col) {
@@ -84,6 +112,7 @@ function eraseCell() {
   if (state.puzzle[row][col] !== 0) return
   state.playerGrid[row][col] = 0
   state.notes[row][col].clear()
+  if (state.isAutoCalc) refreshAutoCalc()
 }
 
 function toggleNoteMode() {
@@ -96,15 +125,24 @@ function toggleEraseMode() {
   if (state.isEraseMode) state.isNoteMode = false
 }
 
+function toggleAutoCalc() {
+  state.isAutoCalc = !state.isAutoCalc
+  if (state.isAutoCalc) {
+    refreshAutoCalc()
+  } else {
+    state.notes = initNotes()
+  }
+}
+
 export function useGameStore() {
   return {
     state,
     newGame,
     selectCell,
-    clearSelection,
     placeNumber,
     eraseCell,
     toggleNoteMode,
     toggleEraseMode,
+    toggleAutoCalc,
   }
 }
