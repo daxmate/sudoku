@@ -86,6 +86,9 @@ function boxBorderClasses(idx) {
 
 <style scoped>
 .board-wrapper { display: flex; justify-content: center; }
+@media (max-width: 640px) {
+  .board-wrapper { width: 100%; }
+}
 
 .board {
   display: grid;
@@ -102,10 +105,12 @@ function boxBorderClasses(idx) {
 
 @media (max-width: 640px) {
   .board {
-    width: min(432px, 100%);
+    width: 100%;
     height: auto;
     aspect-ratio: 1;
     box-sizing: border-box;
+    border-width: 1px;
+    border-radius: 4px;
   }
 }
 

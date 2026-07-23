@@ -436,14 +436,18 @@ h1 {
 }
 
 @media (max-width: 640px) {
+  .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; }
   .container {
-    padding: 12px 12px 60px;
-    border-radius: 16px;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    min-height: 100dvh;
+    box-shadow: none;
   }
-  h1 { font-size: 1.1rem; letter-spacing: 3px; margin-bottom: 0; }
-  .subtitle { font-size: 0.55rem; margin-bottom: 10px; }
-  .board-row { gap: 10px; }
-  .side-panel { gap: 6px; }
+  h1 { padding: 8px 0 0; margin: 0; font-size: 1rem; letter-spacing: 2px; }
+  .subtitle { display: none; }
+  .board-row { gap: 6px; }
+  .side-panel { gap: 4px; }
 }
 
 .board-row {
