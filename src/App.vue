@@ -55,6 +55,12 @@
     />
     </div>
   </div>
+
+  <Transition name="hint-toast">
+    <div v-if="game.state.hintMessage" class="hint-toast">
+      {{ game.state.hintMessage }}
+    </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -361,5 +367,33 @@ h1 {
   flex: 1;
   min-width: 140px;
   max-width: 210px;
+}
+
+/* 提示消息 Toast */
+.hint-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--badge-bg);
+  color: var(--badge-text);
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  box-shadow: 0 4px 20px rgba(0,0,0,.15);
+  z-index: 1000;
+  white-space: nowrap;
+}
+
+.hint-toast-enter-active { transition: all .3s ease-out; }
+.hint-toast-leave-active { transition: all .3s ease-in; }
+.hint-toast-enter-from {
+  opacity: 0;
+  transform: translateX(-50%) translateY(16px);
+}
+.hint-toast-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(16px);
 }
 </style>

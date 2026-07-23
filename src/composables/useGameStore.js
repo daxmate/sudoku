@@ -18,6 +18,7 @@ const state = reactive({
   isPaused: false,
   hintsRemaining: 3,
   hintCell: null,
+  hintMessage: '',
 })
 
 function initNotes() {
@@ -179,35 +180,101 @@ function togglePause() {
   state.isPaused = !state.isPaused
 }
 
+function getCandidates(r, c) {
+  if (state.playerGrid[r][c] !== 0) return new Set()
+  const p = new Set()
+  for (let i = 0; i < 9; i++) {
+    if (state.playerGrid[r][i] !== 0) p.add(state.playerGrid[r][i])
+    if (state.playerGrid[i][c] !== 0) p.add(state.playerGrid[i][c])
+  }
+  const sr = Math.floor(r / 3) * 3, sc = Math.floor(c / 3) * 3
+  for (let rr = sr; rr < sr + 3; rr++)
+    for (let cc = sc; cc < sc + 3; cc++)
+      if (state.playerGrid[rr][cc] !== 0) p.add(state.playerGrid[rr][cc])
+  const r2 = new Set()
+  for (let n = 1; n <= 9; n++) if (!p.has(n)) r2.add(n)
+  return r2
+}
+
+function findHint() {
+  const fixed = state.puzzle
+
+  // 1. 唯余法 — 只有一个候选数的空格
+  for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++) {
+    if (fixed[r][c] || state.playerGrid[r][c] !== 0) continue
+    const cs = getCandidates(r, c)
+    if (cs.size === 1) return { r, c, num: [...cs][0], method: 'naked' }
+  }
+
+  // 2. 隐唯法 — 行
+  for (let r = 0; r < 9; r++) for (let n = 1; n <= 9; n++) {
+    let ok = false; for (let c = 0; c < 9; c++) if (state.playerGrid[r][c] === n) { ok = true; break }
+    if (ok) continue
+    const ps = []
+    for (let c = 0; c < 9; c++)
+      if (!fixed[r][c] && state.playerGrid[r][c] === 0 && getCandidates(r, c).has(n)) ps.push(c)
+    if (ps.length === 1) return { r, c: ps[0], num: n, method: 'hidden_row' }
+  }
+
+  // 3. 隐唯法 — 列
+  for (let c = 0; c < 9; c++) for (let n = 1; n <= 9; n++) {
+    let ok = false; for (let r = 0; r < 9; r++) if (state.playerGrid[r][c] === n) { ok = true; break }
+    if (ok) continue
+    const ps = []
+    for (let r = 0; r < 9; r++)
+      if (!fixed[r][c] && state.playerGrid[r][c] === 0 && getCandidates(r, c).has(n)) ps.push(r)
+    if (ps.length === 1) return { r: ps[0], c, num: n, method: 'hidden_col' }
+  }
+
+  // 4. 隐唯法 — 宫
+  for (let br = 0; br < 3; br++) for (let bc = 0; bc < 3; bc++) for (let n = 1; n <= 9; n++) {
+    const sr = br * 3, sc = bc * 3
+    let ok = false
+    for (let rr = sr; rr < sr + 3 && !ok; rr++) for (let cc = sc; cc < sc + 3; cc++)
+      if (state.playerGrid[rr][cc] === n) { ok = true; break }
+    if (ok) continue
+    const ps = []
+    for (let rr = sr; rr < sr + 3; rr++) for (let cc = sc; cc < sc + 3; cc++)
+      if (!fixed[rr][cc] && state.playerGrid[rr][cc] === 0 && getCandidates(rr, cc).has(n)) ps.push([rr, cc])
+    if (ps.length === 1) return { r: ps[0][0], c: ps[0][1], num: n, method: 'hidden_box' }
+  }
+
+  // 5. 兜底 — 第一个空格
+  for (let r = 0; r < 9; r++) for (let c = 0; c < 9; c++)
+    if (!fixed[r][c] && state.playerGrid[r][c] === 0) return { r, c, num: state.solution[r][c], method: 'fallback' }
+
+  return null
+}
+
 function useHint() {
   if (state.hintsRemaining <= 0) return
 
-  // 找所有空格
-  const emptyCells = []
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      if (state.playerGrid[r][c] === 0) {
-        emptyCells.push({ row: r, col: c })
-      }
-    }
-  }
-  if (emptyCells.length === 0) return
+  const hint = findHint()
+  if (!hint) return
 
-  // 选一个随机空格
-  const cell = emptyCells[Math.floor(Math.random() * emptyCells.length)]
-  const { row, col } = cell
-  const num = state.solution[row][col]
+  const { r, c, num, method } = hint
 
   // 填入正确数字
-  state.playerGrid[row][col] = num
+  state.playerGrid[r][c] = num
   state.hintsRemaining--
 
   // 记录提示的格子（用于动画）
-  state.hintCell = `${row},${col}`
+  state.hintCell = `${r},${c}`
   setTimeout(() => { state.hintCell = null }, 1200)
 
   // 清除同行/列/宫的该数字笔记
-  clearNotesForNumber(num, row, col)
+  clearNotesForNumber(num, r, c)
+
+  // 设置提示信息
+  const methodMap = {
+    naked: `唯余法：第 ${r + 1} 行第 ${c + 1} 列只有 ${num} 可以填`,
+    hidden_row: `隐唯法：第 ${r + 1} 行中只有第 ${c + 1} 列可以填 ${num}`,
+    hidden_col: `隐唯法：第 ${c + 1} 列中只有第 ${r + 1} 行可以填 ${num}`,
+    hidden_box: `隐唯法：第 ${Math.floor(r / 3) * 3 + 1} 行第 ${Math.floor(c / 3) * 3 + 1} 格的宫中只有 (${r + 1},${c + 1}) 可以填 ${num}`,
+    fallback: `第 ${r + 1} 行第 ${c + 1} 列应该填 ${num}`,
+  }
+  state.hintMessage = methodMap[method] || methodMap.fallback
+  setTimeout(() => { state.hintMessage = '' }, 3000)
 }
 
 export function useGameStore() {
