@@ -7,6 +7,7 @@
       <div class="board-row">
         <GameBoard />
         <div class="side-panel">
+          <ActionButtons />
           <NumberPad />
         </div>
       </div>
@@ -18,6 +19,7 @@
 import { ref } from 'vue'
 import GameHeader from './components/GameHeader.vue'
 import GameBoard from './components/GameBoard.vue'
+import ActionButtons from './components/ActionButtons.vue'
 import NumberPad from './components/NumberPad.vue'
 
 const isDarkMode = ref(false)
