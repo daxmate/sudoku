@@ -126,18 +126,12 @@ onMounted(() => {
   /* ActionButtons */
   --action-bg: #f1f4f8;
   --action-text: #6d7584;
-  --action-hover-bg: #e5e9f0;
-  --action-hover-text: #4f46e5;
+  --action-hover-bg: #f5f3ff;
+  --action-hover-text: #6d28d9;
   --action-erase-text: #b91c1c;
-  --action-erase-hover-bg: #fef2f2;
-  --action-erase-hover-text: #dc2626;
-  --action-notes-active-bg: transparent;
   --action-notes-active-text: #6366f1;
   --action-warning-text: #92400e;
-  --action-warning-hover-bg: #fef3c7;
-  --action-warning-hover-text: #d97706;
-  --action-mark-hover-bg: #f5f3ff;
-  --action-mark-hover-text: #6d28d9;
+
   --hint-count-bg: #94a3b8;
   --hint-count-text: #fff;
 

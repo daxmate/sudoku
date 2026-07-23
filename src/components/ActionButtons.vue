@@ -88,16 +88,13 @@ defineEmits(['toggleErase', 'toggleNotes', 'toggleAutoCalc'])
 }
 
 .erase-btn { color: var(--action-erase-text); }
-.erase-btn:hover { background: var(--action-erase-hover-bg) !important; color: var(--action-erase-hover-text) !important; }
 .erase-btn.active { color: var(--action-notes-active-text); }
 
 .notes-toggle.active { color: var(--action-notes-active-text); }
 
 .auto-calc-btn.active { color: var(--action-notes-active-text); }
-.auto-calc-btn:hover { background: var(--action-mark-hover-bg) !important; color: var(--action-mark-hover-text) !important; }
 
 .warning { color: var(--action-warning-text); }
-.warning:hover { background: var(--action-warning-hover-bg) !important; color: var(--action-warning-hover-text) !important; }
 
 .hint-count {
   position: absolute;
