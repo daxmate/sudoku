@@ -8,14 +8,10 @@
       @click="$emit('place', n)"
     >
       <div class="num-body">
-        <div class="num-dots">
-          <span
-            v-for="i in 9"
-            :key="i"
-            class="dot"
-            :class="{ filled: i <= count[n] }"
-          ></span>
-        </div>
+        <div
+          class="num-ring"
+          :style="ringStyle(n)"
+        ></div>
         <span class="num-label">{{ n }}</span>
       </div>
     </button>
@@ -41,6 +37,14 @@ const count = computed(() => {
     }
   return cnt
 })
+
+function ringStyle(n) {
+  const pct = (count.value[n] / 9) * 100
+  return {
+    background: `conic-gradient(currentColor 0% ${pct}%, transparent ${pct}% 100%)`,
+    opacity: count.value[n] === 9 ? .08 : .15,
+  }
+}
 </script>
 
 <style scoped>
@@ -90,6 +94,7 @@ const count = computed(() => {
   justify-content: center;
   width: 100%;
   height: 100%;
+  min-height: 44px;
 }
 
 .num-label {
@@ -100,32 +105,19 @@ const count = computed(() => {
   line-height: 1;
 }
 
-.num-dots {
+.num-ring {
   position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
-  padding: 5px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64%;
+  aspect-ratio: 1;
+  border-radius: 50%;
   z-index: 0;
+  transition: background .2s ease, opacity .2s ease;
 }
 
-.dot {
-  border-radius: 2px;
-  background: var(--numpad-text);
-  opacity: .04;
-  transition: opacity .15s ease;
-}
-
-.dot.filled {
-  opacity: .15;
-}
-
-.depleted .dot {
-  opacity: .01;
-}
-
-.depleted .dot.filled {
-  opacity: .05;
+.depleted .num-ring {
+  opacity: .04 !important;
 }
 </style>
