@@ -9,11 +9,17 @@
         <div class="side-panel">
           <ActionButtons />
           <NumberPad />
-          <BottomPanel @open-settings="showSettings = true" />
+          <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" />
         </div>
       </div>
 
     <SettingsOverlay :visible="showSettings" @close="showSettings = false" />
+    <ConfirmOverlay
+      :visible="showConfirm"
+      message="确定要开始新游戏吗？当前进度将丢失。"
+      @confirm="startNewGame"
+      @cancel="showConfirm = false"
+    />
     </div>
   </div>
 </template>
@@ -21,6 +27,7 @@
 <script setup>
 import { ref } from 'vue'
 import SettingsOverlay from './components/SettingsOverlay.vue'
+import ConfirmOverlay from './components/ConfirmOverlay.vue'
 import GameHeader from './components/GameHeader.vue'
 import GameBoard from './components/GameBoard.vue'
 import ActionButtons from './components/ActionButtons.vue'
@@ -29,6 +36,12 @@ import BottomPanel from './components/BottomPanel.vue'
 
 const isDarkMode = ref(false)
 const showSettings = ref(false)
+const showConfirm = ref(false)
+
+function startNewGame() {
+  showConfirm.value = false
+  // 后续加游戏逻辑
+}
 </script>
 
 <style scoped>

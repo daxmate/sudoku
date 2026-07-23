@@ -9,7 +9,7 @@
           <path d="M15 6q3-2 1-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
       </button>
-      <button class="new-game-btn">新游戏</button>
+      <button class="new-game-btn" @click="$emit('newGame')">新游戏</button>
     </div>
 
     <!-- 底部按钮行：排行榜 + 主题 + 设置 -->
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-defineEmits(['openSettings'])
+defineEmits(['openSettings', 'newGame'])
 </script>
 
 <style scoped>
