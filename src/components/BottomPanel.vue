@@ -20,7 +20,7 @@
           <path d="M14 8.79A6.5 6.5 0 117.21 2 5 5 0 0014 8.79z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button class="icon-btn" title="设置">
+      <button class="icon-btn" title="设置" @click="$emit('openSettings')">
         <svg viewBox="0 0 16 16" width="16" height="16" fill="none">
           <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.2"/>
           <path d="M8 4.5v-2M8 13.5v-2M11.5 8h2M2.5 8h2M4.5 4.5l1.4 1.4M10.1 10.1l1.4 1.4M4.5 11.5l1.4-1.4M10.1 5.9l1.4-1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -29,6 +29,10 @@
     </div>
   </div>
 </template>
+
+<script setup>
+defineEmits(['openSettings'])
+</script>
 
 <style scoped>
 .bottom-section {

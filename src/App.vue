@@ -9,15 +9,18 @@
         <div class="side-panel">
           <ActionButtons />
           <NumberPad />
-          <BottomPanel />
+          <BottomPanel @open-settings="showSettings = true" />
         </div>
       </div>
+
+    <SettingsOverlay :visible="showSettings" @close="showSettings = false" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import SettingsOverlay from './components/SettingsOverlay.vue'
 import GameHeader from './components/GameHeader.vue'
 import GameBoard from './components/GameBoard.vue'
 import ActionButtons from './components/ActionButtons.vue'
@@ -25,6 +28,7 @@ import NumberPad from './components/NumberPad.vue'
 import BottomPanel from './components/BottomPanel.vue'
 
 const isDarkMode = ref(false)
+const showSettings = ref(false)
 </script>
 
 <style scoped>
@@ -59,6 +63,12 @@ const isDarkMode = ref(false)
   --color-numpad-text: #6d7584;
   --color-numpad-hover-bg: #e5e9f0;
   --color-numpad-hover-text: #4f46e5;
+  --overlay-bg: #fff;
+  --overlay-heading: #334155;
+  --overlay-label: #475569;
+  --overlay-btn-bg: #f1f4f8;
+  --overlay-btn-text: #4f46e5;
+  --overlay-btn-hover-bg: #e5e9f0;
   --container-shadow: 0 25px 80px rgba(0,0,0,.35), 0 4px 16px rgba(0,0,0,.15);
 
   /* 深色主题变量 */
@@ -91,6 +101,12 @@ const isDarkMode = ref(false)
   --color-numpad-text-dark: #e2e8f0;
   --color-numpad-hover-bg-dark: #334155;
   --color-numpad-hover-text-dark: #e2e8f0;
+  --overlay-bg-dark: #1e293b;
+  --overlay-heading-dark: #e2e8f0;
+  --overlay-label-dark: #cbd5e1;
+  --overlay-btn-bg-dark: #334155;
+  --overlay-btn-text-dark: #94a3b8;
+  --overlay-btn-hover-bg-dark: #475569;
   --container-shadow-dark: 0 25px 80px rgba(0,0,0,.4), 0 4px 16px rgba(0,0,0,.25);
 }
 
@@ -130,6 +146,12 @@ const isDarkMode = ref(false)
   --color-numpad-text: var(--color-numpad-text-dark);
   --color-numpad-hover-bg: var(--color-numpad-hover-bg-dark);
   --color-numpad-hover-text: var(--color-numpad-hover-text-dark);
+  --overlay-bg: var(--overlay-bg-dark);
+  --overlay-heading: var(--overlay-heading-dark);
+  --overlay-label: var(--overlay-label-dark);
+  --overlay-btn-bg: var(--overlay-btn-bg-dark);
+  --overlay-btn-text: var(--overlay-btn-text-dark);
+  --overlay-btn-hover-bg: var(--overlay-btn-hover-bg-dark);
   --container-shadow: var(--container-shadow-dark);
 }
 
