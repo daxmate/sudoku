@@ -9,6 +9,7 @@
         <div class="side-panel">
           <ActionButtons />
           <NumberPad />
+          <BottomPanel />
         </div>
       </div>
     </div>
@@ -21,6 +22,7 @@ import GameHeader from './components/GameHeader.vue'
 import GameBoard from './components/GameBoard.vue'
 import ActionButtons from './components/ActionButtons.vue'
 import NumberPad from './components/NumberPad.vue'
+import BottomPanel from './components/BottomPanel.vue'
 
 const isDarkMode = ref(false)
 </script>
