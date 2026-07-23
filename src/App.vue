@@ -16,7 +16,7 @@
           />
           <NumberPad @place="game.placeNumber($event)" />
           <BottomPanel
-            :auto-mark-enabled="game.state.isAutoMark"
+            :auto-mark-enabled="game.state.autoMarkFeature"
             @open-settings="showSettings = true"
             @new-game="showConfirm = true"
             @open-leaderboard="showLeaderboard = true"
@@ -29,10 +29,10 @@
     <SettingsOverlay
       :visible="showSettings"
       :auto-calc="game.state.isAutoCalc"
-      :auto-mark="game.state.isAutoMark"
+      :auto-mark="game.state.autoMarkFeature"
       @close="showSettings = false"
       @toggle-auto-calc="game.toggleAutoCalc($event)"
-      @toggle-auto-mark="game.setAutoMark($event)"
+      @toggle-auto-mark="game.setAutoMarkFeature($event)"
     />
     <ConfirmOverlay
       :visible="showConfirm"

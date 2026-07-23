@@ -11,6 +11,7 @@ const state = reactive({
   isNoteMode: false,
   isAutoCalc: false,
   isAutoMark: false,
+  autoMarkFeature: false,
 })
 
 function initNotes() {
@@ -124,11 +125,11 @@ function toggleAutoMark() {
   }
 }
 
-function setAutoMark(on) {
-  state.isAutoMark = on
-  if (on) {
-    refreshAutoMark()
-  } else {
+function setAutoMarkFeature(on) {
+  state.autoMarkFeature = on
+  if (!on && state.isAutoMark) {
+    // 关闭功能时同时关闭标记
+    state.isAutoMark = false
     state.notes = initNotes()
   }
 }
