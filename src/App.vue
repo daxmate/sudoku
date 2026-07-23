@@ -172,6 +172,7 @@ onUnmounted(() => {
   --color-text-muted: #64748b;
   --color-text-light: #94a3b8;
   --color-surface: rgba(255, 255, 255, 0.94);
+  --color-surface-mobile: #fff;
 
   /* GameHeader - 状态标签 */
   --badge-bg: #f1f4f8;
@@ -304,6 +305,7 @@ onUnmounted(() => {
   --color-text-muted: #94a3b8;
   --color-text-light: #64748b;
   --color-surface: rgba(15, 23, 42, 0.94);
+  --color-surface-mobile: #0f172a;
   --badge-bg: #1e293b;
   --badge-text: #94a3b8;
   --diff-btn-border: #334155;
@@ -446,6 +448,9 @@ h1 {
     border: none;
     min-height: 100dvh;
     box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--color-surface-mobile);
   }
   h1 { padding: 8px 0 0; margin: 0; font-size: 1rem; letter-spacing: 2px; }
   .subtitle { display: none; }
