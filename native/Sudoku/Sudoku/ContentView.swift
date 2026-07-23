@@ -20,6 +20,10 @@ struct ContentView: View {
     }
 }
 
+class WSCoordinator {
+    let schemeHandler = DistSchemeHandler()
+}
+
 #if os(macOS)
     struct WebViewContainer: NSViewRepresentable {
         func makeNSView(context: Context) -> WKWebView {
@@ -35,21 +39,26 @@ struct ContentView: View {
         }
 
         func updateNSView(_ nsView: WKWebView, context: Context) {}
+        func makeCoordinator() -> WSCoordinator { WSCoordinator() }
     }
 #else
     struct WebViewContainer: UIViewRepresentable {
-
         func makeUIView(context: Context) -> WKWebView {
-            let wv = WKWebView(frame: .zero)
-            // 单文件 HTML，所有 JS/CSS 内联，无需额外资源加载
-            if let url = Bundle.main.url(forResource: "index", withExtension: "html", subdirectory: "dist"),
-               let html = try? String(contentsOf: url, encoding: .utf8) {
-                wv.loadHTMLString(html, baseURL: Bundle.main.resourceURL)
+            let config = WKWebViewConfiguration()
+            config.setURLSchemeHandler(context.coordinator.schemeHandler, forURLScheme: "sudoku")
+
+            let wv = WKWebView(frame: .zero, configuration: config)
+            if let distUrl = Bundle.main.url(forResource: "dist", withExtension: nil) {
+                let indexUrl = distUrl.appendingPathComponent("index.html")
+                if let html = try? String(contentsOf: indexUrl, encoding: .utf8) {
+                    wv.loadHTMLString(html, baseURL: URL(string: "sudoku://bundle/"))
+                }
             }
             return wv
         }
 
         func updateUIView(_ uiView: WKWebView, context: Context) {}
+        func makeCoordinator() -> WSCoordinator { WSCoordinator() }
     }
 #endif
 
