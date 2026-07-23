@@ -2,10 +2,12 @@
   <div class="container">
     <h1>数 独</h1>
     <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
+    <GameHeader />
   </div>
 </template>
 
 <script setup>
+import GameHeader from './components/GameHeader.vue'
 </script>
 
 <style scoped>
