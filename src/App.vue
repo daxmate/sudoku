@@ -13,6 +13,7 @@
         @select-difficulty="game.newGame($event)"
         @toggle-pause="game.togglePause()"
         @update-zoom="game.setZoom($event)"
+        @open-settings="showSettings = true"
       />
       <div class="board-row">
         <GameBoard />

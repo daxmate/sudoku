@@ -64,10 +64,13 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
 
 @media (max-width: 640px) {
   .bottom-section { gap: 2px; }
-  .new-game-btn { font-size: .68rem; padding: 4px; min-height: 32px; }
-  .lb-btn { font-size: .68rem; padding: 4px; min-height: 28px; }
-  .icon-btn { width: 28px; height: 28px; padding: 4px; flex-shrink: 0; }
-  .icon-btn svg { width: 14px; height: 14px; }
+  .new-game-btn {
+    width: 100%;
+    font-size: .72rem;
+    padding: 6px;
+    min-height: 36px;
+  }
+  .leaderboard-row { display: none; }
 }
 
 .leaderboard-row {
