@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="overlay" @click.self="$emit('restart')">
+  <div v-if="visible" class="overlay" @click.self="$emit('restart')" @keydown.enter="$emit('restart')">
     <div class="overlay-box">
       <div class="overlay-icon">{{ won ? '🎉' : '💥' }}</div>
       <p class="overlay-msg">{{ won ? '恭喜你完成数独！' : '游戏结束！错误已达上限。' }}</p>
