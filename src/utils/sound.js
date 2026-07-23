@@ -127,6 +127,24 @@ export function playCompletionSound() {
   playEcho(783.99, t + 0.3, 0.5, 0.04, 'sine', 0.08, 0.35, 4)
 }
 
+/** 😵 游戏失败 — 下行滑音 + 嗡嗡声 */
+export function playGameOverSound() {
+  const c = ctx()
+  if (!c) return
+  const t = c.currentTime
+  // 下行三音 (下降 + 失落感)
+  const descend = [
+    [523.25, 0, 0.35],     // C5
+    [415.3, 0.15, 0.35],   // G#4
+    [349.23, 0.3, 0.4],    // F4
+  ]
+  descend.forEach(([freq, offset, dur]) => {
+    playTone(freq, t + offset, dur, 0.07, 'triangle')
+  })
+  // 末尾低音
+  playTone(130.81, t + 0.35, 0.6, 0.08, 'sawtooth')
+}
+
 /** 🏆 通关胜利 — 上行琶音 + 饱满和弦感 */
 export function playVictorySound() {
   const c = ctx()
