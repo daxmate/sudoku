@@ -12,6 +12,19 @@
       </svg>
     </button>
 
+    <button
+      class="auto-calc-btn"
+      :class="{ active: autoCalcEnabled, disabled: !autoCalcEnabled }"
+      :title="autoCalcEnabled ? '自动计算当前格候选数' : '需要到设置中开启'"
+      @click="autoCalcEnabled ? $emit('autoCalc') : null"
+    >
+      <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
+        <rect x="3" y="2" width="24" height="26" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="6" y="5" width="18" height="6.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+        <path stroke="currentColor" stroke-width="1" d="M6 14.5h3v3H6zm5 0h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3zM6 19.5h3v3H6zm5 0h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3zM6 24.5h3v3H6zm5 0h3v3h-3zm5 0h3v3h-3zm5 0h3v3h-3z"/>
+      </svg>
+    </button>
+
     <button class="warning" title="提示">
       <svg viewBox="0 0 30 30" width="24" height="24">
         <g fill="currentColor" fill-rule="evenodd">
@@ -27,15 +40,16 @@
 <script setup>
 defineProps({
   noteActive: Boolean,
+  autoCalcEnabled: Boolean,
 })
 
-defineEmits(['erase', 'toggleNotes'])
+defineEmits(['erase', 'toggleNotes', 'autoCalc'])
 </script>
 
 <style scoped>
 .action-buttons {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
 }
 
@@ -75,6 +89,9 @@ defineEmits(['erase', 'toggleNotes'])
 
 .erase-btn { color: var(--action-erase-text); }
 .notes-toggle.active { color: var(--action-notes-active-text); }
+.auto-calc-btn.active { color: var(--action-notes-active-text); }
+.auto-calc-btn.disabled { opacity: 0.45; }
+.auto-calc-btn.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
 .warning { color: var(--action-warning-text); }
 
 .hint-count {

@@ -104,13 +104,20 @@ function toggleNoteMode() {
   state.isNoteMode = !state.isNoteMode
 }
 
+function autoCalcCell() {
+  if (!state.selectedCell) return
+  const { row, col } = state.selectedCell
+  if (state.playerGrid[row][col] !== 0) return
+  if (state.notes[row][col].size > 0) {
+    state.notes[row][col].clear()
+  } else {
+    state.notes[row][col] = calcCandidates(row, col)
+  }
+}
+
 function toggleAutoCalc(on) {
   state.isAutoCalc = on
-  if (on && state.selectedCell) {
-    const { row, col } = state.selectedCell
-    if (state.playerGrid[row][col] === 0)
-      state.notes[row][col] = calcCandidates(row, col)
-  }
+  // 开启时自动计算功能可用，按钮可点击
 }
 
 function toggleAutoMark() {
@@ -130,6 +137,7 @@ export function useGameStore() {
     placeNumber,
     eraseCell,
     toggleNoteMode,
+    autoCalcCell,
     toggleAutoCalc,
     toggleAutoMark,
   }
