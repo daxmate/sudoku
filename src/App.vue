@@ -441,7 +441,7 @@ h1 {
 }
 
 @media (max-width: 640px) {
-  .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; }
+  .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; background: var(--color-surface-mobile); }
   .container {
     padding: 0;
     border-radius: 0;
