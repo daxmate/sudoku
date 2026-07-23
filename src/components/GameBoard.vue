@@ -6,7 +6,7 @@
         :key="idx"
         :value="cell.value"
         :fixed="cell.fixed"
-        :class="borderClasses(idx)"
+        :class="boxBorderClasses(idx)"
       />
     </div>
   </div>
@@ -15,16 +15,13 @@
 <script setup>
 import BoardCell from './BoardCell.vue'
 
-// 静态示例数据 — 展示棋盘布局用
 const puzzle = [
   [5,3,0, 0,7,0, 0,0,0],
   [6,0,0, 1,9,5, 0,0,0],
   [0,9,8, 0,0,0, 0,6,0],
-
   [8,0,0, 0,6,0, 0,0,3],
   [4,0,0, 8,0,3, 0,0,1],
   [7,0,0, 0,2,0, 0,0,6],
-
   [0,6,0, 0,0,0, 2,8,0],
   [0,0,0, 4,1,9, 0,0,5],
   [0,0,0, 0,8,0, 0,7,9],
@@ -35,7 +32,7 @@ const cells = puzzle.flat().map(value => ({
   fixed: value !== 0,
 }))
 
-function borderClasses(idx) {
+function boxBorderClasses(idx) {
   const col = idx % 9
   const row = Math.floor(idx / 9)
   return {
@@ -54,8 +51,8 @@ function borderClasses(idx) {
 .board {
   display: grid;
   grid-template-columns: repeat(9, 1fr);
-  gap: 1px;
-  background: #e2e8f0;
+  gap: 0;
+  background: #d1d5db;
   border: 2px solid var(--color-board-border);
   border-radius: 10px;
   overflow: hidden;
@@ -65,12 +62,36 @@ function borderClasses(idx) {
 }
 </style>
 
-<!-- 非 scoped：box 边框用全局 class 控制 -->
 <style>
-.box-border-right {
-  border-right: 2px solid var(--color-box-border) !important;
+/* 单元格之间的细线 */
+.board > .cell {
+  border: 0.5px solid #cbd5e1;
+  position: relative;
 }
-.box-border-bottom {
-  border-bottom: 2px solid var(--color-box-border) !important;
+
+/* 宫格竖分隔线 — 用 ::before 画在网格之上 */
+.board > .cell.box-border-right::before {
+  content: '';
+  position: absolute;
+  right: -0.5px;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: var(--color-box-border, #888);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 宫格横分隔线 — 用 ::after 画在网格之上 */
+.board > .cell.box-border-bottom::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.5px;
+  height: 1.5px;
+  background: var(--color-box-border, #888);
+  z-index: 1;
+  pointer-events: none;
 }
 </style>
