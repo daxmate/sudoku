@@ -34,6 +34,7 @@ const state = reactive({
   isGameOver: false,
   gameWon: false,
   completedCells: new Set(),
+  popCell: null,
   score: 0,
   streak: 0,
 })
@@ -86,6 +87,7 @@ function newGame(difficulty = state.difficulty) {
   state.isGameOver = false
   state.gameWon = false
   state.completedCells = new Set()
+  state.popCell = null
   state.score = 0
   state.streak = 0
   state.elapsedSeconds = 0
@@ -178,6 +180,8 @@ function placeNumber(num) {
     const m = DIFF_MULT[state.difficulty] || 1
     state.score += Math.round(10 * sm * m)
     checkAndAnimateLineCompletion(row, col)
+    state.popCell = `${row},${col}`
+    setTimeout(() => { if (state.popCell === `${row},${col}`) state.popCell = null }, 300)
     // 检查是否全部填完
     if (checkWin()) {
       state.isGameOver = true
