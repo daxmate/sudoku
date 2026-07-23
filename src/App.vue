@@ -8,7 +8,7 @@
         <GameBoard />
         <div class="side-panel">
           <ActionButtons />
-          <NumberPad />
+          <NumberPad @place="game.placeNumber($event)" />
           <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" @toggle-theme="toggleDarkMode" />
         </div>
       </div>

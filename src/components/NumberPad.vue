@@ -1,10 +1,14 @@
 <template>
   <div class="num-grid">
-    <button v-for="n in 9" :key="n">
+    <button v-for="n in 9" :key="n" @click="$emit('place', n)">
       {{ n }}
     </button>
   </div>
 </template>
+
+<script setup>
+defineEmits(['place'])
+</script>
 
 <style scoped>
 .num-grid {
@@ -18,8 +22,8 @@
   aspect-ratio: 1;
   border: none;
   border-radius: 6px;
-  background: var(--color-numpad-bg);
-  color: var(--color-numpad-text);
+  background: var(--numpad-bg);
+  color: var(--numpad-text);
   font-size: 1.3rem;
   font-weight: 400;
   cursor: pointer;
@@ -29,8 +33,8 @@
 }
 
 .num-grid button:hover {
-  background: var(--color-numpad-hover-bg);
-  color: var(--color-numpad-hover-text);
+  background: var(--numpad-hover-bg);
+  color: var(--numpad-hover-text);
   transform: translateY(-1px);
   box-shadow: 0 6px 18px rgba(99,102,241,.2);
 }
