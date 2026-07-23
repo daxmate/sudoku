@@ -45,6 +45,7 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
   display: flex;
   flex-direction: column;
   gap: 4px;
+  margin-top: auto;
 }
 
 .leaderboard-row {
