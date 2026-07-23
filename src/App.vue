@@ -8,10 +8,12 @@
         :mistakes="game.state.mistakes"
         :elapsed-seconds="game.state.elapsedSeconds"
         :paused="game.state.isPaused"
+        :zoom="game.state.zoom"
         @select-difficulty="game.newGame($event)"
         @toggle-pause="game.togglePause()"
+        @update-zoom="game.setZoom($event)"
       />
-      <div class="board-row">
+      <div class="board-row" :style="{ transform: `scale(${game.state.zoom / 100})` }">
         <GameBoard />
         <div class="side-panel">
           <ActionButtons
@@ -359,6 +361,7 @@ h1 {
   justify-content: center;
   align-items: stretch;
   gap: 14px;
+  transform-origin: top center;
 }
 
 .side-panel {

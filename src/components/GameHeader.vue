@@ -30,8 +30,8 @@
       <span>0</span>
     </div>
     <div class="zoom-control">
-      <input type="range" class="zoom-slider" min="70" max="130" value="100" step="5" />
-      <span class="zoom-label">100%</span>
+      <input type="range" class="zoom-slider" min="50" max="150" step="5" :value="zoom" @input="$emit('updateZoom', Number($event.target.value))" />
+      <span class="zoom-label">{{ zoom }}%</span>
     </div>
   </div>
 
@@ -51,8 +51,9 @@ const props = defineProps({
   mistakes: { type: Number, default: 0 },
   elapsedSeconds: { type: Number, default: 0 },
   paused: Boolean,
+  zoom: { type: Number, default: 100 },
 })
-defineEmits(['selectDifficulty', 'togglePause'])
+defineEmits(['selectDifficulty', 'togglePause', 'updateZoom'])
 
 function pad(n) { return String(n).padStart(2, '0') }
 

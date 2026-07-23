@@ -19,6 +19,7 @@ const state = reactive({
   hintsRemaining: 3,
   hintCell: null,
   hintMessage: '',
+  zoom: 100,
 })
 
 function initNotes() {
@@ -180,6 +181,10 @@ function togglePause() {
   state.isPaused = !state.isPaused
 }
 
+function setZoom(val) {
+  state.zoom = Math.max(50, Math.min(150, val))
+}
+
 function getCandidates(r, c) {
   if (state.playerGrid[r][c] !== 0) return new Set()
   const p = new Set()
@@ -293,5 +298,6 @@ export function useGameStore() {
     stopTimer,
     useHint,
     togglePause,
+    setZoom,
   }
 }
