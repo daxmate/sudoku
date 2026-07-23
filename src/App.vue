@@ -322,6 +322,7 @@ onMounted(() => {
 }
 
 .container {
+  position: relative;
   background: var(--color-surface);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -371,7 +372,10 @@ h1 {
 
 /* 提示消息 Toast */
 .hint-toast {
-  margin-top: 16px;
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
   background: var(--badge-bg);
   color: var(--badge-text);
   padding: 10px 24px;
@@ -380,17 +384,16 @@ h1 {
   font-weight: 500;
   box-shadow: 0 4px 20px rgba(0,0,0,.15);
   white-space: nowrap;
-  display: inline-block;
 }
 
 .hint-toast-enter-active { transition: all .3s ease-out; }
 .hint-toast-leave-active { transition: all .3s ease-in; }
 .hint-toast-enter-from {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateX(-50%) translateY(16px);
 }
 .hint-toast-leave-to {
   opacity: 0;
-  transform: translateY(-16px);
+  transform: translateX(-50%) translateY(-16px);
 }
 </style>
