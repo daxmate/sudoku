@@ -30,8 +30,8 @@
       <span>0</span>
     </div>
     <div class="zoom-control">
-      <input type="range" class="zoom-slider" min="50" max="150" step="5" :value="zoom" @input="$emit('updateZoom', Number($event.target.value))" />
-      <span class="zoom-label">{{ zoom }}%</span>
+      <input type="range" class="zoom-slider" min="50" max="150" step="5" :value="zoom" @input="localZoom = Number($event.target.value)" @change="$emit('updateZoom', Number($event.target.value))" />
+      <span class="zoom-label">{{ localZoom }}%</span>
     </div>
   </div>
 
@@ -44,7 +44,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   difficulty: { type: String, default: 'medium' },
@@ -54,6 +54,10 @@ const props = defineProps({
   zoom: { type: Number, default: 100 },
 })
 defineEmits(['selectDifficulty', 'togglePause', 'updateZoom'])
+
+const localZoom = ref(props.zoom)
+
+watch(() => props.zoom, (v) => { localZoom.value = v })
 
 function pad(n) { return String(n).padStart(2, '0') }
 
