@@ -71,6 +71,12 @@ function newGame(difficulty = state.difficulty) {
 }
 
 function selectCell(row, col) {
+  // 自动计算模式下，先清空上一格的笔记
+  if (state.isAutoCalc && state.selectedCell) {
+    const { row: prevRow, col: prevCol } = state.selectedCell
+    state.notes[prevRow][prevCol].clear()
+  }
+
   state.selectedCell = { row, col }
 
   // 擦除模式
@@ -138,7 +144,15 @@ function toggleEraseMode() {
 
 function toggleAutoCalc() {
   state.isAutoCalc = !state.isAutoCalc
-  if (!state.isAutoCalc) {
+  if (state.isAutoCalc) {
+    // 开启时立即显示当前格的候选数
+    if (state.selectedCell) {
+      const { row, col } = state.selectedCell
+      if (state.playerGrid[row][col] === 0) {
+        state.notes[row][col] = calcCandidates(row, col)
+      }
+    }
+  } else {
     // 关闭时清除当前格笔记
     if (state.selectedCell) {
       const { row, col } = state.selectedCell
