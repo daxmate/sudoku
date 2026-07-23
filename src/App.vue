@@ -181,6 +181,7 @@ onUnmounted(() => {
 <style scoped>
 .app {
   /* ==================== 浅色主题 ==================== */
+  --color-body-bg: #fff;
   --color-text: #1e293b;
   --color-text-muted: #64748b;
   --color-text-light: #94a3b8;
@@ -314,6 +315,7 @@ onUnmounted(() => {
 
 /* 深色变量覆盖（直接写值，不用中间变量） */
 .app.dark {
+  --color-body-bg: #0f172a;
   --color-text: #e2e8f0;
   --color-text-muted: #94a3b8;
   --color-text-light: #64748b;
@@ -454,7 +456,8 @@ h1 {
 }
 
 @media (max-width: 640px) {
-  .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; background: var(--color-surface-mobile); }
+  body { background: var(--color-body-bg); }
+  .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; background: var(--color-body-bg); }
   .container {
     padding: 0;
     border-radius: 0;
@@ -463,7 +466,7 @@ h1 {
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
-    background: var(--color-surface-mobile);
+    background: var(--color-body-bg);
   }
   h1 { padding: 8px 0 0; margin: 0; font-size: 1rem; letter-spacing: 2px; }
   .subtitle { display: none; }
