@@ -3,7 +3,10 @@
     <div class="container">
       <h1>数 独</h1>
       <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
-      <GameHeader />
+      <GameHeader
+        :difficulty="game.state.difficulty"
+        @select-difficulty="game.newGame($event)"
+      />
       <div class="board-row">
         <GameBoard />
         <div class="side-panel">

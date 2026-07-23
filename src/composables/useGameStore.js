@@ -145,6 +145,6 @@ export function useGameStore() {
     autoCalcCell,
     toggleAutoCalc,
     toggleAutoMark,
-    setAutoMark,
+    setAutoMarkFeature,
   }
 }

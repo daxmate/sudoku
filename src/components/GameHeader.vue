@@ -27,12 +27,19 @@
   </div>
 
   <div class="difficulty-wrap">
-    <button>简单</button>
-    <button class="active">中等</button>
-    <button>困难</button>
-    <button>专家</button>
+    <button :class="{ active: difficulty === 'easy' }" @click="$emit('selectDifficulty', 'easy')">简单</button>
+    <button :class="{ active: difficulty === 'medium' }" @click="$emit('selectDifficulty', 'medium')">中等</button>
+    <button :class="{ active: difficulty === 'hard' }" @click="$emit('selectDifficulty', 'hard')">困难</button>
+    <button :class="{ active: difficulty === 'expert' }" @click="$emit('selectDifficulty', 'expert')">专家</button>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  difficulty: { type: String, default: 'medium' },
+})
+defineEmits(['selectDifficulty'])
+</script>
 
 <style scoped>
 .game-header {
