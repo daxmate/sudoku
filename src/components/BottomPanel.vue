@@ -1,18 +1,6 @@
 <template>
   <div class="bottom-section">
     <div class="bottom-row">
-      <button
-        class="auto-mark-btn"
-        :class="{ disabled: !autoMarkEnabled }"
-        :title="autoMarkEnabled ? '全部标记' : '需要到设置中开启'"
-        @click="autoMarkEnabled ? $emit('toggleAutoMark') : null"
-      >
-        <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
-          <circle cx="15" cy="16" r="8.5" stroke="currentColor" stroke-width="1.5"/>
-          <rect x="13.5" y="6" width="3" height="3" rx=".6" stroke="currentColor" stroke-width="1.3"/>
-          <path d="M15 6q3-2 1-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        </svg>
-      </button>
       <button class="new-game-btn" @click="$emit('newGame')">新游戏</button>
     </div>
     <div class="leaderboard-row">
@@ -33,11 +21,7 @@
 </template>
 
 <script setup>
-defineProps({
-  autoMarkEnabled: Boolean,
-})
-
-defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggleAutoMark'])
+defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
 </script>
 
 <style scoped>
@@ -56,34 +40,6 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 4px;
-}
-
-.auto-mark-btn {
-  width: 100%;
-  aspect-ratio: 1;
-  border: none;
-  border-radius: 6px;
-  background: var(--panel-bg);
-  color: var(--panel-text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all .15s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,.06);
-}
-
-.auto-mark-btn:hover {
-  background: var(--panel-hover-bg);
-  color: var(--panel-mark-hover-text);
-}
-.auto-mark-btn.disabled {
-  opacity: 0.45;
-}
-.auto-mark-btn.disabled:hover {
-  background: var(--panel-bg);
-  color: var(--panel-text);
-  transform: none;
 }
 
 .new-game-btn {
@@ -108,13 +64,7 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
 
 @media (max-width: 640px) {
   .bottom-section { gap: 2px; }
-  .bottom-row {
-    display: flex;
-    gap: 4px;
-  }
-  .auto-mark-btn { width: 32px; aspect-ratio: auto; height: 32px; padding: 2px; flex-shrink: 0; }
-  .auto-mark-btn svg { width: 20px; height: 20px; }
-  .new-game-btn { font-size: .68rem; padding: 4px; min-height: 32px; flex: 1; }
+  .new-game-btn { font-size: .68rem; padding: 4px; min-height: 32px; }
   .lb-btn { font-size: .68rem; padding: 4px; min-height: 28px; }
   .icon-btn { width: 28px; height: 28px; padding: 4px; flex-shrink: 0; }
   .icon-btn svg { width: 14px; height: 14px; }

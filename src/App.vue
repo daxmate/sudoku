@@ -20,20 +20,20 @@
           <ActionButtons
             :note-active="game.state.isNoteMode"
             :auto-calc-enabled="game.state.isAutoCalc"
+            :auto-mark-enabled="game.state.autoMarkFeature"
             :hints-remaining="game.state.hintsRemaining"
             @erase="game.eraseCell()"
             @toggle-notes="game.toggleNoteMode()"
             @auto-calc="game.autoCalcCell()"
             @hint="game.useHint()"
+            @toggle-auto-mark="game.toggleAutoMark()"
           />
           <NumberPad :player-grid="game.state.playerGrid" :show-depletion="game.state.depletionFeature" @place="game.placeNumber($event)" />
           <BottomPanel
-            :auto-mark-enabled="game.state.autoMarkFeature"
             @open-settings="showSettings = true"
             @new-game="showConfirm = true"
             @open-leaderboard="showLeaderboard = true"
             @toggle-theme="toggleDarkMode"
-            @toggle-auto-mark="game.toggleAutoMark()"
           />
         </div>
       </div>
