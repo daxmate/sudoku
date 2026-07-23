@@ -1,5 +1,5 @@
 <template>
-  <div class="app" :class="{ dark: isDarkMode }" :style="{ zoom: game.state.zoom / 100 }">
+  <div class="app" :class="{ dark: isDarkMode }" :style="{ zoom: game.state.zoom / 100 }" tabindex="-1">
     <div class="container">
       <h1>数 独</h1>
       <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
@@ -125,11 +125,7 @@ const onKeydown = (e) => {
 onMounted(() => {
   game.newGame('medium')
   game.startTimer()
-  document.addEventListener('keydown', onKeydown)
-})
-
-onUnmounted(() => {
-  document.removeEventListener('keydown', onKeydown)
+  window.addEventListener('keydown', onKeydown)
 })
 </script>
 
