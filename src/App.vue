@@ -53,14 +53,14 @@
       :visible="showLeaderboard"
       @close="showLeaderboard = false"
     />
+
+      <Transition name="hint-toast">
+        <div v-if="game.state.hintMessage" class="hint-toast">
+          {{ game.state.hintMessage }}
+        </div>
+      </Transition>
     </div>
   </div>
-
-  <Transition name="hint-toast">
-    <div v-if="game.state.hintMessage" class="hint-toast">
-      {{ game.state.hintMessage }}
-    </div>
-  </Transition>
 </template>
 
 <script setup>
@@ -326,7 +326,7 @@ onMounted(() => {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 28px;
-  padding: 24px 28px 28px;
+  padding: 24px 28px 44px;
   box-shadow: var(--container-shadow);
   border: 1px solid rgba(255,255,255,.08);
   text-align: center;
@@ -371,10 +371,7 @@ h1 {
 
 /* 提示消息 Toast */
 .hint-toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 16px;
   background: var(--badge-bg);
   color: var(--badge-text);
   padding: 10px 24px;
@@ -382,18 +379,18 @@ h1 {
   font-size: 0.82rem;
   font-weight: 500;
   box-shadow: 0 4px 20px rgba(0,0,0,.15);
-  z-index: 1000;
   white-space: nowrap;
+  display: inline-block;
 }
 
 .hint-toast-enter-active { transition: all .3s ease-out; }
 .hint-toast-leave-active { transition: all .3s ease-in; }
 .hint-toast-enter-from {
   opacity: 0;
-  transform: translateX(-50%) translateY(16px);
+  transform: translateY(16px);
 }
 .hint-toast-leave-to {
   opacity: 0;
-  transform: translateX(-50%) translateY(16px);
+  transform: translateY(-16px);
 }
 </style>
