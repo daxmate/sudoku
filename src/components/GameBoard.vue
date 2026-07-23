@@ -14,6 +14,7 @@
         :hinted="cell.hinted"
         :line-complete="cell.lineComplete"
         :pop="cell.pop"
+        :shake="cell.shake"
         :notes="cell.notes"
         @select="selectCell(cell.row, cell.col)"
         :class="boxBorderClasses(idx)"
@@ -50,6 +51,7 @@ const cells = computed(() => {
       hinted: state.hintCell === `${row},${col}`,
       lineComplete: state.completedCells.has(`${row},${col}`),
       pop: state.popCell === `${row},${col}`,
+      shake: state.shakeCell === `${row},${col}`,
       notes: [...(state.notes[row]?.[col] || [])],
     }
   })

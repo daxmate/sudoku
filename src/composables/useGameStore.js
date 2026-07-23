@@ -35,6 +35,7 @@ const state = reactive({
   gameWon: false,
   completedCells: new Set(),
   popCell: null,
+  shakeCell: null,
   score: 0,
   streak: 0,
 })
@@ -88,6 +89,7 @@ function newGame(difficulty = state.difficulty) {
   state.gameWon = false
   state.completedCells = new Set()
   state.popCell = null
+  state.shakeCell = null
   state.score = 0
   state.streak = 0
   state.elapsedSeconds = 0
@@ -166,6 +168,8 @@ function placeNumber(num) {
     state.mistakes++
     state.streak = 0
     state.score = Math.max(0, state.score - 30)
+    state.shakeCell = `${row},${col}`
+    setTimeout(() => { if (state.shakeCell === `${row},${col}`) state.shakeCell = null }, 350)
     if (state.mistakes >= 3) {
       state.isGameOver = true
       state.gameWon = false

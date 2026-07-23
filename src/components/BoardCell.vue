@@ -2,7 +2,7 @@
   <div
     class="cell"
     :data-selected="selected"
-    :class="{ fixed, user, highlighted, 'same-number': sameNumber, error, hinted, 'line-complete': lineComplete, pop }"
+    :class="{ fixed, user, highlighted, 'same-number': sameNumber, error, hinted, 'line-complete': lineComplete, pop, shake }"
     @click="$emit('select')"
     role="button"
     :tabindex="0"
@@ -33,6 +33,7 @@ defineProps({
   error: Boolean,
   lineComplete: Boolean,
   pop: Boolean,
+  shake: Boolean,
   notes: { type: Array, default: () => [] },
 })
 
@@ -128,6 +129,18 @@ defineEmits(['select'])
   40%  { transform: scale(1.12); }
   70%  { transform: scale(0.95); }
   100% { transform: scale(1); }
+}
+
+.cell.shake {
+  animation: cellShake .35s ease;
+}
+
+@keyframes cellShake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(3px); }
 }
 
 .cell.line-complete {
