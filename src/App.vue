@@ -117,8 +117,8 @@ onMounted(() => {
   --action-erase-text: #b91c1c;
   --action-erase-hover-bg: #fef2f2;
   --action-erase-hover-text: #dc2626;
-  --action-notes-active-bg: #eef2ff;
-  --action-notes-active-text: #4f46e5;
+  --action-notes-active-bg: #6366f1;
+  --action-notes-active-text: #fff;
   --action-warning-text: #92400e;
   --action-warning-hover-bg: #fef3c7;
   --action-warning-hover-text: #d97706;
@@ -232,8 +232,8 @@ onMounted(() => {
   --action-erase-text: #b85c5c;
   --action-erase-hover-bg: #450a0a;
   --action-erase-hover-text: #fca5a5;
-  --action-notes-active-bg: #312e81;
-  --action-notes-active-text: #a5b4fc;
+  --action-notes-active-bg: #4f46e5;
+  --action-notes-active-text: #fff;
   --action-warning-text: #f59e0b;
   --action-warning-hover-bg: #451a03;
   --action-warning-hover-text: #fbbf24;

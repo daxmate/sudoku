@@ -84,7 +84,11 @@ defineEmits(['erase', 'toggleNotes'])
 .erase-btn { color: var(--action-erase-text); }
 .erase-btn:hover { background: var(--action-erase-hover-bg) !important; color: var(--action-erase-hover-text) !important; }
 
-.notes-toggle.active { background: var(--action-notes-active-bg); color: var(--action-notes-active-text); }
+.notes-toggle.active {
+  background: var(--action-notes-active-bg, #6366f1);
+  color: var(--action-notes-active-text, #fff);
+  box-shadow: 0 0 0 1.5px #4f46e5;
+}
 
 .warning { color: var(--action-warning-text); }
 .warning:hover { background: var(--action-warning-hover-bg) !important; color: var(--action-warning-hover-text) !important; }
