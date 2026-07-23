@@ -41,9 +41,9 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
-const props = defineProps({ visible: Boolean })
+defineProps({ visible: Boolean })
 defineEmits(['close'])
 
 const filters = [
@@ -82,7 +82,7 @@ function refresh() {
   ]
 }
 
-watch(() => props.visible, (v) => { if (v) refresh() })
+onMounted(() => refresh())
 
 const displayEntries = computed(() => {
   const all = entries.value

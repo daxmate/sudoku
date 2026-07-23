@@ -74,6 +74,7 @@
     />
     <LeaderboardOverlay
       :visible="showLeaderboard"
+      :key="'lb-' + showLeaderboard"
       @close="showLeaderboard = false"
     />
   </div>
