@@ -42,6 +42,7 @@
       :visible="game.state.isGameOver"
       :won="game.state.gameWon"
       @restart="game.newGame()"
+      @view-leaderboard="showLeaderboard = true"
     />
 
     <Transition name="hint-toast">

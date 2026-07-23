@@ -11,6 +11,7 @@
       </div>
       <div class="overlay-actions">
         <button ref="restartBtn" class="overlay-btn overlay-confirm" @click="$emit('restart')">再来一局</button>
+        <button class="overlay-btn overlay-secondary" @click="$emit('view-leaderboard')">排行榜</button>
       </div>
     </div>
   </div>
@@ -25,7 +26,7 @@ const props = defineProps({
   won: Boolean,
 })
 
-defineEmits(['restart'])
+defineEmits(['restart', 'view-leaderboard'])
 
 const restartBtn = ref(null)
 
@@ -163,5 +164,14 @@ const scoreDetail = computed(() => {
 }
 .overlay-confirm:hover {
   background: var(--overlay-btn-hover-bg);
+}
+
+.overlay-secondary {
+  background: var(--overlay-cancel-bg);
+  color: var(--overlay-cancel-text);
+}
+.overlay-secondary:hover {
+  background: var(--overlay-cancel-hover-bg);
+  color: var(--overlay-cancel-hover-text);
 }
 </style>
