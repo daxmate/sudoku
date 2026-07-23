@@ -37,6 +37,7 @@ const state = reactive({
   isGameOver: false,
   gameWon: false,
   completedCells: new Set(),
+  vimMode: false,
   popCell: null,
   floatingScores: [],
   _scoreId: 0,
@@ -277,6 +278,10 @@ function setAutoMarkFeature(on) {
     state.isAutoMark = false
     state.notes = initNotes()
   }
+}
+
+function toggleVimMode() {
+  state.vimMode = !state.vimMode
 }
 
 function toggleDepletion() {
@@ -537,6 +542,7 @@ export function useGameStore() {
     toggleAutoCalc,
     toggleAutoMark,
     setAutoMarkFeature,
+    toggleVimMode,
     toggleDepletion,
     toggleAnim,
     startTimer,

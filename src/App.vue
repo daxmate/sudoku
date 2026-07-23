@@ -59,12 +59,14 @@
       :depletion="game.state.depletionFeature"
       :sound="game.state.soundOn"
       :anim="game.state.isAnimOn"
+      :vim-mode="game.state.vimMode"
       @close="showSettings = false"
       @toggle-auto-calc="game.toggleAutoCalc($event)"
       @toggle-auto-mark="game.setAutoMarkFeature($event)"
       @toggle-depletion="game.toggleDepletion()"
       @toggle-sound="game.toggleSound()"
       @toggle-anim="game.toggleAnim()"
+      @toggle-vim="game.toggleVimMode()"
     />
     <ConfirmOverlay
       :visible="showConfirm"
@@ -118,6 +120,18 @@ const onKeydown = (e) => {
   } else if (k === 'Backspace' || k === 'Delete') {
     e.preventDefault()
     game.eraseCell()
+  } else if (k === 'h' || k === 'j' || k === 'k' || k === 'l') {
+    if (game.state.vimMode || e.ctrlKey) {
+      e.preventDefault()
+      const sel = game.state.selectedCell
+      let r = sel ? sel.row : 0
+      let c = sel ? sel.col : 0
+      if (k === 'h') c = Math.max(0, c - 1)
+      if (k === 'j') r = Math.min(8, r + 1)
+      if (k === 'k') r = Math.max(0, r - 1)
+      if (k === 'l') c = Math.min(8, c + 1)
+      game.selectCell(r, c)
+    }
   } else if (k.startsWith('Arrow')) {
     e.preventDefault()
     const sel = game.state.selectedCell

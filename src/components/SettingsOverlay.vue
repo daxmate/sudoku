@@ -37,6 +37,13 @@
           <span class="toggle-track"></span>
         </label>
       </div>
+      <div class="setting-row">
+        <label>Vim 方向键 (h/j/k/l)</label>
+        <label class="toggle">
+          <input type="checkbox" :checked="vimMode" @change="$emit('toggleVim')" />
+          <span class="toggle-track"></span>
+        </label>
+      </div>
       <div class="overlay-actions">
         <button class="overlay-btn overlay-confirm" @click="$emit('close')">完成</button>
       </div>
@@ -52,8 +59,9 @@ defineProps({
   depletion: Boolean,
   sound: Boolean,
   anim: Boolean,
+  vimMode: Boolean,
 })
-defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleSound', 'toggleAnim'])
+defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleSound', 'toggleAnim', 'toggleVim'])
 </script>
 
 <style scoped>
