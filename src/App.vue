@@ -37,6 +37,19 @@
         </div>
       </div>
 
+    <GameOverOverlay
+      :visible="game.state.isGameOver"
+      :won="game.state.gameWon"
+      @restart="game.newGame()"
+    />
+
+    <Transition name="hint-toast">
+        <div v-if="game.state.hintMessage" class="hint-toast">
+          {{ game.state.hintMessage }}
+        </div>
+      </Transition>
+    </div>
+
     <SettingsOverlay
       :visible="showSettings"
       :auto-calc="game.state.isAutoCalc"
@@ -51,22 +64,10 @@
       @confirm="startNewGame"
       @cancel="showConfirm = false"
     />
-    <GameOverOverlay
-      :visible="game.state.isGameOver"
-      :won="game.state.gameWon"
-      @restart="game.newGame()"
-    />
     <LeaderboardOverlay
       :visible="showLeaderboard"
       @close="showLeaderboard = false"
     />
-
-      <Transition name="hint-toast">
-        <div v-if="game.state.hintMessage" class="hint-toast">
-          {{ game.state.hintMessage }}
-        </div>
-      </Transition>
-    </div>
   </div>
 </template>
 

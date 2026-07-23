@@ -31,13 +31,15 @@ watch(() => props.visible, (v) => {
 
 <style scoped>
 .overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: rgba(0,0,0,.35);
-  z-index: 1000;
+  border-radius: 28px;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(4px);
 }
 
 .overlay-box {
