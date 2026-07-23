@@ -2,6 +2,10 @@
   <div
     class="cell"
     :class="{ fixed, selected, highlighted, 'same-number': sameNumber, error }"
+    @click="$emit('select')"
+    role="button"
+    :tabindex="0"
+    @keydown.enter="$emit('select')"
   >
     <template v-if="value !== 0">
       <span class="cell-value">{{ value }}</span>
@@ -23,6 +27,8 @@ defineProps({
   sameNumber: Boolean,
   error: Boolean,
 })
+
+defineEmits(['select'])
 </script>
 
 <style scoped>

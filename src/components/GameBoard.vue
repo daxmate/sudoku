@@ -6,6 +6,10 @@
         :key="idx"
         :value="cell.value"
         :fixed="cell.fixed"
+        :selected="cell.selected"
+        :highlighted="cell.highlighted"
+        :same-number="cell.sameNumber"
+        @select="selectCell(cell.row, cell.col)"
         :class="boxBorderClasses(idx)"
       />
     </div>
@@ -17,18 +21,27 @@ import { computed } from 'vue'
 import { useGameStore } from '../composables/useGameStore.js'
 import BoardCell from './BoardCell.vue'
 
-const { state } = useGameStore()
+const { state, selectCell } = useGameStore()
 
-const cells = computed(() =>
-  state.playerGrid.flat().map((value, idx) => {
-    const col = idx % 9
+const cells = computed(() => {
+  const grid = state.playerGrid
+  const sel = state.selectedCell
+  const selVal = sel ? grid[sel.row]?.[sel.col] : 0
+
+  return grid.flat().map((value, idx) => {
     const row = Math.floor(idx / 9)
+    const col = idx % 9
     return {
-      value,
+      row, col, value,
       fixed: state.puzzle[row]?.[col] !== 0,
+      selected: sel?.row === row && sel?.col === col,
+      highlighted: sel && (row === sel.row || col === sel.col ||
+        (Math.floor(row / 3) === Math.floor(sel.row / 3) &&
+         Math.floor(col / 3) === Math.floor(sel.col / 3))),
+      sameNumber: selVal !== 0 && value !== 0 && value === selVal,
     }
   })
-)
+})
 
 function boxBorderClasses(idx) {
   const col = idx % 9
