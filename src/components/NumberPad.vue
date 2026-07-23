@@ -101,14 +101,14 @@ const count = computed(() => {
 .dot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: 1.5px;
   background: var(--numpad-text);
-  opacity: .15;
+  opacity: .12;
   transition: opacity .15s ease;
 }
 
 .dot.filled {
-  opacity: .55;
+  opacity: .6;
 }
 
 .depleted .dot.filled {
