@@ -104,6 +104,11 @@ const isDarkMode = ref(false)
 
 function toggleDarkMode() {
   isDarkMode.value = !isDarkMode.value
+  const isMobile = window.innerWidth <= 640
+  if (isMobile) {
+    document.body.style.background = isDarkMode.value ? '#0f172a' : '#fff'
+    document.body.style.backgroundImage = 'none'
+  }
 }
 
 const showSettings = ref(false)
@@ -149,6 +154,10 @@ const onKeydown = (e) => {
 }
 
 onMounted(() => {
+  if (window.innerWidth <= 640) {
+    document.body.style.background = '#fff'
+    document.body.style.backgroundImage = 'none'
+  }
   if (game.hasSavedGame()) {
     const saved = JSON.parse(localStorage.getItem('sudoku-saved-game'))
     game.restoreGame(saved)
@@ -162,6 +171,8 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
+  document.body.style.background = ''
+  document.body.style.backgroundImage = ''
 })
 </script>
 
