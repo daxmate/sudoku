@@ -326,7 +326,7 @@ onMounted(() => {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-radius: 28px;
-  padding: 24px 28px 44px;
+  padding: 24px 28px 78px;
   box-shadow: var(--container-shadow);
   border: 1px solid rgba(255,255,255,.08);
   text-align: center;
