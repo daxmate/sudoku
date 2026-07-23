@@ -16,15 +16,15 @@
           {{ f.label }}
         </button>
       </div>
-      <div class="lb-stats" v-if="stats">
-        <div class="lb-stat" v-for="s in stats" :key="s.label">
+      <div class="lb-stats" v-if="allStats.length">
+        <div class="lb-stat" v-for="s in allStats" :key="s.label">
           <div class="lb-stat-value" :class="{ best: s.best }">{{ s.value }}</div>
           <div class="lb-stat-label">{{ s.label }}</div>
         </div>
       </div>
       <div class="lb-list">
-        <p v-if="filteredEntries.length === 0" class="lb-empty">暂无游戏记录</p>
-        <div v-for="(entry, idx) in filteredEntries" :key="idx" class="lb-entry">
+        <p v-if="displayEntries.length === 0" class="lb-empty">暂无游戏记录</p>
+        <div v-for="(entry, idx) in displayEntries" :key="idx" class="lb-entry">
           <div class="lb-rank" :class="rankClass(idx)">{{ idx + 1 }}</div>
           <div class="lb-info">
             <div class="lb-score" :class="{ top1: idx === 0 }">{{ entry.score != null ? entry.score + ' 分' : entry.time }}</div>
@@ -41,9 +41,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, watch, computed } from 'vue'
 
-defineProps({ visible: Boolean })
+const props = defineProps({ visible: Boolean })
 defineEmits(['close'])
 
 const filters = [
@@ -55,6 +55,8 @@ const filters = [
 ]
 
 const activeFilter = ref('all')
+const entries = ref([])
+const allStats = ref([])
 
 function loadHistory() {
   try {
@@ -62,15 +64,7 @@ function loadHistory() {
   } catch (e) { return [] }
 }
 
-const allEntries = computed(() => loadHistory())
-
-const filteredEntries = computed(() => {
-  const all = loadHistory()
-  if (activeFilter.value === 'all') return all
-  return all.filter(e => e.difficulty === activeFilter.value)
-})
-
-const stats = computed(() => {
+function refresh() {
   const all = loadHistory()
   const won = all.filter(e => e.won)
   const avgTime = all.length > 0 ? Math.round(all.reduce((s, e) => s + e.seconds, 0) / all.length) : 0
@@ -79,12 +73,21 @@ const stats = computed(() => {
     const sec = s % 60
     return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
   }
-  return [
+  entries.value = all
+  allStats.value = [
     { label: '总局数', value: all.length, best: false },
     { label: '胜场', value: won.length, best: true },
     { label: '胜率', value: all.length > 0 ? Math.round(won.length / all.length * 100) + '%' : '-' },
     { label: '平均用时', value: all.length > 0 ? fmt(avgTime) : '-' },
   ]
+}
+
+watch(() => props.visible, (v) => { if (v) refresh() })
+
+const displayEntries = computed(() => {
+  const all = entries.value
+  if (activeFilter.value === 'all') return all
+  return all.filter(e => e.difficulty === activeFilter.value)
 })
 
 function diffLabel(key) {
