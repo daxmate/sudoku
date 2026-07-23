@@ -108,11 +108,15 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
 
 @media (max-width: 640px) {
   .bottom-section { gap: 2px; }
-  .bottom-row { gap: 2px; }
-  .new-game-btn, .lb-btn { font-size: .68rem; padding: 4px; min-height: 28px; }
-  .auto-mark-btn { padding: 2px; }
+  .bottom-row {
+    display: flex;
+    gap: 4px;
+  }
+  .auto-mark-btn { width: 32px; aspect-ratio: auto; height: 32px; padding: 2px; flex-shrink: 0; }
   .auto-mark-btn svg { width: 20px; height: 20px; }
-  .icon-btn { width: 28px; padding: 4px; }
+  .new-game-btn { font-size: .68rem; padding: 4px; min-height: 32px; flex: 1; }
+  .lb-btn { font-size: .68rem; padding: 4px; min-height: 28px; }
+  .icon-btn { width: 28px; height: 28px; padding: 4px; flex-shrink: 0; }
   .icon-btn svg { width: 14px; height: 14px; }
 }
 
