@@ -431,15 +431,23 @@ function pushFloatingScore(row, col, text, color) {
   }, 800)
 }
 
+function calcFinalScore() {
+  const m = DIFF_MULT[state.difficulty] || 1
+  const base = Math.round(state.score * m)
+  const bonus = 100 * m
+  const noHint = (3 - state.hintsRemaining) === 0 ? 200 * m : 0
+  const noError = state.mistakes === 0 ? 150 * m : 0
+  const timeBonus = Math.max(0, Math.round((1800 - state.elapsedSeconds) * 0.5 * m))
+  return base + bonus + noHint + noError + timeBonus
+}
+
 function saveGameHistory(won) {
-  console.log('saveGameHistory called, won:', won, 'score:', state.score, 'history after save:', (() => { try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]').length } catch(e) { return 'err' } })())
+  const totalScore = won ? calcFinalScore() : 0
   const fmt = (s) => {
     const m = Math.floor(s / 60)
     const sec = s % 60
     return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
   }
-  const m = DIFF_MULT[state.difficulty] || 1
-  const totalScore = won ? state.score : 0
   try {
     const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
     h.unshift({

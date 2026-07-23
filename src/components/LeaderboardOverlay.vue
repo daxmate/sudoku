@@ -86,8 +86,11 @@ onMounted(() => { console.log('LB mounted, refreshing...'); refresh(); console.l
 
 const displayEntries = computed(() => {
   const all = entries.value
-  if (activeFilter.value === 'all') return all
-  return all.filter(e => e.difficulty === activeFilter.value)
+  // 只显示胜场，按分数降序排列，同分按用时升序
+  const filtered = (activeFilter.value === 'all' ? all : all.filter(e => e.difficulty === activeFilter.value))
+    .filter(e => e.won && e.score > 0)
+    .sort((a, b) => b.score - a.score || a.seconds - b.seconds)
+  return filtered
 })
 
 function diffLabel(key) {
