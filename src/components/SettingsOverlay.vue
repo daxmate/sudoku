@@ -24,6 +24,13 @@
         </label>
       </div>
       <div class="setting-row">
+        <label>音效</label>
+        <label class="toggle">
+          <input type="checkbox" :checked="sound" @change="$emit('toggleSound')" />
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <div class="setting-row">
         <label>动画</label>
         <label class="toggle">
           <input type="checkbox" :checked="anim" @change="$emit('toggleAnim')" />
@@ -43,9 +50,10 @@ defineProps({
   autoCalc: Boolean,
   autoMark: Boolean,
   depletion: Boolean,
+  sound: Boolean,
   anim: Boolean,
 })
-defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleAnim'])
+defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleSound', 'toggleAnim'])
 </script>
 
 <style scoped>

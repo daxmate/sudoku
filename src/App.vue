@@ -56,11 +56,13 @@
       :auto-calc="game.state.isAutoCalc"
       :auto-mark="game.state.autoMarkFeature"
       :depletion="game.state.depletionFeature"
+      :sound="game.state.soundOn"
       :anim="game.state.isAnimOn"
       @close="showSettings = false"
       @toggle-auto-calc="game.toggleAutoCalc($event)"
       @toggle-auto-mark="game.setAutoMarkFeature($event)"
       @toggle-depletion="game.toggleDepletion()"
+      @toggle-sound="game.toggleSound()"
       @toggle-anim="game.toggleAnim()"
     />
     <ConfirmOverlay

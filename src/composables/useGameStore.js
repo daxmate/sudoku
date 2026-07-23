@@ -1,5 +1,6 @@
 import { reactive, ref } from 'vue'
 import SudokuEngine from '../utils/sudokuEngine.js'
+import { playCorrectSound, playErrorSound, playCompletionSound, playVictorySound } from '../utils/sound.js'
 
 const DIFF_MULT = { easy: 1, medium: 1.5, hard: 2.5, expert: 4 }
 
@@ -24,6 +25,7 @@ const state = reactive({
   autoMarkFeature: false,
   depletionFeature: false,
   isAnimOn: true,
+  soundOn: true,
   mistakes: 0,
   errors: new Set(),
   elapsedSeconds: 0,
@@ -143,6 +145,7 @@ function checkAndAnimateLineCompletion(r, c) {
 
   if (keys.length) {
     keys.forEach(k => state.completedCells.add(k))
+    if (state.soundOn) playCompletionSound()
     setTimeout(() => keys.forEach(k => state.completedCells.delete(k)), 700)
   }
 }
@@ -174,6 +177,7 @@ function placeNumber(num) {
       state.shakeCell = `${row},${col}`
       setTimeout(() => { if (state.shakeCell === `${row},${col}`) state.shakeCell = null }, 350)
     }
+    if (state.soundOn) playErrorSound()
     if (state.mistakes >= 3) {
       state.isGameOver = true
       state.gameWon = false
@@ -187,6 +191,7 @@ function placeNumber(num) {
     const sm = state.streak >= 5 ? 3 : state.streak >= 3 ? 2 : state.streak >= 2 ? 1.5 : 1
     const m = DIFF_MULT[state.difficulty] || 1
     state.score += Math.round(10 * sm * m)
+    if (state.soundOn) playCorrectSound()
     checkAndAnimateLineCompletion(row, col)
     if (state.isAnimOn) {
       state.popCell = `${row},${col}`
@@ -197,6 +202,7 @@ function placeNumber(num) {
       state.isGameOver = true
       state.gameWon = true
       stopTimer()
+      if (state.soundOn) playVictorySound()
       saveGameHistory(true)
       clearSavedGame()
     }
@@ -271,6 +277,10 @@ function toggleDepletion() {
 
 function toggleAnim() {
   state.isAnimOn = !state.isAnimOn
+}
+
+function toggleSound() {
+  state.soundOn = !state.soundOn
 }
 
 let timerInterval = null
@@ -447,6 +457,7 @@ function saveGame() {
     autoMarkFeature: state.autoMarkFeature,
     depletionFeature: state.depletionFeature,
     isAnimOn: state.isAnimOn,
+    soundOn: state.soundOn,
     zoom: state.zoom,
   }
   try { localStorage.setItem(SAVE_KEY, JSON.stringify(data)) } catch (e) { /* ignore */ }
@@ -467,6 +478,7 @@ function restoreGame(saved) {
   state.autoMarkFeature = saved.autoMarkFeature
   state.depletionFeature = saved.depletionFeature || false
   state.isAnimOn = saved.isAnimOn !== false
+  state.soundOn = saved.soundOn !== false
   state.zoom = saved.zoom || 100
   state.errors.clear()
   state.selectedCell = null
