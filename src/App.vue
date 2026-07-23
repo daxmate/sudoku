@@ -448,8 +448,8 @@ h1 {
 
 .board-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
+  align-items: stretch;
   gap: 14px;
 }
 
@@ -457,19 +457,21 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 100%;
-  max-width: 432px;
+  flex: 1;
+  min-width: 140px;
+  max-width: 210px;
 }
 
-@media (min-width: 641px) {
+@media (max-width: 640px) {
   .board-row {
-    flex-direction: row;
-    align-items: stretch;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
   .side-panel {
-    flex: 1;
-    min-width: 140px;
-    max-width: 210px;
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
   }
 }
 

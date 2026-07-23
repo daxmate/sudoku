@@ -95,10 +95,18 @@ function boxBorderClasses(idx) {
   border: 2px solid var(--board-border);
   border-radius: 10px;
   overflow: hidden;
-  width: min(432px, 100%);
-  box-sizing: border-box;
-  aspect-ratio: 1;
+  width: 432px;
+  height: 432px;
   box-shadow: var(--board-shadow);
+}
+
+@media (max-width: 640px) {
+  .board {
+    width: min(432px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+    box-sizing: border-box;
+  }
 }
 
 .float-score {
