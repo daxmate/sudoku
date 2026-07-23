@@ -50,6 +50,7 @@ defineEmits(['select'])
   user-select: none;
   position: relative;
   transition: background .1s ease, color .1s ease;
+  outline: none;
 }
 
 .cell.fixed { color: var(--cell-fixed); }
