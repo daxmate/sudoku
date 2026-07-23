@@ -117,7 +117,6 @@ function checkWin() {
 }
 
 function checkAndAnimateLineCompletion(r, c) {
-  if (!state.isAnimOn) return
   const g = state.playerGrid
   const keys = []
 
@@ -144,9 +143,11 @@ function checkAndAnimateLineCompletion(r, c) {
   }
 
   if (keys.length) {
-    keys.forEach(k => state.completedCells.add(k))
+    if (state.isAnimOn) {
+      keys.forEach(k => state.completedCells.add(k))
+      setTimeout(() => keys.forEach(k => state.completedCells.delete(k)), 700)
+    }
     if (state.soundOn) playCompletionSound()
-    setTimeout(() => keys.forEach(k => state.completedCells.delete(k)), 700)
   }
 }
 
