@@ -124,6 +124,15 @@ function toggleAutoMark() {
   }
 }
 
+function setAutoMark(on) {
+  state.isAutoMark = on
+  if (on) {
+    refreshAutoMark()
+  } else {
+    state.notes = initNotes()
+  }
+}
+
 export function useGameStore() {
   return {
     state,
@@ -135,5 +144,6 @@ export function useGameStore() {
     autoCalcCell,
     toggleAutoCalc,
     toggleAutoMark,
+    setAutoMark,
   }
 }

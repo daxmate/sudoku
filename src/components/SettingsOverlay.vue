@@ -10,6 +10,13 @@
         </label>
       </div>
       <div class="setting-row">
+        <label>全部标记</label>
+        <label class="toggle">
+          <input type="checkbox" :checked="autoMark" @change="$emit('toggleAutoMark', $event.target.checked)" />
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <div class="setting-row">
         <label>音效</label>
         <label class="toggle">
           <input type="checkbox" checked />
@@ -34,8 +41,9 @@
 defineProps({
   visible: Boolean,
   autoCalc: Boolean,
+  autoMark: Boolean,
 })
-defineEmits(['close', 'toggleAutoCalc'])
+defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark'])
 </script>
 
 <style scoped>
