@@ -102,31 +102,30 @@ const count = computed(() => {
 
 .num-dots {
   position: absolute;
+  inset: 0;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  width: 28px;
+  gap: 3px;
+  padding: 5px;
   z-index: 0;
 }
 
 .dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 1.5px;
+  border-radius: 2px;
   background: var(--numpad-text);
-  opacity: .06;
+  opacity: .04;
   transition: opacity .15s ease;
 }
 
 .dot.filled {
-  opacity: .25;
+  opacity: .15;
 }
 
 .depleted .dot {
-  opacity: .02;
+  opacity: .01;
 }
 
 .depleted .dot.filled {
-  opacity: .08;
+  opacity: .05;
 }
 </style>
