@@ -3,6 +3,13 @@
     <div class="overlay-box">
       <h3>设置</h3>
       <div class="setting-row">
+        <label>自动计算</label>
+        <label class="toggle">
+          <input type="checkbox" :checked="autoCalc" @change="$emit('toggleAutoCalc', $event.target.checked)" />
+          <span class="toggle-track"></span>
+        </label>
+      </div>
+      <div class="setting-row">
         <label>音效</label>
         <label class="toggle">
           <input type="checkbox" checked />
@@ -26,8 +33,9 @@
 <script setup>
 defineProps({
   visible: Boolean,
+  autoCalc: Boolean,
 })
-defineEmits(['close'])
+defineEmits(['close', 'toggleAutoCalc'])
 </script>
 
 <style scoped>

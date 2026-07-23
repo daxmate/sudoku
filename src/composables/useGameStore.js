@@ -9,6 +9,7 @@ const state = reactive({
   selectedCell: null,
   notes: [],
   isNoteMode: false,
+  isAutoCalc: false,
   isAutoMark: false,
 })
 
@@ -58,6 +59,11 @@ function newGame(difficulty = state.difficulty) {
 
 function selectCell(row, col) {
   state.selectedCell = { row, col }
+
+  // 自动计算设置开启时，自动显示候选
+  if (state.isAutoCalc && state.playerGrid[row][col] === 0) {
+    state.notes[row][col] = calcCandidates(row, col)
+  }
 }
 
 function placeNumber(num) {
@@ -98,15 +104,12 @@ function toggleNoteMode() {
   state.isNoteMode = !state.isNoteMode
 }
 
-function autoCalcCell() {
-  if (!state.selectedCell) return
-  const { row, col } = state.selectedCell
-  if (state.playerGrid[row][col] !== 0) return
-  // 如果该格已有候选数就清掉，否则计算
-  if (state.notes[row][col].size > 0) {
-    state.notes[row][col].clear()
-  } else {
-    state.notes[row][col] = calcCandidates(row, col)
+function toggleAutoCalc(on) {
+  state.isAutoCalc = on
+  if (on && state.selectedCell) {
+    const { row, col } = state.selectedCell
+    if (state.playerGrid[row][col] === 0)
+      state.notes[row][col] = calcCandidates(row, col)
   }
 }
 
@@ -127,7 +130,7 @@ export function useGameStore() {
     placeNumber,
     eraseCell,
     toggleNoteMode,
-    autoCalcCell,
+    toggleAutoCalc,
     toggleAutoMark,
   }
 }

@@ -11,7 +11,6 @@
             :note-active="game.state.isNoteMode"
             @erase="game.eraseCell()"
             @toggle-notes="game.toggleNoteMode()"
-            @auto-calc="game.autoCalcCell()"
           />
           <NumberPad @place="game.placeNumber($event)" />
           <BottomPanel
@@ -25,7 +24,12 @@
         </div>
       </div>
 
-    <SettingsOverlay :visible="showSettings" @close="showSettings = false" />
+    <SettingsOverlay
+      :visible="showSettings"
+      :auto-calc="game.state.isAutoCalc"
+      @close="showSettings = false"
+      @toggle-auto-calc="game.toggleAutoCalc($event)"
+    />
     <ConfirmOverlay
       :visible="showConfirm"
       message="确定要开始新游戏吗？当前进度将丢失。"
