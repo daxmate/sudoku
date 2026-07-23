@@ -14,7 +14,7 @@
 
     <button
       class="auto-calc-btn"
-      :class="{ active: autoCalcEnabled, disabled: !autoCalcEnabled }"
+      :class="{ disabled: !autoCalcEnabled }"
       :title="autoCalcEnabled ? '自动计算当前格候选数' : '需要到设置中开启'"
       @click="autoCalcEnabled ? $emit('autoCalc') : null"
     >
@@ -89,7 +89,6 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc'])
 
 .erase-btn { color: var(--action-erase-text); }
 .notes-toggle.active { color: var(--action-notes-active-text); }
-.auto-calc-btn.active { color: var(--action-notes-active-text); }
 .auto-calc-btn.disabled { opacity: 0.45; }
 .auto-calc-btn.disabled:hover { transform: none; box-shadow: none; background: var(--action-bg); color: var(--action-text); cursor: default; }
 .warning { color: var(--action-warning-text); }
