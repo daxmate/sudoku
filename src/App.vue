@@ -9,7 +9,7 @@
         <div class="side-panel">
           <ActionButtons />
           <NumberPad />
-          <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" />
+          <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" @toggle-theme="toggleDarkMode" />
         </div>
       </div>
 
@@ -40,6 +40,11 @@ import NumberPad from './components/NumberPad.vue'
 import BottomPanel from './components/BottomPanel.vue'
 
 const isDarkMode = ref(false)
+
+function toggleDarkMode() {
+  isDarkMode.value = !isDarkMode.value
+}
+
 const showSettings = ref(false)
 const showConfirm = ref(false)
 const showLeaderboard = ref(false)

@@ -15,7 +15,7 @@
     <!-- 底部按钮行：排行榜 + 主题 + 设置 -->
     <div class="leaderboard-row">
       <button class="lb-btn" @click="$emit('openLeaderboard')">排行榜</button>
-      <button class="icon-btn" title="切换暗色主题">
+      <button class="icon-btn" title="切换暗色主题" @click="$emit('toggleTheme')">
         <svg viewBox="0 0 16 16" width="16" height="16" fill="none">
           <path d="M14 8.79A6.5 6.5 0 117.21 2 5 5 0 0014 8.79z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
         </svg>
@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-defineEmits(['openSettings', 'newGame', 'openLeaderboard'])
+defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
 </script>
 
 <style scoped>
