@@ -125,6 +125,8 @@ function placeNumber(num) {
       state.isGameOver = true
       state.gameWon = false
       stopTimer()
+      saveGameHistory(false)
+      clearSavedGame()
     }
   } else {
     state.errors.delete(errKey)
@@ -133,9 +135,11 @@ function placeNumber(num) {
       state.isGameOver = true
       state.gameWon = true
       stopTimer()
+      saveGameHistory(true)
+      clearSavedGame()
     }
   }
-  saveGame()
+  if (!state.isGameOver) saveGame()
 }
 
 function clearNotesForNumber(num, row, col) {
@@ -326,6 +330,29 @@ function useHint() {
 }
 
 const SAVE_KEY = 'sudoku-saved-game'
+const HISTORY_KEY = 'sudoku-history'
+
+function saveGameHistory(won) {
+  const fmt = (s) => {
+    const m = Math.floor(s / 60)
+    const sec = s % 60
+    return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+  }
+  try {
+    const h = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]')
+    h.unshift({
+      date: new Date().toISOString(),
+      difficulty: state.difficulty,
+      time: fmt(state.elapsedSeconds),
+      seconds: state.elapsedSeconds,
+      mistakes: state.mistakes,
+      hints: 3 - state.hintsRemaining,
+      won,
+    })
+    if (h.length > 50) h.length = 50
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(h))
+  } catch (e) { /* ignore */ }
+}
 
 function saveGame() {
   if (state.isGameOver) return
@@ -399,6 +426,7 @@ export function useGameStore() {
     togglePause,
     setZoom,
     saveGame,
+    saveGameHistory,
     hasSavedGame,
     restoreGame,
     clearSavedGame,

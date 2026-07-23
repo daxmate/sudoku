@@ -27,10 +27,10 @@
         <div v-for="(entry, idx) in filteredEntries" :key="idx" class="lb-entry">
           <div class="lb-rank" :class="rankClass(idx)">{{ idx + 1 }}</div>
           <div class="lb-info">
-            <div class="lb-score" :class="{ top1: idx === 0 }">{{ entry.score }} 分</div>
+            <div class="lb-score" :class="{ top1: idx === 0 }">{{ entry.time }}</div>
             <div class="lb-meta">
               <span class="lb-diff">{{ diffLabel(entry.difficulty) }}</span>
-              {{ entry.date }}
+              {{ fmtDate(entry.date) }}
             </div>
           </div>
           <div class="lb-time">{{ entry.time }}</div>
@@ -56,30 +56,45 @@ const filters = [
 
 const activeFilter = ref('all')
 
-const allEntries = [
-  { score: 2850, difficulty: 'expert', time: '12:34', date: '7/20' },
-  { score: 2400, difficulty: 'hard', time: '08:15', date: '7/19' },
-  { score: 2100, difficulty: 'medium', time: '06:42', date: '7/21' },
-  { score: 1800, difficulty: 'easy', time: '04:30', date: '7/18' },
-  { score: 1650, difficulty: 'medium', time: '07:10', date: '7/17' },
-  { score: 1500, difficulty: 'hard', time: '09:55', date: '7/16' },
-  { score: 1200, difficulty: 'easy', time: '05:20', date: '7/15' },
-]
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('sudoku-history') || '[]')
+  } catch (e) { return [] }
+}
+
+const allEntries = computed(() => loadHistory())
 
 const filteredEntries = computed(() => {
-  if (activeFilter.value === 'all') return allEntries
-  return allEntries.filter(e => e.difficulty === activeFilter.value)
+  const all = loadHistory()
+  if (activeFilter.value === 'all') return all
+  return all.filter(e => e.difficulty === activeFilter.value)
 })
 
-const stats = computed(() => [
-  { label: '总局数', value: allEntries.length, best: false },
-  { label: '最高分', value: Math.max(...allEntries.map(e => e.score)), best: true },
-  { label: '胜率', value: '100%', best: false },
-  { label: '平均用时', value: '07:44', best: false },
-])
+const stats = computed(() => {
+  const all = loadHistory()
+  const won = all.filter(e => e.won)
+  const avgTime = all.length > 0 ? Math.round(all.reduce((s, e) => s + e.seconds, 0) / all.length) : 0
+  const fmt = (s) => {
+    const m = Math.floor(s / 60)
+    const sec = s % 60
+    return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`
+  }
+  return [
+    { label: '总局数', value: all.length, best: false },
+    { label: '胜场', value: won.length, best: true },
+    { label: '胜率', value: all.length > 0 ? Math.round(won.length / all.length * 100) + '%' : '-' },
+    { label: '平均用时', value: all.length > 0 ? fmt(avgTime) : '-' },
+  ]
+})
 
 function diffLabel(key) {
   return { easy: '简单', medium: '中等', hard: '困难', expert: '专家' }[key] || key
+}
+
+function fmtDate(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  return `${d.getMonth() + 1}/${d.getDate()}`
 }
 
 function rankClass(idx) {
