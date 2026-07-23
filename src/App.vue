@@ -51,6 +51,11 @@
       @confirm="startNewGame"
       @cancel="showConfirm = false"
     />
+    <GameOverOverlay
+      :visible="game.state.isGameOver"
+      :won="game.state.gameWon"
+      @restart="game.newGame()"
+    />
     <LeaderboardOverlay
       :visible="showLeaderboard"
       @close="showLeaderboard = false"
@@ -71,6 +76,7 @@ import { useGameStore } from './composables/useGameStore.js'
 import SettingsOverlay from './components/SettingsOverlay.vue'
 import ConfirmOverlay from './components/ConfirmOverlay.vue'
 import LeaderboardOverlay from './components/LeaderboardOverlay.vue'
+import GameOverOverlay from './components/GameOverOverlay.vue'
 import GameHeader from './components/GameHeader.vue'
 import GameBoard from './components/GameBoard.vue'
 import ActionButtons from './components/ActionButtons.vue'

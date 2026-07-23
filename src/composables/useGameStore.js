@@ -28,6 +28,8 @@ const state = reactive({
   hintCell: null,
   hintMessage: '',
   zoom: loadZoom(),
+  isGameOver: false,
+  gameWon: false,
 })
 
 function initNotes() {
@@ -74,6 +76,8 @@ function newGame(difficulty = state.difficulty) {
   state.isNoteMode = false
   state.mistakes = 0
   state.errors.clear()
+  state.isGameOver = false
+  state.gameWon = false
   state.elapsedSeconds = 0
   state.isPaused = false
   state.hintsRemaining = 3
@@ -85,7 +89,17 @@ function selectCell(row, col) {
   state.selectedCell = { row, col }
 }
 
+function checkWin() {
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      if (state.playerGrid[r][c] !== state.solution[r][c]) return false
+    }
+  }
+  return true
+}
+
 function placeNumber(num) {
+  if (state.isGameOver) return
   if (!state.selectedCell) return
   const { row, col } = state.selectedCell
   if (state.puzzle[row][col] !== 0) return
@@ -105,8 +119,19 @@ function placeNumber(num) {
   if (state.solution[row][col] !== num) {
     state.errors.add(errKey)
     state.mistakes++
+    if (state.mistakes >= 3) {
+      state.isGameOver = true
+      state.gameWon = false
+      stopTimer()
+    }
   } else {
     state.errors.delete(errKey)
+    // 检查是否全部填完
+    if (checkWin()) {
+      state.isGameOver = true
+      state.gameWon = true
+      stopTimer()
+    }
   }
 }
 
@@ -121,6 +146,7 @@ function clearNotesForNumber(num, row, col) {
 }
 
 function eraseCell() {
+  if (state.isGameOver) return
   if (!state.selectedCell) return
   const { row, col } = state.selectedCell
   if (state.puzzle[row][col] !== 0) return
@@ -130,6 +156,7 @@ function eraseCell() {
 }
 
 function toggleNoteMode() {
+  if (state.isGameOver) return
   state.isNoteMode = !state.isNoteMode
 }
 
@@ -261,6 +288,7 @@ function findHint() {
 }
 
 function useHint() {
+  if (state.isGameOver) return
   if (state.hintsRemaining <= 0) return
 
   const hint = findHint()
