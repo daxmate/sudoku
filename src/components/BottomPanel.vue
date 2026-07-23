@@ -62,20 +62,17 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
   transform: translateY(-1px);
 }
 
-@media (max-width: 640px) {
-  .bottom-section { gap: 2px; }
-  .new-game-btn {
-    width: 100%;
-    font-size: .72rem;
-    padding: 6px;
-    min-height: 36px;
-  }
-  .leaderboard-row { display: none; }
-}
-
 .leaderboard-row {
   display: flex;
   gap: 4px;
+  margin-top: auto;
+}
+
+@media (max-width: 640px) {
+  .bottom-section { gap: 2px; }
+  .bottom-row { display: block; }
+  .new-game-btn { width: 100%; font-size: .72rem; padding: 6px; min-height: 36px; }
+  .leaderboard-row { display: none !important; }
 }
 
 .lb-btn {
