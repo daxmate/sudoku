@@ -106,6 +106,12 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggl
   transform: translateY(-1px);
 }
 
+@media (max-width: 640px) {
+  .new-game-btn, .lb-btn { font-size: .72rem; padding: 6px; }
+  .icon-btn { width: 32px; padding: 6px; }
+  .icon-btn svg { width: 14px; height: 14px; }
+}
+
 .leaderboard-row {
   display: flex;
   gap: 4px;

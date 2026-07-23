@@ -1,6 +1,6 @@
 <template>
   <div class="board-wrapper">
-    <div class="board" style="position:relative">
+    <div ref="boardEl" class="board" style="position:relative">
       <BoardCell
         v-for="(cell, idx) in cells"
         :key="idx"
@@ -25,8 +25,8 @@
         :key="s.id"
         class="float-score"
         :style="{
-          top: (s.row * 48 + 8) + 'px',
-          left: (s.col * 48 + 6) + 'px',
+          top: (s.row * cellSize + cellSize * 0.17) + 'px',
+          left: (s.col * cellSize + cellSize * 0.13) + 'px',
           color: s.color,
         }"
       >{{ s.text }}</div>
@@ -35,11 +35,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useGameStore } from '../composables/useGameStore.js'
 import BoardCell from './BoardCell.vue'
 
 const { state, selectCell } = useGameStore()
+const boardEl = ref(null)
+
+const cellSize = computed(() => {
+  if (!boardEl.value) return 48
+  return boardEl.value.offsetWidth / 9
+})
 
 const cells = computed(() => {
   const grid = state.playerGrid
@@ -89,8 +95,8 @@ function boxBorderClasses(idx) {
   border: 2px solid var(--board-border);
   border-radius: 10px;
   overflow: hidden;
-  width: 432px;
-  height: 432px;
+  width: min(432px, calc(100dvw - 3rem));
+  aspect-ratio: 1;
   box-shadow: var(--board-shadow);
 }
 

@@ -113,4 +113,18 @@ defineEmits(['erase', 'toggleNotes', 'autoCalc', 'hint'])
   padding: 0 3px;
   line-height: 1;
 }
+
+@media (max-width: 640px) {
+  .action-buttons {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+  }
+  .action-buttons button {
+    height: 36px;
+  }
+  .action-buttons button svg {
+    width: 20px;
+    height: 20px;
+  }
+}
 </style>

@@ -122,4 +122,21 @@ function ringStyle(n) {
 .depleted .num-ring {
   opacity: .04 !important;
 }
+
+@media (max-width: 640px) {
+  .num-grid {
+    grid-template-columns: repeat(9, 1fr);
+    gap: 4px;
+  }
+  .num-grid button {
+    min-height: 40px;
+    padding: 2px;
+  }
+  .num-label {
+    font-size: 1rem;
+  }
+  .num-body {
+    min-height: 36px;
+  }
+}
 </style>

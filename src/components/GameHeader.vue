@@ -182,4 +182,13 @@ const formattedTime = computed(() => {
   border-color: var(--diff-btn-active-border);
   color: var(--diff-btn-active-text);
 }
+
+@media (max-width: 640px) {
+  .game-header { gap: 4px; margin-bottom: 8px; }
+  .stat-badge { font-size: .72rem; padding: 3px 8px; }
+  .stat-badge svg { width: 12px; height: 12px; }
+  .zoom-control { display: none; }
+  .difficulty-wrap { gap: 4px; margin-bottom: 10px; }
+  .difficulty-wrap button { font-size: .68rem; padding: 3px 10px; }
+}
 </style>

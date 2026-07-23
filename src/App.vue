@@ -435,10 +435,21 @@ h1 {
   margin-bottom: 14px;
 }
 
+@media (max-width: 640px) {
+  .container {
+    padding: 12px 12px 60px;
+    border-radius: 16px;
+  }
+  h1 { font-size: 1.1rem; letter-spacing: 3px; margin-bottom: 0; }
+  .subtitle { font-size: 0.55rem; margin-bottom: 10px; }
+  .board-row { gap: 10px; }
+  .side-panel { gap: 6px; }
+}
+
 .board-row {
   display: flex;
-  justify-content: center;
-  align-items: stretch;
+  flex-direction: column;
+  align-items: center;
   gap: 14px;
 }
 
@@ -446,9 +457,20 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  flex: 1;
-  min-width: 140px;
-  max-width: 210px;
+  width: 100%;
+  max-width: 432px;
+}
+
+@media (min-width: 641px) {
+  .board-row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .side-panel {
+    flex: 1;
+    min-width: 140px;
+    max-width: 210px;
+  }
 }
 
 /* 提示消息 Toast */
