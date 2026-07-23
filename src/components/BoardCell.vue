@@ -1,7 +1,7 @@
 <template>
   <div
     class="cell"
-    :class="{ fixed, selected, highlighted, 'same-number': sameNumber, error }"
+    :class="{ fixed, user, selected, highlighted, 'same-number': sameNumber, error }"
     @click="$emit('select')"
     role="button"
     :tabindex="0"
@@ -24,6 +24,7 @@
 defineProps({
   value: { type: Number, default: 0 },
   fixed: Boolean,
+  user: Boolean,
   selected: Boolean,
   highlighted: Boolean,
   sameNumber: Boolean,
@@ -50,6 +51,7 @@ defineEmits(['select'])
 }
 
 .cell.fixed { color: var(--cell-fixed); }
+.cell.user { color: var(--cell-user); }
 
 .cell.selected {
   background-color: var(--cell-selected) !important;

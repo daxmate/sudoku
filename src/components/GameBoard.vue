@@ -6,6 +6,7 @@
         :key="idx"
         :value="cell.value"
         :fixed="cell.fixed"
+        :user="cell.user"
         :selected="cell.selected"
         :highlighted="cell.highlighted"
         :same-number="cell.sameNumber"
@@ -35,6 +36,7 @@ const cells = computed(() => {
     return {
       row, col, value,
       fixed: state.puzzle[row]?.[col] !== 0,
+      user: value !== 0 && state.puzzle[row]?.[col] === 0,
       selected: sel?.row === row && sel?.col === col,
       highlighted: sel && (row === sel.row || col === sel.col ||
         (Math.floor(row / 3) === Math.floor(sel.row / 3) &&

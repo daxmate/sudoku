@@ -119,6 +119,7 @@ onMounted(() => {
   --box-border: #888;
   --cell-bg: #fff;
   --cell-fixed: #334155;
+  --cell-user: #2563eb;
   --cell-selected: #eef2ff;
   --cell-highlight: #f1f5f9;
   --cell-same: #dbeafe;
@@ -232,6 +233,7 @@ onMounted(() => {
   --box-border: #64748b;
   --cell-bg: #1e293b;
   --cell-fixed: #94a3b8;
+  --cell-user: #60a5fa;
   --cell-selected: #1e1b4b;
   --cell-highlight: #0f172a;
   --cell-same: #1e1b4b;
