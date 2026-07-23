@@ -9,7 +9,6 @@ const state = reactive({
   selectedCell: null,
   notes: [],
   isNoteMode: false,
-  isAutoCalc: false,
   isAutoMark: false,
 })
 
@@ -46,13 +45,6 @@ function refreshAutoMark() {
         state.notes[r][c] = calcCandidates(r, c)
 }
 
-function refreshSelectedCellNotes() {
-  if (!state.isAutoCalc || !state.selectedCell) return
-  const { row, col } = state.selectedCell
-  if (state.playerGrid[row][col] === 0)
-    state.notes[row][col] = calcCandidates(row, col)
-}
-
 function newGame(difficulty = state.difficulty) {
   const { puzzle, solution } = SudokuEngine.generatePuzzle(difficulty)
   state.puzzle = puzzle
@@ -66,11 +58,6 @@ function newGame(difficulty = state.difficulty) {
 
 function selectCell(row, col) {
   state.selectedCell = { row, col }
-
-  // 自动计算：显示当前格的候选数（保留之前的笔记）
-  if (state.isAutoCalc && state.playerGrid[row][col] === 0) {
-    state.notes[row][col] = calcCandidates(row, col)
-  }
 }
 
 function placeNumber(num) {
@@ -111,12 +98,15 @@ function toggleNoteMode() {
   state.isNoteMode = !state.isNoteMode
 }
 
-function toggleAutoCalc() {
-  state.isAutoCalc = !state.isAutoCalc
-  if (state.isAutoCalc && state.selectedCell) {
-    const { row, col } = state.selectedCell
-    if (state.playerGrid[row][col] === 0)
-      state.notes[row][col] = calcCandidates(row, col)
+function autoCalcCell() {
+  if (!state.selectedCell) return
+  const { row, col } = state.selectedCell
+  if (state.playerGrid[row][col] !== 0) return
+  // 如果该格已有候选数就清掉，否则计算
+  if (state.notes[row][col].size > 0) {
+    state.notes[row][col].clear()
+  } else {
+    state.notes[row][col] = calcCandidates(row, col)
   }
 }
 
@@ -137,7 +127,7 @@ export function useGameStore() {
     placeNumber,
     eraseCell,
     toggleNoteMode,
-    toggleAutoCalc,
+    autoCalcCell,
     toggleAutoMark,
   }
 }

@@ -15,7 +15,7 @@
     </button>
 
     <!-- 自动计算 -->
-    <button class="auto-calc-btn" :class="{ active: autoCalcActive }" title="自动计算" @click="$emit('toggleAutoCalc')">
+    <button class="auto-calc-btn" title="自动计算" @click="$emit('autoCalc')">
       <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
         <rect x="3" y="2" width="24" height="26" rx="2.5" stroke="currentColor" stroke-width="1.5"/>
         <rect x="6" y="5" width="18" height="6.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
@@ -39,10 +39,9 @@
 <script setup>
 defineProps({
   noteActive: Boolean,
-  autoCalcActive: Boolean,
 })
 
-defineEmits(['erase', 'toggleNotes', 'toggleAutoCalc'])
+defineEmits(['erase', 'toggleNotes', 'autoCalc'])
 </script>
 
 <style scoped>
@@ -89,8 +88,6 @@ defineEmits(['erase', 'toggleNotes', 'toggleAutoCalc'])
 .erase-btn { color: var(--action-erase-text); }
 
 .notes-toggle.active { color: var(--action-notes-active-text); }
-
-.auto-calc-btn.active { color: var(--action-notes-active-text); }
 
 .warning { color: var(--action-warning-text); }
 
