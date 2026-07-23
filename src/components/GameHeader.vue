@@ -33,13 +33,6 @@
       <input type="range" class="zoom-slider" min="50" max="150" step="5" v-model.number="localZoom" @change="$emit('updateZoom', localZoom)" />
       <span class="zoom-label">{{ localZoom }}%</span>
     </div>
-    <button class="menu-btn" @click="$emit('openSettings')" title="设置">
-      <svg viewBox="0 0 20 16" width="20" height="16">
-        <rect y="0" width="20" height="2" rx="1" fill="currentColor"/>
-        <rect y="7" width="20" height="2" rx="1" fill="currentColor"/>
-        <rect y="14" width="20" height="2" rx="1" fill="currentColor"/>
-      </svg>
-    </button>
   </div>
 
   <div class="difficulty-wrap">
@@ -61,7 +54,7 @@ const props = defineProps({
   paused: Boolean,
   zoom: { type: Number, default: 100 },
 })
-defineEmits(['selectDifficulty', 'togglePause', 'updateZoom', 'openSettings'])
+defineEmits(['selectDifficulty', 'togglePause', 'updateZoom'])
 
 const localZoom = ref(props.zoom)
 
@@ -190,23 +183,11 @@ const formattedTime = computed(() => {
   color: var(--diff-btn-active-text);
 }
 
-.menu-btn {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px;
-  color: var(--badge-text);
-  border-radius: 6px;
-}
-.menu-btn:hover { background: var(--badge-bg); }
-
 @media (max-width: 640px) {
   .game-header { gap: 4px; margin-bottom: 8px; }
   .stat-badge { font-size: .72rem; padding: 3px 8px; }
   .stat-badge svg { width: 12px; height: 12px; }
   .zoom-control { display: none; }
-  .menu-btn { display: flex; align-items: center; }
   .difficulty-wrap { gap: 4px; margin-bottom: 10px; }
   .difficulty-wrap button { font-size: .68rem; padding: 3px 10px; }
 }

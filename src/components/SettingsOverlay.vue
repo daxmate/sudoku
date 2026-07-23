@@ -38,13 +38,6 @@
         </label>
       </div>
       <div class="setting-row">
-        <label>深色模式</label>
-        <label class="toggle">
-          <input type="checkbox" :checked="darkMode" @change="$emit('toggleDarkMode')" />
-          <span class="toggle-track"></span>
-        </label>
-      </div>
-      <div class="setting-row setting-row-vim">
         <label>Vim 方向键 (h/j/k/l)</label>
         <label class="toggle">
           <input type="checkbox" :checked="vimMode" @change="$emit('toggleVim')" />
@@ -67,9 +60,8 @@ defineProps({
   sound: Boolean,
   anim: Boolean,
   vimMode: Boolean,
-  darkMode: Boolean,
 })
-defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleSound', 'toggleAnim', 'toggleVim', 'toggleDarkMode'])
+defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleSound', 'toggleAnim', 'toggleVim'])
 </script>
 
 <style scoped>
@@ -172,9 +164,5 @@ h3 {
 }
 .overlay-confirm:hover {
   background: var(--overlay-btn-hover-bg);
-}
-
-@media (max-width: 640px) {
-  .setting-row-vim { display: none; }
 }
 </style>
