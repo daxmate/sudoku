@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-section">
     <div class="bottom-row">
-      <button class="auto-mark-btn" title="全部标记">
+      <button class="auto-mark-btn" :class="{ active: autoMarkActive }" title="全部标记" @click="$emit('toggleAutoMark')">
         <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
           <circle cx="15" cy="16" r="8.5" stroke="currentColor" stroke-width="1.5"/>
           <rect x="13.5" y="6" width="3" height="3" rx=".6" stroke="currentColor" stroke-width="1.3"/>
@@ -28,7 +28,11 @@
 </template>
 
 <script setup>
-defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
+defineProps({
+  autoMarkActive: Boolean,
+})
+
+defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme', 'toggleAutoMark'])
 </script>
 
 <style scoped>
@@ -67,6 +71,10 @@ defineEmits(['openSettings', 'newGame', 'openLeaderboard', 'toggleTheme'])
 .auto-mark-btn:hover {
   background: var(--panel-hover-bg);
   color: var(--panel-mark-hover-text);
+}
+.auto-mark-btn.active {
+  background: #065f46;
+  color: #fff;
 }
 
 .new-game-btn {

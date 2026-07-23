@@ -16,7 +16,14 @@
             @toggle-auto-calc="game.toggleAutoCalc()"
           />
           <NumberPad @place="game.placeNumber($event)" />
-          <BottomPanel @open-settings="showSettings = true" @new-game="showConfirm = true" @open-leaderboard="showLeaderboard = true" @toggle-theme="toggleDarkMode" />
+          <BottomPanel
+            :auto-mark-active="game.state.isAutoMark"
+            @open-settings="showSettings = true"
+            @new-game="showConfirm = true"
+            @open-leaderboard="showLeaderboard = true"
+            @toggle-theme="toggleDarkMode"
+            @toggle-auto-mark="game.toggleAutoMark()"
+          />
         </div>
       </div>
 

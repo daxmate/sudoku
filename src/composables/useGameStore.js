@@ -11,6 +11,7 @@ const state = reactive({
   isNoteMode: false,
   isEraseMode: false,
   isAutoCalc: false,
+  isAutoMark: false,
 })
 
 function initNotes() {
@@ -38,14 +39,22 @@ function calcCandidates(row, col) {
   return candidates
 }
 
-function refreshAutoCalc() {
-  if (!state.isAutoCalc) return
+function refreshAutoMark() {
+  if (!state.isAutoMark) return
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
       if (state.playerGrid[r][c] === 0) {
         state.notes[r][c] = calcCandidates(r, c)
       }
     }
+  }
+}
+
+function refreshSelectedCellNotes() {
+  if (!state.isAutoCalc || !state.selectedCell) return
+  const { row, col } = state.selectedCell
+  if (state.playerGrid[row][col] === 0) {
+    state.notes[row][col] = calcCandidates(row, col)
   }
 }
 
@@ -59,16 +68,21 @@ function newGame(difficulty = state.difficulty) {
   state.notes = initNotes()
   state.isNoteMode = false
   state.isEraseMode = false
-  // 如果开启了自动计算，新游戏后也计算
-  if (state.isAutoCalc) refreshAutoCalc()
 }
 
 function selectCell(row, col) {
   state.selectedCell = { row, col }
+
+  // 擦除模式
   if (state.isEraseMode && state.puzzle[row][col] === 0) {
     state.playerGrid[row][col] = 0
     state.notes[row][col].clear()
-    if (state.isAutoCalc) refreshAutoCalc()
+    return
+  }
+
+  // 自动计算：显示当前格的候选数
+  if (state.isAutoCalc && state.playerGrid[row][col] === 0) {
+    state.notes[row][col] = calcCandidates(row, col)
   }
 }
 
@@ -80,7 +94,6 @@ function placeNumber(num) {
   if (state.isEraseMode) {
     state.playerGrid[row][col] = 0
     state.notes[row][col].clear()
-    if (state.isAutoCalc) refreshAutoCalc()
     return
   }
 
@@ -93,7 +106,6 @@ function placeNumber(num) {
 
   state.playerGrid[row][col] = num
   clearNotesForNumber(num, row, col)
-  if (state.isAutoCalc) refreshAutoCalc()
 }
 
 function clearNotesForNumber(num, row, col) {
@@ -112,7 +124,6 @@ function eraseCell() {
   if (state.puzzle[row][col] !== 0) return
   state.playerGrid[row][col] = 0
   state.notes[row][col].clear()
-  if (state.isAutoCalc) refreshAutoCalc()
 }
 
 function toggleNoteMode() {
@@ -127,8 +138,19 @@ function toggleEraseMode() {
 
 function toggleAutoCalc() {
   state.isAutoCalc = !state.isAutoCalc
-  if (state.isAutoCalc) {
-    refreshAutoCalc()
+  if (!state.isAutoCalc) {
+    // 关闭时清除当前格笔记
+    if (state.selectedCell) {
+      const { row, col } = state.selectedCell
+      state.notes[row][col].clear()
+    }
+  }
+}
+
+function toggleAutoMark() {
+  state.isAutoMark = !state.isAutoMark
+  if (state.isAutoMark) {
+    refreshAutoMark()
   } else {
     state.notes = initNotes()
   }
@@ -144,5 +166,6 @@ export function useGameStore() {
     toggleNoteMode,
     toggleEraseMode,
     toggleAutoCalc,
+    toggleAutoMark,
   }
 }
