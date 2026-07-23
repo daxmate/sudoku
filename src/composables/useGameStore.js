@@ -1,6 +1,14 @@
 import { reactive, ref } from 'vue'
 import SudokuEngine from '../utils/sudokuEngine.js'
 
+function loadZoom() {
+  try {
+    const s = parseInt(localStorage.getItem('sudoku-zoom'))
+    if (s >= 50 && s <= 150) return s
+  } catch (e) { /* ignore */ }
+  return 100
+}
+
 const state = reactive({
   puzzle: [],
   solution: [],
@@ -19,7 +27,7 @@ const state = reactive({
   hintsRemaining: 3,
   hintCell: null,
   hintMessage: '',
-  zoom: 100,
+  zoom: loadZoom(),
 })
 
 function initNotes() {
@@ -183,6 +191,7 @@ function togglePause() {
 
 function setZoom(val) {
   state.zoom = Math.max(50, Math.min(150, val))
+  try { localStorage.setItem('sudoku-zoom', String(val)) } catch (e) { /* ignore */ }
 }
 
 function getCandidates(r, c) {

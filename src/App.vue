@@ -1,5 +1,5 @@
 <template>
-  <div class="app" :class="{ dark: isDarkMode }">
+  <div class="app" :class="{ dark: isDarkMode }" :style="{ zoom: game.state.zoom / 100 }">
     <div class="container">
       <h1>数 独</h1>
       <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
@@ -13,7 +13,7 @@
         @toggle-pause="game.togglePause()"
         @update-zoom="game.setZoom($event)"
       />
-      <div class="board-row" :style="{ transform: `scale(${game.state.zoom / 100})` }">
+      <div class="board-row">
         <GameBoard />
         <div class="side-panel">
           <ActionButtons
@@ -361,7 +361,6 @@ h1 {
   justify-content: center;
   align-items: stretch;
   gap: 14px;
-  transform-origin: top center;
 }
 
 .side-panel {
