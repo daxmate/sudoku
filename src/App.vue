@@ -71,7 +71,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from './composables/useGameStore.js'
 import SettingsOverlay from './components/SettingsOverlay.vue'
 import ConfirmOverlay from './components/ConfirmOverlay.vue'
@@ -100,9 +100,35 @@ function startNewGame() {
   showConfirm.value = false
 }
 
+function handleKeydown(e) {
+  const k = e.key
+  if (k >= '1' && k <= '9') {
+    e.preventDefault()
+    game.placeNumber(parseInt(k))
+  } else if (k === 'Backspace' || k === 'Delete') {
+    e.preventDefault()
+    game.eraseCell()
+  } else if (k.startsWith('Arrow')) {
+    e.preventDefault()
+    const sel = game.state.selectedCell
+    let r = sel ? sel.row : 0
+    let c = sel ? sel.col : 0
+    if (k === 'ArrowUp') r = Math.max(0, r - 1)
+    if (k === 'ArrowDown') r = Math.min(8, r + 1)
+    if (k === 'ArrowLeft') c = Math.max(0, c - 1)
+    if (k === 'ArrowRight') c = Math.min(8, c + 1)
+    game.selectCell(r, c)
+  }
+}
+
 onMounted(() => {
+  document.addEventListener('keydown', handleKeydown)
   game.newGame('medium')
   game.startTimer()
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown)
 })
 </script>
 
