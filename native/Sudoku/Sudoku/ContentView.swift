@@ -40,7 +40,16 @@ struct ContentView: View {
     struct WebViewContainer: UIViewRepresentable {
 
         func makeUIView(context: Context) -> WKWebView {
-            let wv = WKWebView(frame: .zero)
+            // 注入捕获 JS 错误的脚本
+            let errScript = WKUserScript(source: """
+window.onerror = function(msg) { window.webkit.messageHandlers.jsError.postMessage(msg) };
+""", injectionTime: .atDocumentStart, forMainFrameOnly: true)
+
+            let config = WKWebViewConfiguration()
+            config.userContentController.addUserScript(errScript)
+            config.userContentController.add(context.coordinator, name: "jsError")
+
+            let wv = WKWebView(frame: .zero, configuration: config)
             wv.navigationDelegate = context.coordinator
 
             let fm = FileManager.default
@@ -65,7 +74,12 @@ struct ContentView: View {
 
         func makeCoordinator() -> Coordinator { Coordinator() }
 
-        class Coordinator: NSObject, WKNavigationDelegate {
+        class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
+            func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+                if message.name == "jsError" {
+                    print("❌ JS Error:", message.body)
+                }
+            }
             func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
                 print("❌ Navigation failed:", error.localizedDescription)
             }
