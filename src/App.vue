@@ -446,8 +446,8 @@ h1 {
   }
   h1 { padding: 8px 0 0; margin: 0; font-size: 1rem; letter-spacing: 2px; }
   .subtitle { display: none; }
-  .board-row { gap: 6px; }
-  .side-panel { gap: 4px; }
+  .board-row { gap: 6px; padding: 0 3px; }
+  .side-panel { gap: 4px; padding: 0 3px; }
 }
 
 .board-row {
