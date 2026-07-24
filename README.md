@@ -56,6 +56,8 @@ https://<你的用户名>.github.io/sudoku/
 - 音效（Web Audio API 合成）
 - 动效 / 音效 / 数字耗尽提示 可开关
 - 深色模式
+- **多语言支持**：中文 / English / 日本語
+- **内置帮助系统**：基本规则 + 入门/进阶/高级技巧图文说明
 - 移动端适配
 
 ## 技术栈
@@ -63,7 +65,25 @@ https://<你的用户名>.github.io/sudoku/
 - [Vue 3](https://vuejs.org/) (Composition API, `<script setup>`)
 - [Vite](https://vitejs.dev/)
 - [vite-plugin-pwa](https://vite-pwa-org.netlify.app/) (Service Worker + Workbox)
+- [vue-i18n](https://vue-i18n.intlify.dev/) v9（多语言国际化）
 - 纯 CSS（无 UI 框架）
+
+### 项目结构
+
+```
+src/
+  locales/          # 多语言资源文件
+    zh-CN.json      # 中文
+    en.json         # 英文
+    ja.json         # 日文
+  components/
+    HelpOverlay.vue # 帮助系统弹窗（基本规则 + 6 种解题技巧）
+  utils/
+    sound.js        # Web Audio API 合成音效（零依赖）
+    sudokuEngine.js # 数独引擎（生成 / 求解 / 校验）
+scripts/
+  check-locales.cjs # CI 中校验三个语言文件 key 结构一致
+```
 
 ## 分支说明
 
