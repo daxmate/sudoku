@@ -130,7 +130,7 @@ function puzzleCells() {
 const sections = [
   // ──── 基本规则 ──────
   {
-    num: '①',
+    num: '1',
     title: '基本规则',
     items: [
       {
@@ -159,7 +159,7 @@ const sections = [
 
   // ──── 入门技巧 ──────
   {
-    num: '②',
+    num: '2',
     title: '入门技巧',
     items: [
       {
@@ -259,7 +259,7 @@ const sections = [
 
   // ──── 进阶技巧 ──────
   {
-    num: '③',
+    num: '3',
     title: '进阶技巧',
     items: [
       {
@@ -378,7 +378,7 @@ const sections = [
 
   // ──── 高级技巧 ──────
   {
-    num: '④',
+    num: '4',
     title: '高级技巧',
     items: [
       {
@@ -511,20 +511,15 @@ const sections = [
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  font-size: .65rem;
+  border: 2px solid #94a3b8;
+  font-size: .82rem;
   font-weight: 700;
-  color: #fff;
+  color: #64748b;
   flex-shrink: 0;
-  background: #6366f1;
 }
-
-.help-section:nth-child(1) .section-num { background: #6366f1; }
-.help-section:nth-child(2) .section-num { background: #059669; }
-.help-section:nth-child(3) .section-num { background: #d97706; }
-.help-section:nth-child(4) .section-num { background: #dc2626; }
 .arrow {
   font-size: .7rem;
   color: #94a3b8;
