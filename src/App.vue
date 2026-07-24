@@ -115,11 +115,8 @@ const isDarkMode = ref(false)
 
 function toggleDarkMode() {
   isDarkMode.value = !isDarkMode.value
-  const isMobile = window.innerWidth <= 640
-  if (isMobile) {
-    document.body.style.background = isDarkMode.value ? '#0f172a' : '#fff'
-    document.body.style.backgroundImage = 'none'
-  }
+  document.body.style.background = isDarkMode.value ? '#0f172a' : '#fff'
+  document.body.style.backgroundImage = 'none'
 }
 
 const { t, locale: i18nLocale } = useI18n()
@@ -174,7 +171,7 @@ const onKeydown = (e) => {
 }
 
 onMounted(() => {
-  if (window.innerWidth <= 640) {
+  if (!isDarkMode.value) {
     document.body.style.background = '#fff'
     document.body.style.backgroundImage = 'none'
   }
@@ -197,11 +194,15 @@ onUnmounted(() => {
 </script>
 
 <style>
-/* 全局样式 - 非 scoped，作用于 body */
-@media (max-width: 640px) {
-  body { background: #fff; }
-  @media (prefers-color-scheme: dark) {
-    body { background: #0f172a; }
+/* 全局样式 - 非 scoped，覆盖 html/body/#app 背景 */
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+@media (prefers-color-scheme: dark) {
+  html, body, #app {
+    background: #0f172a;
   }
 }
 </style>
