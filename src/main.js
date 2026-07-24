@@ -4,6 +4,7 @@ import App from './App.vue'
 import './style.css'
 import zhCN from './locales/zh-CN.json'
 import en from './locales/en.json'
+import ja from './locales/ja.json'
 
 // Load saved locale, default to zh-CN
 const savedLocale = localStorage.getItem('sudoku-locale') || 'zh-CN'
@@ -15,6 +16,7 @@ const i18n = createI18n({
   messages: {
     'zh-CN': zhCN,
     en,
+    ja,
   },
 })
 
