@@ -185,6 +185,16 @@ onUnmounted(() => {
 })
 </script>
 
+<style>
+/* 全局样式 - 非 scoped，作用于 body */
+@media (max-width: 640px) {
+  body { background: #fff; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #0f172a; }
+  }
+}
+</style>
+
 <style scoped>
 .app {
   /* ==================== 浅色主题 ==================== */
@@ -463,7 +473,6 @@ h1 {
 }
 
 @media (max-width: 640px) {
-  body { background: var(--color-body-bg); }
   .app { max-width: none; margin: 0; width: 100%; min-height: 100dvh; background: var(--color-body-bg); }
   .container {
     padding: 0;
