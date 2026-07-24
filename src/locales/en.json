@@ -125,11 +125,11 @@
           },
           {
             "title": "Naked Pair",
-            "desc": "When two cells in the same row/column/box contain only the same two candidates, those digits can be eliminated from other cells in that unit.\n\nIn the diagram: Two orange cells in Row 4 form a ｛2,7｝ naked pair. The blue cell in Column 3 originally had candidates ｛2,3,7｝. After eliminating 2 and 7, only 3 remains — solution found!"
+            "desc": "When two cells in the same row/column/box contain only the same two candidates, those digits can be eliminated from other cells in that unit.\n\nIn the diagram: Two orange cells in Row 4 form a {2,7} naked pair. The blue cell in Column 3 originally had candidates {2,3,7}. After eliminating 2 and 7, only 3 remains — solution found!"
           },
           {
             "title": "Naked Triple",
-            "desc": "An extension of Naked Pair. If three cells together contain only three unique candidates, those digits can be eliminated from other cells in that unit. The orange cells form a ｛1,4,9｝ naked triple in the diagram."
+            "desc": "An extension of Naked Pair. If three cells together contain only three unique candidates, those digits can be eliminated from other cells in that unit. The orange cells form a {1,4,9} naked triple in the diagram."
           }
         ]
       },
