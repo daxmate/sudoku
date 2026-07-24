@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import SudokuEngine from '../utils/sudokuEngine.js'
-import { playCorrectSound, playErrorSound, playCompletionSound, playVictorySound, playGameOverSound } from '../utils/sound.js'
+import { playCorrectSound, playErrorSound, playCompletionSound, playVictorySound, playGameOverSound, playHintSound } from '../utils/sound.js'
 
 const DIFF_MULT = { easy: 1, medium: 1.5, hard: 2.5, expert: 4 }
 
@@ -397,6 +397,8 @@ function useHint() {
   if (!hint) return
 
   const { r, c, num, method } = hint
+
+  if (state.soundOn) playHintSound()
 
   // 填入正确数字
   state.playerGrid[r][c] = num

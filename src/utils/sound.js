@@ -134,6 +134,15 @@ export function playVictorySound() {
   playEcho(1318.5, t + 0.45, 0.8, 0.06, 'sine', 0.1, 0.3, 6)
 }
 
+/** 💡 使用提示 — 清澈叮咚 */
+export function playHintSound() {
+  const c = ctx()
+  if (!c) return
+  const t = c.currentTime
+  playTone(880, t, 0.2, 0.04, 'sine', [[3, 0.15, 'sine']])
+  playTone(1320, t + 0.07, 0.25, 0.03, 'sine', [[2, 0.12, 'sine']])
+}
+
 /** 😵 游戏失败 — 下行滑音 + 低音落幕 */
 export function playGameOverSound() {
   const c = ctx()
