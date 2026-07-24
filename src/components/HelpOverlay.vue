@@ -134,15 +134,15 @@ const sections = computed(() => [
   // ──── 基本规则 ──────
   {
     num: '1',
-    title: t('help.sections[0].title'),
+    title: t('help.sections.0.title'),
     items: [
       {
-        title: t('help.sections[0].items[0].title'),
-        desc: t('help.sections[0].items[0].desc'),
+        title: t('help.sections.0.items.0.title'),
+        desc: t('help.sections.0.items.0.desc'),
       },
       {
-        title: t('help.sections[0].items[1].title'),
-        desc: t('help.sections[0].items[1].desc'),
+        title: t('help.sections.0.items.1.title'),
+        desc: t('help.sections.0.items.1.desc'),
         mt: '4px',
         grid: (() => {
           const cells = puzzleCells()
@@ -163,11 +163,11 @@ const sections = computed(() => [
   // ──── 入门技巧 ──────
   {
     num: '2',
-    title: t('help.sections[1].title'),
+    title: t('help.sections.1.title'),
     items: [
       {
-        title: t('help.sections[1].items[0].title'),
-        desc: t('help.sections[1].items[0].desc'),
+        title: t('help.sections.1.items.0.title'),
+        desc: t('help.sections.1.items.0.desc'),
         grid: (() => {
           // Create a grid where top-left box has 8 numbers, one empty
           const cells = puzzleCells()
@@ -198,8 +198,8 @@ const sections = computed(() => [
         })(),
       },
       {
-        title: t('help.sections[1].items[1].title'),
-        desc: t('help.sections[1].items[1].desc'),
+        title: t('help.sections.1.items.1.title'),
+        desc: t('help.sections.1.items.1.desc'),
         mt: '4px',
         grid: (() => {
           // Hidden Single for number 6 in Row 0 (1-indexed: 第1行)
@@ -263,11 +263,11 @@ const sections = computed(() => [
   // ──── 进阶技巧 ──────
   {
     num: '3',
-    title: t('help.sections[2].title'),
+    title: t('help.sections.2.title'),
     items: [
       {
-        title: t('help.sections[2].items[0].title'),
-        desc: t('help.sections[2].items[0].desc'),
+        title: t('help.sections.2.items.0.title'),
+        desc: t('help.sections.2.items.0.desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // Row 2 (0-indexed: 第3行), candidate 7
@@ -317,8 +317,8 @@ const sections = computed(() => [
         })(),
       },
       {
-        title: t('help.sections[2].items[1].title'),
-        desc: t('help.sections[2].items[1].desc'),
+        title: t('help.sections.2.items.1.title'),
+        desc: t('help.sections.2.items.1.desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // Row 3 (0-indexed): col 1 and col 4 form a {2,7} naked pair
@@ -353,8 +353,8 @@ const sections = computed(() => [
         })(),
       },
       {
-        title: t('help.sections[2].items[2].title'),
-        desc: t('help.sections[2].items[2].desc'),
+        title: t('help.sections.2.items.2.title'),
+        desc: t('help.sections.2.items.2.desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // Row 5: cols 2, 5, 7 form {1,4,9} naked triple
@@ -382,11 +382,11 @@ const sections = computed(() => [
   // ──── 高级技巧 ──────
   {
     num: '4',
-    title: t('help.sections[3].title'),
+    title: t('help.sections.3.title'),
     items: [
       {
-        title: t('help.sections[3].items[0].title'),
-        desc: t('help.sections[3].items[0].desc'),
+        title: t('help.sections.3.items.0.title'),
+        desc: t('help.sections.3.items.0.desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // X-Wing on 3: rows 1 and 7, cols 3 and 6
@@ -414,8 +414,8 @@ const sections = computed(() => [
         })(),
       },
       {
-        title: t('help.sections[3].items[1].title'),
-        desc: t('help.sections[3].items[1].desc'),
+        title: t('help.sections.3.items.1.title'),
+        desc: t('help.sections.3.items.1.desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // A at (1,5) = {1,5}
@@ -437,8 +437,8 @@ const sections = computed(() => [
         })(),
       },
       {
-        title: t('help.sections[3].items[2].title'),
-        desc: t('help.sections[3].items[2].desc'),
+        title: t('help.sections.3.items.2.title'),
+        desc: t('help.sections.3.items.2.desc'),
       },
     ],
   },
