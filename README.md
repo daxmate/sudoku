@@ -1,5 +1,7 @@
 # 数独 (Sudoku)
 
+> [🇺🇸 English](README.en.md) · [🇯🇵 日本語](README.ja.md)
+
 纯前端数独游戏，使用 **Vue 3 + Vite** 构建，支持离线 PWA 体验。
 
 ## 前置要求
