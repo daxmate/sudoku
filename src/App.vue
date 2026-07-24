@@ -1,8 +1,8 @@
 <template>
   <div class="app" :class="{ dark: isDarkMode }" :style="{ zoom: game.state.zoom / 100 }" tabindex="-1">
     <div class="container">
-      <h1>数 独</h1>
-      <p class="subtitle">— 逻辑 · 专注 · 挑战 —</p>
+      <h1>{{ t('app.title') }}</h1>
+      <p class="subtitle">{{ t('app.subtitle') }}</p>
       <GameHeader
         :difficulty="game.state.difficulty"
         :mistakes="game.state.mistakes"
@@ -95,7 +95,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useGameStore } from './composables/useGameStore.js'
 import HelpOverlay from './components/HelpOverlay.vue'
 import SettingsOverlay from './components/SettingsOverlay.vue'
@@ -121,9 +122,11 @@ function toggleDarkMode() {
   }
 }
 
+const { t, locale: i18nLocale } = useI18n()
 const locale = ref(localStorage.getItem('sudoku-locale') || 'zh-CN')
 function setLocale(v) {
   locale.value = v
+  i18nLocale.value = v
   localStorage.setItem('sudoku-locale', v)
 }
 
