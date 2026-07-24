@@ -21,7 +21,7 @@
         <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
         <path d="M5.5 5.5l5 5m-5 0l5-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
       </svg>
-      <span>{{ t('header.errors', { n: mistakes }) }}</span>
+	  <span>{{ t('header.errors') }} {{ mistakes }} / 3</span>
     </div>
     <div class="stat-badge">
       <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
