@@ -170,12 +170,6 @@ const onKeydown = (e) => {
   }
 }
 
-const onVisibilityChange = () => {
-  if (document.hidden && !game.state.isGameOver) {
-    game.togglePause()
-  }
-}
-
 onMounted(() => {
   if (!isDarkMode.value) {
     document.body.style.background = '#fff'
@@ -190,12 +184,10 @@ onMounted(() => {
   }
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('beforeunload', () => game.saveGame())
-  document.addEventListener('visibilitychange', onVisibilityChange)
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeydown)
-  document.removeEventListener('visibilitychange', onVisibilityChange)
   document.body.style.background = ''
   document.body.style.backgroundImage = ''
 })
