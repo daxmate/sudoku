@@ -2,7 +2,7 @@
   <div v-if="visible" class="overlay">
     <div class="overlay-box">
       <div class="overlay-icon">{{ won ? '🎉' : '💥' }}</div>
-      <p class="overlay-msg">{{ won ? '恭喜你完成数独！' : '游戏结束！错误已达上限。' }}</p>
+      <p class="overlay-msg">{{ won ? t('gameOver.won') : t('gameOver.lost') }}</p>
       <div v-if="won" class="score-detail">
         <div v-for="row in scoreDetail" :key="row.label" class="sd-row" :class="{ 'sd-total': row.total }">
           <span class="sd-label">{{ row.label }}</span>
@@ -10,8 +10,8 @@
         </div>
       </div>
       <div class="overlay-actions">
-        <button ref="restartBtn" class="overlay-btn overlay-confirm" @click="$emit('restart')">再来一局</button>
-        <button class="overlay-btn overlay-secondary" @click="$emit('view-leaderboard')">排行榜</button>
+        <button ref="restartBtn" class="overlay-btn overlay-confirm" @click="$emit('restart')">{{ t('gameOver.restart') }}</button>
+        <button class="overlay-btn overlay-secondary" @click="$emit('view-leaderboard')">{{ t('gameOver.leaderboard') }}</button>
       </div>
     </div>
   </div>
@@ -19,7 +19,10 @@
 
 <script setup>
 import { ref, watch, nextTick, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useGameStore } from '../composables/useGameStore.js'
+
+const { t } = useI18n()
 
 const props = defineProps({
   visible: Boolean,
@@ -41,7 +44,7 @@ const game = useGameStore()
 const scoreDetail = computed(() => {
   const s = game.state
   const diffMult = { easy: 1, medium: 1.5, hard: 2.5, expert: 4 }
-  const diffLabel = { easy: '简单', medium: '中等', hard: '困难', expert: '专家' }
+  const diffLabel = { easy: t('gameOver.easy'), medium: t('gameOver.medium'), hard: t('gameOver.hard'), expert: t('gameOver.expert') }
   const m = diffMult[s.difficulty] || 1
   const dl = diffLabel[s.difficulty] || s.difficulty
 
@@ -59,18 +62,18 @@ const scoreDetail = computed(() => {
   }
 
   const rows = [
-    { label: '难度', value: `${dl} (×${m})`, total: false },
-    { label: '基础分', value: fmt(base), total: false },
-    { label: '通关奖励', value: fmt(bonus), total: false },
+    { label: t('gameOver.difficulty'), value: `${dl} (×${m})`, total: false },
+    { label: t('gameOver.baseScore'), value: fmt(base), total: false },
+    { label: t('gameOver.completion'), value: fmt(bonus), total: false },
   ]
-  if (noHint) rows.push({ label: '无提示奖励', value: fmt(noHint), total: false })
-  if (noError) rows.push({ label: '无错误奖励', value: fmt(noError), total: false })
-  if (timeBonus) rows.push({ label: '时间奖励', value: fmt(timeBonus), total: false })
+  if (noHint) rows.push({ label: t('gameOver.noHint'), value: fmt(noHint), total: false })
+  if (noError) rows.push({ label: t('gameOver.noError'), value: fmt(noError), total: false })
+  if (timeBonus) rows.push({ label: t('gameOver.timeBonus'), value: fmt(timeBonus), total: false })
   rows.push(
-    { label: '用时', value: fmtTime(s.elapsedSeconds), total: false },
-    { label: '错误', value: String(s.mistakes), total: false },
-    { label: '提示', value: String(3 - s.hintsRemaining), total: false },
-    { label: '总分', value: total, total: true },
+    { label: t('gameOver.time'), value: fmtTime(s.elapsedSeconds), total: false },
+    { label: t('gameOver.errors'), value: String(s.mistakes), total: false },
+    { label: t('gameOver.hints'), value: String(3 - s.hintsRemaining), total: false },
+    { label: t('gameOver.total'), value: total, total: true },
   )
   return rows
 })

@@ -1,7 +1,7 @@
 <template>
   <div v-if="visible" class="overlay" @click.self="$emit('close')">
     <div class="overlay-box help-box">
-      <h3>游戏帮助</h3>
+      <h3>{{ t('help.title') }}</h3>
 
       <div class="help-content">
         <div
@@ -47,14 +47,17 @@
       </div>
 
       <div class="overlay-actions">
-        <button class="overlay-btn overlay-confirm" @click="$emit('close')">关闭</button>
+        <button class="overlay-btn overlay-confirm" @click="$emit('close')">{{ t('help.close') }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 defineProps({ visible: Boolean })
 defineEmits(['close'])
@@ -127,19 +130,19 @@ function puzzleCells() {
 
 // ─── Sections ───
 
-const sections = [
+const sections = computed(() => [
   // ──── 基本规则 ──────
   {
     num: '1',
-    title: '基本规则',
+    title: t('help.sections[0].title'),
     items: [
       {
-        title: '目标',
-        desc: '在 9×9 的格子中填入数字 1~9，使每行、每列、每个 3×3 粗框宫格内，数字 1~9 各出现一次。',
+        title: t('help.sections[0].items[0].title'),
+        desc: t('help.sections[0].items[0].desc'),
       },
       {
-        title: '三大约束',
-        desc: '同一行、同一列、同一宫内，数字不能重复。下图用不同颜色标出了这三种约束区域。',
+        title: t('help.sections[0].items[1].title'),
+        desc: t('help.sections[0].items[1].desc'),
         mt: '4px',
         grid: (() => {
           const cells = puzzleCells()
@@ -160,11 +163,11 @@ const sections = [
   // ──── 入门技巧 ──────
   {
     num: '2',
-    title: '入门技巧',
+    title: t('help.sections[1].title'),
     items: [
       {
-        title: '唯一数（Naked Single）',
-        desc: '如果某个格子所在的行、列、宫中已经出现了 8 个不同的数字，那么这个格子只能填剩下的那个。下图中蓝色格子只能填 9。',
+        title: t('help.sections[1].items[0].title'),
+        desc: t('help.sections[1].items[0].desc'),
         grid: (() => {
           // Create a grid where top-left box has 8 numbers, one empty
           const cells = puzzleCells()
@@ -195,8 +198,8 @@ const sections = [
         })(),
       },
       {
-        title: '唯余法（Hidden Single）',
-        desc: '在某行/列/宫中，某个数字 1~9 中有一个只能填入唯一的格子。即使这个格子有其他候选数，也能确定答案。\n\n看下面棋盘：第 1 行要放数字 6，但每一列都已经有 6 了，只剩下第 5 列还没有 6。所以第 1 行第 5 列只能是 6 —— 这就是唯余法。',
+        title: t('help.sections[1].items[1].title'),
+        desc: t('help.sections[1].items[1].desc'),
         mt: '4px',
         grid: (() => {
           // Hidden Single for number 6 in Row 0 (1-indexed: 第1行)
@@ -260,11 +263,11 @@ const sections = [
   // ──── 进阶技巧 ──────
   {
     num: '3',
-    title: '进阶技巧',
+    title: t('help.sections[2].title'),
     items: [
       {
-        title: '摒除法（宫行排除）',
-        desc: '某行中，如果数字 X 只能出现在同一个宫内，那么该宫其他行的 X 候选可以排除。\n\n看下图：第 3 行要放数字 7，但第 4~9 列在其他行已有 7（红底叉号），第 3 行第 5 列和第 7 列也已填其他数，所以 7 只能放在第 1~3 列（左上宫，紫底标记）。→ 左上宫内不在第 3 行的格子都不能有 7（红底叉号）。',
+        title: t('help.sections[2].items[0].title'),
+        desc: t('help.sections[2].items[0].desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // Row 2 (0-indexed: 第3行), candidate 7
@@ -314,8 +317,8 @@ const sections = [
         })(),
       },
       {
-        title: '数对法（Naked Pair）',
-        desc: '某行/列/宫中，如果两个格子都只包含相同的两个候选数，它们就构成数对。这两个数可以从该单元的其他格子中排除。\n\n看下图：第 4 行的两个橙色格子构成 {2,7} 数对，因此同行的第 3 列（蓝底）不能是 2 或 7。它本来有候选 {2,3,7}，排除后只剩 3——答案出来了！',
+        title: t('help.sections[2].items[1].title'),
+        desc: t('help.sections[2].items[1].desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // Row 3 (0-indexed): col 1 and col 4 form a {2,7} naked pair
@@ -350,8 +353,8 @@ const sections = [
         })(),
       },
       {
-        title: '三链数（Naked Triple）',
-        desc: '数对的扩展。三个格子的候选数合起来只包含三个不同的数字，则这三个数可以从该单元的其他格子中排除。下图中，橙色格子构成 {1,4,9} 三链数。',
+        title: t('help.sections[2].items[2].title'),
+        desc: t('help.sections[2].items[2].desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // Row 5: cols 2, 5, 7 form {1,4,9} naked triple
@@ -379,11 +382,11 @@ const sections = [
   // ──── 高级技巧 ──────
   {
     num: '4',
-    title: '高级技巧',
+    title: t('help.sections[3].title'),
     items: [
       {
-        title: 'X-Wing',
-        desc: '某数字在 两行 中都只可能出现在相同的 两列 中，则这两列的其他行可以排除该数字。图形呈 X 形状。下图中数字 3 在行 1、7 都只能出现在列 3、6。',
+        title: t('help.sections[3].items[0].title'),
+        desc: t('help.sections[3].items[0].desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // X-Wing on 3: rows 1 and 7, cols 3 and 6
@@ -411,8 +414,8 @@ const sections = [
         })(),
       },
       {
-        title: 'XY-Wing',
-        desc: '三个格子 A{X,Y}、B{X,Z}、C{Y,Z} 形成 XY-Wing。B 和 C 共同影响的格子不能是 Z。下图中 A(1,5)、B(1,7)、C(4,5) 形成 XY-Wing，排除(4,7)的 8。',
+        title: t('help.sections[3].items[1].title'),
+        desc: t('help.sections[3].items[1].desc'),
         grid: (() => {
           const cells = Array.from({ length: 81 }, () => ({ cls: 'demo-empty' }))
           // A at (1,5) = {1,5}
@@ -434,12 +437,12 @@ const sections = [
         })(),
       },
       {
-        title: '链式推理',
-        desc: '通过"如果 A 是 X 则导致矛盾，因此 A 必须是 Y"的推理方式求解。适用于最难的专家题目，通常需要配合候选数标记手动推算。',
+        title: t('help.sections[3].items[2].title'),
+        desc: t('help.sections[3].items[2].desc'),
       },
     ],
   },
-]
+])
 </script>
 
 <style scoped>

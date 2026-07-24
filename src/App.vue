@@ -82,7 +82,7 @@
     />
     <ConfirmOverlay
       :visible="showConfirm"
-      message="确定要开始新游戏吗？当前进度将丢失。"
+      :message="t('confirm.message')"
       @confirm="startNewGame"
       @cancel="showConfirm = false"
     />

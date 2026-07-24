@@ -39,7 +39,8 @@
   },
   "confirm": {
     "cancel": "取消",
-    "confirm": "确认"
+    "confirm": "确认",
+    "message": "确定要开始新游戏吗？当前进度将丢失。"
   },
   "actions": {
     "erase": "擦除",
@@ -65,7 +66,11 @@
     "time": "用时",
     "errors": "错误",
     "hints": "提示",
-    "total": "总分"
+    "total": "总分",
+    "easy": "简单",
+    "medium": "中等",
+    "hard": "困难",
+    "expert": "专家"
   },
   "leaderboard": {
     "title": "排行榜",

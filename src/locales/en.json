@@ -39,7 +39,8 @@
   },
   "confirm": {
     "cancel": "Cancel",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "message": "Start a new game? Current progress will be lost."
   },
   "actions": {
     "erase": "Erase",
@@ -65,7 +66,11 @@
     "time": "Time",
     "errors": "Errors",
     "hints": "Hints",
-    "total": "Total"
+    "total": "Total",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "expert": "Expert"
   },
   "leaderboard": {
     "title": "Leaderboard",

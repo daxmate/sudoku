@@ -4,7 +4,7 @@
       <button
         class="auto-mark-btn"
         :class="{ disabled: !autoMarkEnabled }"
-        :title="autoMarkEnabled ? '全部标记' : '需要到设置中开启'"
+        :title="autoMarkEnabled ? t('actions.autoMarkEnabled') : t('actions.autoMarkDisabled')"
         @click="autoMarkEnabled ? $emit('toggleAutoMark') : null"
       >
         <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
@@ -13,16 +13,16 @@
           <path d="M15 6q3-2 1-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
         </svg>
       </button>
-      <button class="new-game-btn" @click="$emit('newGame')">新游戏</button>
+      <button class="new-game-btn" @click="$emit('newGame')">{{ t('bottom.newGame') }}</button>
     </div>
     <div class="leaderboard-row">
-      <button class="lb-btn" @click="$emit('openLeaderboard')">排行榜</button>
-      <button class="icon-btn" title="切换暗色主题" @click="$emit('toggleTheme')">
+      <button class="lb-btn" @click="$emit('openLeaderboard')">{{ t('bottom.leaderboard') }}</button>
+      <button class="icon-btn" :title="t('bottom.theme')" @click="$emit('toggleTheme')">
         <svg viewBox="0 0 16 16" width="16" height="16" fill="none">
           <path d="M14 8.79A6.5 6.5 0 117.21 2 5 5 0 0014 8.79z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button class="icon-btn" title="设置" @click="$emit('openSettings')">
+      <button class="icon-btn" :title="t('bottom.settings')" @click="$emit('openSettings')">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3.5"/>
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -33,6 +33,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   autoMarkEnabled: Boolean,
 })

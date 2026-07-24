@@ -2,7 +2,7 @@
   <div v-if="visible" class="overlay lb-overlay" @click.self="$emit('close')">
     <div class="overlay-box">
       <div class="lb-header">
-        <h2>排行榜</h2>
+        <h2>{{ t('leaderboard.title') }}</h2>
         <span class="lb-close" @click="$emit('close')">✕</span>
       </div>
       <div class="lb-filters">
@@ -23,11 +23,11 @@
         </div>
       </div>
       <div class="lb-list">
-        <p v-if="displayEntries.length === 0" class="lb-empty">暂无游戏记录</p>
+        <p v-if="displayEntries.length === 0" class="lb-empty">{{ t('leaderboard.empty') }}</p>
         <div v-for="(entry, idx) in displayEntries" :key="idx" class="lb-entry">
           <div class="lb-rank" :class="rankClass(idx)">{{ idx + 1 }}</div>
           <div class="lb-info">
-            <div class="lb-score" :class="{ top1: idx === 0 }">{{ entry.score != null ? entry.score + ' 分' : entry.time }}</div>
+            <div class="lb-score" :class="{ top1: idx === 0 }">{{ entry.score != null ? entry.score + t('leaderboard.score') : entry.time }}</div>
             <div class="lb-meta">
               <span class="lb-diff">{{ diffLabel(entry.difficulty) }}</span>
               {{ fmtDate(entry.date) }}
@@ -42,16 +42,19 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 defineProps({ visible: Boolean })
 defineEmits(['close'])
 
 const filters = [
-  { key: 'all', label: '全部' },
-  { key: 'easy', label: '简单' },
-  { key: 'medium', label: '中等' },
-  { key: 'hard', label: '困难' },
-  { key: 'expert', label: '专家' },
+  { key: 'all', label: t('leaderboard.all') },
+  { key: 'easy', label: t('leaderboard.easy') },
+  { key: 'medium', label: t('leaderboard.medium') },
+  { key: 'hard', label: t('leaderboard.hard') },
+  { key: 'expert', label: t('leaderboard.expert') },
 ]
 
 const activeFilter = ref('all')
@@ -75,10 +78,10 @@ function refresh() {
   }
   entries.value = all
   allStats.value = [
-    { label: '总局数', value: all.length, best: false },
-    { label: '胜场', value: won.length, best: true },
-    { label: '胜率', value: all.length > 0 ? Math.round(won.length / all.length * 100) + '%' : '-' },
-    { label: '平均用时', value: all.length > 0 ? fmt(avgTime) : '-' },
+    { label: t('leaderboard.totalGames'), value: all.length, best: false },
+    { label: t('leaderboard.wins'), value: won.length, best: true },
+    { label: t('leaderboard.winRate'), value: all.length > 0 ? Math.round(won.length / all.length * 100) + '%' : '-' },
+    { label: t('leaderboard.avgTime'), value: all.length > 0 ? fmt(avgTime) : '-' },
   ]
 }
 
@@ -94,7 +97,7 @@ const displayEntries = computed(() => {
 })
 
 function diffLabel(key) {
-  return { easy: '简单', medium: '中等', hard: '困难', expert: '专家' }[key] || key
+  return { easy: t('leaderboard.easy'), medium: t('leaderboard.medium'), hard: t('leaderboard.hard'), expert: t('leaderboard.expert') }[key] || key
 }
 
 function fmtDate(iso) {

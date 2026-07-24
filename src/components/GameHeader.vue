@@ -6,7 +6,7 @@
         <path d="M8 4.5V8l2.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <span>{{ formattedTime }}</span>
-      <button class="pause-btn" @click.stop="$emit('togglePause')" :title="paused ? '继续' : '暂停'">
+      <button class="pause-btn" @click.stop="$emit('togglePause')" :title="paused ? t('header.resume') : t('header.pause')">
         <svg v-if="paused" viewBox="0 0 16 16" width="10" height="10" fill="currentColor">
           <path d="M4 2l10 6-10 6V2z"/>
         </svg>
@@ -21,7 +21,7 @@
         <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/>
         <path d="M5.5 5.5l5 5m-5 0l5-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
       </svg>
-      <span>错误 {{ mistakes }} / 3</span>
+      <span>{{ t('header.errors', { n: mistakes }) }}</span>
     </div>
     <div class="stat-badge">
       <svg viewBox="0 0 16 16" width="14" height="14" fill="none">
@@ -33,8 +33,8 @@
       <input type="range" class="zoom-slider" min="50" max="150" step="5" v-model.number="localZoom" @change="$emit('updateZoom', localZoom)" />
       <span class="zoom-label">{{ localZoom }}%</span>
     </div>
-    <button class="help-btn" @click="$emit('openHelp')" title="帮助">?</button>
-    <button class="menu-btn" @click="$emit('openSettings')" title="设置">
+    <button class="help-btn" @click="$emit('openHelp')" :title="t('header.help')">?</button>
+    <button class="menu-btn" @click="$emit('openSettings')" :title="t('header.settings')">
       <svg viewBox="0 0 20 16" width="20" height="16">
         <rect y="0" width="20" height="2" rx="1" fill="currentColor"/>
         <rect y="7" width="20" height="2" rx="1" fill="currentColor"/>
@@ -44,15 +44,18 @@
   </div>
 
   <div class="difficulty-wrap">
-    <button :class="{ active: difficulty === 'easy' }" @click="$emit('selectDifficulty', 'easy')">简单</button>
-    <button :class="{ active: difficulty === 'medium' }" @click="$emit('selectDifficulty', 'medium')">中等</button>
-    <button :class="{ active: difficulty === 'hard' }" @click="$emit('selectDifficulty', 'hard')">困难</button>
-    <button :class="{ active: difficulty === 'expert' }" @click="$emit('selectDifficulty', 'expert')">专家</button>
+    <button :class="{ active: difficulty === 'easy' }" @click="$emit('selectDifficulty', 'easy')">{{ t('header.difficulty.easy') }}</button>
+    <button :class="{ active: difficulty === 'medium' }" @click="$emit('selectDifficulty', 'medium')">{{ t('header.difficulty.medium') }}</button>
+    <button :class="{ active: difficulty === 'hard' }" @click="$emit('selectDifficulty', 'hard')">{{ t('header.difficulty.hard') }}</button>
+    <button :class="{ active: difficulty === 'expert' }" @click="$emit('selectDifficulty', 'expert')">{{ t('header.difficulty.expert') }}</button>
   </div>
 </template>
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   difficulty: { type: String, default: 'medium' },

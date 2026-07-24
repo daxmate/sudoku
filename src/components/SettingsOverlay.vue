@@ -1,72 +1,76 @@
 <template>
   <div v-if="visible" class="overlay" @click.self="$emit('close')">
     <div class="overlay-box">
-      <h3>设置</h3>
+      <h3>{{ t('settings.title') }}</h3>
       <div class="setting-row">
-        <label>自动计算</label>
+        <label>{{ t('settings.autoCalc') }}</label>
         <label class="toggle">
           <input type="checkbox" :checked="autoCalc" @change="$emit('toggleAutoCalc', $event.target.checked)" />
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
-        <label>全部标记</label>
+        <label>{{ t('settings.autoMark') }}</label>
         <label class="toggle">
           <input type="checkbox" :checked="autoMark" @change="$emit('toggleAutoMark', $event.target.checked)" />
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
-        <label>数字耗尽提示</label>
+        <label>{{ t('settings.depletion') }}</label>
         <label class="toggle">
           <input type="checkbox" :checked="depletion" @change="$emit('toggleDepletion')" />
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
-        <label>音效</label>
+        <label>{{ t('settings.sound') }}</label>
         <label class="toggle">
           <input type="checkbox" :checked="sound" @change="$emit('toggleSound')" />
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
-        <label>动画</label>
+        <label>{{ t('settings.animation') }}</label>
         <label class="toggle">
           <input type="checkbox" :checked="anim" @change="$emit('toggleAnim')" />
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
-        <label>深色模式</label>
+        <label>{{ t('settings.darkMode') }}</label>
         <label class="toggle">
           <input type="checkbox" :checked="darkMode" @change="$emit('toggleDarkMode')" />
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row setting-row-vim">
-        <label>Vim 方向键 (h/j/k/l)</label>
+        <label>{{ t('settings.vim') }}</label>
         <label class="toggle">
           <input type="checkbox" :checked="vimMode" @change="$emit('toggleVim')" />
           <span class="toggle-track"></span>
         </label>
       </div>
       <div class="setting-row">
-        <label>语言</label>
+        <label>{{ t('settings.language') }}</label>
         <div class="lang-buttons">
-          <button :class="{ active: locale === 'zh-CN' }" @click="$emit('changeLocale', 'zh-CN')">中文</button>
-          <button :class="{ active: locale === 'en' }" @click="$emit('changeLocale', 'en')">EN</button>
-          <button :class="{ active: locale === 'ja' }" @click="$emit('changeLocale', 'ja')">日本語</button>
+          <button :class="{ active: locale === 'zh-CN' }" @click="$emit('changeLocale', 'zh-CN')">{{ t('settings.zh') }}</button>
+          <button :class="{ active: locale === 'en' }" @click="$emit('changeLocale', 'en')">{{ t('settings.en') }}</button>
+          <button :class="{ active: locale === 'ja' }" @click="$emit('changeLocale', 'ja')">{{ t('settings.ja') }}</button>
         </div>
       </div>
       <div class="overlay-actions">
-        <button class="overlay-btn overlay-confirm" @click="$emit('close')">完成</button>
+        <button class="overlay-btn overlay-confirm" @click="$emit('close')">{{ t('settings.done') }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   visible: Boolean,
   autoCalc: Boolean,

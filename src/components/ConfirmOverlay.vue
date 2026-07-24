@@ -3,14 +3,18 @@
     <div class="overlay-box">
       <p class="overlay-msg">{{ message }}</p>
       <div class="overlay-actions">
-        <button class="overlay-btn overlay-cancel" @click="$emit('cancel')">取消</button>
-        <button class="overlay-btn overlay-confirm" @click="$emit('confirm')">确认</button>
+        <button class="overlay-btn overlay-cancel" @click="$emit('cancel')">{{ t('confirm.cancel') }}</button>
+        <button class="overlay-btn overlay-confirm" @click="$emit('confirm')">{{ t('confirm.confirm') }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   visible: Boolean,
   message: { type: String, default: '' },

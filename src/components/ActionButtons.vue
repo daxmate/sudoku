@@ -1,12 +1,12 @@
 <template>
   <div class="action-buttons">
-    <button class="erase-btn" title="擦除" @click="$emit('erase')">
+    <button class="erase-btn" :title="t('actions.erase')" @click="$emit('erase')">
       <svg viewBox="0 0 30 31" width="24" height="24">
         <path fill="currentColor" fill-rule="evenodd" d="M27.13 25.11a1 1 0 01.12 2h-6.9a1 1 0 01-.11-2H27.13zM21.48 4.08l.17.14.16.15 3.76 3.76a4 4 0 01.15 5.5l-.15.16-11.32 11.32h2.04a1 1 0 011 .89v.11a1 1 0 01-.88 1H6.52a3 3 0 01-1.98-.74l-.14-.14-2.23-2.22a4 4 0 01-.15-5.5l.15-.16L16.15 4.37a4 4 0 015.33-.29zm-11.52 9.3l-6.38 6.38a2 2 0 00-.11 2.7l.11.13 2.23 2.23a1 1 0 00.58.28l.13.01h4.9l5.13-5.13-6.59-6.6zm7.87-7.82l-.14.1-.13.13-6.18 6.18 6.59 6.6 6.19-6.2a2 2 0 00.11-2.7l-.11-.12-3.77-3.76a2 2 0 00-2.56-.22z"/>
       </svg>
     </button>
 
-    <button class="notes-toggle" :class="{ active: noteActive }" title="笔记" @click="$emit('toggleNotes')">
+    <button class="notes-toggle" :class="{ active: noteActive }" :title="t('actions.notes')" @click="$emit('toggleNotes')">
       <svg viewBox="0 0 30 31" width="24" height="24">
         <path fill="currentColor" d="M25.43 4.76a5.42 5.42 0 01.19 7.52l-.18.2-13.5 13.48a.91.91 0 01-1.21.08l-.1-.08-5.07-5.08-.59 4.34 3.25-.44c.44-.05.84.2 1 .58l.03.11.02.11c.06.47-.24.91-.7 1.03l-.1.02-4.45.6a.94.94 0 01-.79-.27.92.92 0 01-.26-.65v-.13l1-7.4a.92.92 0 01.19-.44l.08-.09L17.71 4.76a5.45 5.45 0 017.72 0zm.35 20.08a1 1 0 110 2h-8.7a1 1 0 010-2h8.7zM21.4 10.18L9.43 22.13 11.3 24l11.95-11.95-1.86-1.86zm-3.23-3.23L6.2 18.91l1.92 1.91L20.07 8.86l-1.9-1.9zm3.42-1.93c-.69 0-1.35.2-1.92.56l-.15.1 5.01 5 .1-.14c.33-.5.51-1.09.55-1.7l.01-.22a3.58 3.58 0 00-3.6-3.6z"/>
       </svg>
@@ -15,7 +15,7 @@
     <button
       class="auto-calc-btn"
       :class="{ disabled: !autoCalcEnabled }"
-      :title="autoCalcEnabled ? '自动计算当前格候选数' : '需要到设置中开启'"
+      :title="autoCalcEnabled ? t('actions.autoCalcEnabled') : t('actions.autoCalcDisabled')"
       @click="autoCalcEnabled ? $emit('autoCalc') : null"
     >
       <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
@@ -27,7 +27,7 @@
 
     <button class="auto-mark-btn mobile-only"
       :class="{ disabled: !autoMarkEnabled }"
-      :title="autoMarkEnabled ? '全部标记' : '需要到设置中开启'"
+      :title="autoMarkEnabled ? t('actions.autoMarkEnabled') : t('actions.autoMarkDisabled')"
       @click="autoMarkEnabled ? $emit('toggleAutoMark') : null"
     >
       <svg viewBox="0 0 30 30" width="24" height="24" fill="none">
@@ -37,7 +37,7 @@
       </svg>
     </button>
 
-    <button class="warning" :class="{ disabled: hintsRemaining <= 0 }" :title="hintsRemaining > 0 ? '提示' : '没有提示次数了'" @click="hintsRemaining > 0 ? $emit('hint') : null">
+    <button class="warning" :class="{ disabled: hintsRemaining <= 0 }" :title="hintsRemaining > 0 ? t('actions.hint') : t('actions.noHints')" @click="hintsRemaining > 0 ? $emit('hint') : null">
       <svg viewBox="0 0 30 30" width="24" height="24">
         <g fill="currentColor" fill-rule="evenodd">
           <path fill="none" d="M0 0h30v30H0z" />
@@ -50,6 +50,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   noteActive: Boolean,
   autoCalcEnabled: Boolean,
