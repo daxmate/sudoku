@@ -65,6 +65,7 @@
       :anim="game.state.isAnimOn"
       :vim-mode="game.state.vimMode"
       :dark-mode="isDarkMode"
+      :locale="locale"
       @close="showSettings = false"
       @toggle-auto-calc="game.toggleAutoCalc($event)"
       @toggle-auto-mark="game.setAutoMarkFeature($event)"
@@ -73,6 +74,7 @@
       @toggle-anim="game.toggleAnim()"
       @toggle-vim="game.toggleVimMode()"
       @toggle-dark-mode="toggleDarkMode"
+      @change-locale="setLocale"
     />
     <HelpOverlay
       :visible="showHelp"
@@ -117,6 +119,12 @@ function toggleDarkMode() {
     document.body.style.background = isDarkMode.value ? '#0f172a' : '#fff'
     document.body.style.backgroundImage = 'none'
   }
+}
+
+const locale = ref(localStorage.getItem('sudoku-locale') || 'zh-CN')
+function setLocale(v) {
+  locale.value = v
+  localStorage.setItem('sudoku-locale', v)
 }
 
 const showHelp = ref(false)

@@ -51,6 +51,14 @@
           <span class="toggle-track"></span>
         </label>
       </div>
+      <div class="setting-row">
+        <label>语言</label>
+        <div class="lang-buttons">
+          <button :class="{ active: locale === 'zh-CN' }" @click="$emit('changeLocale', 'zh-CN')">中文</button>
+          <button :class="{ active: locale === 'en' }" @click="$emit('changeLocale', 'en')">EN</button>
+          <button :class="{ active: locale === 'ja' }" @click="$emit('changeLocale', 'ja')">日本語</button>
+        </div>
+      </div>
       <div class="overlay-actions">
         <button class="overlay-btn overlay-confirm" @click="$emit('close')">完成</button>
       </div>
@@ -68,8 +76,9 @@ defineProps({
   anim: Boolean,
   vimMode: Boolean,
   darkMode: Boolean,
+  locale: String,
 })
-defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleSound', 'toggleAnim', 'toggleVim', 'toggleDarkMode'])
+defineEmits(['close', 'toggleAutoCalc', 'toggleAutoMark', 'toggleDepletion', 'toggleSound', 'toggleAnim', 'toggleVim', 'toggleDarkMode', 'changeLocale'])
 </script>
 
 <style scoped>
@@ -172,6 +181,33 @@ h3 {
 }
 .overlay-confirm:hover {
   background: var(--overlay-btn-hover-bg);
+}
+
+.lang-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.lang-buttons button {
+  padding: 4px 8px;
+  border: 1px solid var(--toggle-bg);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--overlay-label);
+  font-size: .75rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all .12s ease;
+}
+
+.lang-buttons button.active {
+  background: var(--overlay-btn-bg);
+  color: var(--overlay-btn-text);
+  border-color: var(--overlay-btn-bg);
+}
+
+.lang-buttons button:hover:not(.active) {
+  border-color: var(--overlay-btn-bg);
 }
 
 @media (max-width: 640px) {
