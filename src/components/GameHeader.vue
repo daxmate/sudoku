@@ -33,6 +33,7 @@
       <input type="range" class="zoom-slider" min="50" max="150" step="5" v-model.number="localZoom" @change="$emit('updateZoom', localZoom)" />
       <span class="zoom-label">{{ localZoom }}%</span>
     </div>
+    <button class="help-btn" @click="$emit('openHelp')" title="帮助">?</button>
     <button class="menu-btn" @click="$emit('openSettings')" title="设置">
       <svg viewBox="0 0 20 16" width="20" height="16">
         <rect y="0" width="20" height="2" rx="1" fill="currentColor"/>
@@ -61,7 +62,7 @@ const props = defineProps({
   paused: Boolean,
   zoom: { type: Number, default: 100 },
 })
-defineEmits(['selectDifficulty', 'togglePause', 'updateZoom', 'openSettings'])
+defineEmits(['selectDifficulty', 'togglePause', 'updateZoom', 'openSettings', 'openHelp'])
 
 const localZoom = ref(props.zoom)
 
@@ -188,6 +189,29 @@ const formattedTime = computed(() => {
   background: var(--diff-btn-active-bg);
   border-color: var(--diff-btn-active-border);
   color: var(--diff-btn-active-text);
+}
+
+.help-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 2px solid var(--badge-text);
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: var(--badge-text);
+  font-size: .75rem;
+  font-weight: 700;
+  font-family: inherit;
+  transition: all .15s ease;
+  flex-shrink: 0;
+}
+.help-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+  background: rgba(99,102,241,.08);
 }
 
 .menu-btn {

@@ -14,6 +14,7 @@
         @toggle-pause="game.togglePause()"
         @update-zoom="game.setZoom($event)"
         @open-settings="showSettings = true"
+        @open-help="showHelp = true"
       />
       <div class="board-row">
         <GameBoard />
@@ -73,6 +74,10 @@
       @toggle-vim="game.toggleVimMode()"
       @toggle-dark-mode="toggleDarkMode"
     />
+    <HelpOverlay
+      :visible="showHelp"
+      @close="showHelp = false"
+    />
     <ConfirmOverlay
       :visible="showConfirm"
       message="确定要开始新游戏吗？当前进度将丢失。"
@@ -90,6 +95,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useGameStore } from './composables/useGameStore.js'
+import HelpOverlay from './components/HelpOverlay.vue'
 import SettingsOverlay from './components/SettingsOverlay.vue'
 import ConfirmOverlay from './components/ConfirmOverlay.vue'
 import LeaderboardOverlay from './components/LeaderboardOverlay.vue'
@@ -113,6 +119,7 @@ function toggleDarkMode() {
   }
 }
 
+const showHelp = ref(false)
 const showSettings = ref(false)
 const showConfirm = ref(false)
 const showLeaderboard = ref(false)
