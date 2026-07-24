@@ -11,6 +11,18 @@ pnpm dev
 
 浏览器打开 `http://localhost:5175` 即可。
 
+## 部署到 GitHub Pages
+
+Fork 本仓库后，只需一步：
+
+在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。
+
+之后每次推送 `main` 分支，会自动构建部署到：
+
+```
+https://<你的用户名>.github.io/sudoku/
+```
+
 ## 功能
 
 - 四种难度：简单 / 中等 / 困难 / 专家
