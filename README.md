@@ -2,6 +2,11 @@
 
 纯前端数独游戏，使用 **Vue 3 + Vite** 构建，支持离线 PWA 体验。
 
+## 前置要求
+
+- **Node.js** ≥ 18（推荐 22）—— 安装后自带 `npm`
+- **pnpm** — 如果未安装，运行 `npm install -g pnpm`
+
 ## 快速开始
 
 ```bash
@@ -12,6 +17,8 @@ pnpm dev
 浏览器打开 `http://localhost:5173` 即可。
 
 > 如果 `5173` 被占用，Vite 会自动递增端口号，留意终端输出的地址即可。
+
+> 也可使用 `npm`：`npm install && npm run dev`（但推荐 pnpm，速度更快）
 
 ## 构建
 
